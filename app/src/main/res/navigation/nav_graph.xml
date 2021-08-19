@@ -12,7 +12,9 @@
         tools:layout="@layout/create_user_fragment" >
         <action
             android:id="@+id/action_create_user_to_search_resturants2"
-            app:destination="@id/search_resturants2" />
+            app:destination="@id/search_resturants2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
     <fragment
         android:id="@+id/search_resturants2"
@@ -25,9 +27,13 @@
         tools:layout="@layout/welcome_screen_fragment" >
         <action
             android:id="@+id/action_welcome_screen_to_create_user"
-            app:destination="@id/create_user" />
+            app:destination="@id/create_user"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
         <action
             android:id="@+id/action_welcome_screen_to_search_resturants2"
-            app:destination="@id/search_resturants2" />
+            app:destination="@id/search_resturants2"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
 </navigation>
