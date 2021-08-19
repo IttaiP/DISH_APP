@@ -1,6 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_graph">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/welcome_screen2">
 
+    <fragment
+        android:id="@+id/create_user"
+        android:name="com.postpc.dish.create_user"
+        android:label="create_user_fragment"
+        tools:layout="@layout/create_user_fragment" >
+        <action
+            android:id="@+id/action_create_user_to_choose_dishes"
+            app:destination="@id/choose_dishes" />
+    </fragment>
+    <fragment
+        android:id="@+id/welcome_screen2"
+        android:name="com.postpc.dish.welcome_screen"
+        android:label="welcome_screen" >
+        <action
+            android:id="@+id/action_welcome_screen2_to_create_user"
+            app:destination="@id/create_user" />
+    </fragment>
+    <fragment
+        android:id="@+id/search_resturants2"
+        android:name="com.postpc.dish.search_resturants"
+        android:label="search_resturants" />
+    <fragment
+        android:id="@+id/choose_dishes"
+        android:name="com.postpc.dish.choose_dishes"
+        android:label="search_resturants_fragment"
+        tools:layout="@layout/search_resturants_fragment" />
 </navigation>
