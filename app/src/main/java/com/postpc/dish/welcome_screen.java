@@ -54,6 +54,28 @@ public class welcome_screen extends Fragment {
             }
         });
 
+        view.findViewById(R.id.resturant_custom_menu).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_welcome_screen_to_resturant_custom_menu);
+
+            }
+        });
+
+        view.findViewById(R.id.rate_recommendation).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_welcome_screen_to_rate_recommendation);
+
+            }
+        });
+
     }
 
     @Override

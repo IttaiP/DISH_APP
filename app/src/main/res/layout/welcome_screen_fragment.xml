@@ -26,4 +26,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Button
+        android:id="@+id/resturant_custom_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="158dp"
+        android:layout_marginTop="188dp"
+        android:layout_marginEnd="159dp"
+        android:layout_marginBottom="143dp"
+        android:text="To Custom Menu"
+        app:layout_constraintBottom_toTopOf="@+id/rate_recommendation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_in" />
+
+    <Button
+        android:id="@+id/rate_recommendation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="143dp"
+        android:layout_marginEnd="156dp"
+        android:layout_marginBottom="176dp"
+        android:text="Rate Recomendation"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/resturant_custom_menu" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

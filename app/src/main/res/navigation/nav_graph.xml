@@ -19,7 +19,18 @@
     <fragment
         android:id="@+id/search_resturants2"
         android:name="com.postpc.dish.search_resturants"
-        android:label="search_resturants" />
+        android:label="search_resturants" >
+        <action
+            android:id="@+id/action_search_resturants2_to_resturant_menu"
+            app:destination="@id/resturant_menu"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_search_resturants2_to_resturant_custom_menu"
+            app:destination="@id/resturant_custom_menu"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
+    </fragment>
     <fragment
         android:id="@+id/welcome_screen"
         android:name="com.postpc.dish.welcome_screen"
@@ -35,5 +46,27 @@
             app:destination="@id/search_resturants2"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+        <action
+            android:id="@+id/action_welcome_screen_to_rate_recommendation"
+            app:destination="@id/rate_recommendation"
+            app:enterAnim="@anim/nav_default_pop_enter_anim" />
+        <action
+            android:id="@+id/action_welcome_screen_to_resturant_custom_menu"
+            app:destination="@id/resturant_custom_menu"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left" />
     </fragment>
+    <fragment
+        android:id="@+id/resturant_custom_menu"
+        android:name="com.postpc.dish.resturant_custom_menu"
+        android:label="resturant_custom_menu" />
+    <fragment
+        android:id="@+id/resturant_menu"
+        android:name="com.postpc.dish.resturant_menu"
+        android:label="rate_recommendation_fragment"
+        tools:layout="@layout/rate_recommendation_fragment" />
+    <fragment
+        android:id="@+id/rate_recommendation"
+        android:name="com.postpc.dish.rate_recommendation"
+        android:label="rate_recommendation" />
 </navigation>
