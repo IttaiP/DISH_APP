@@ -10,10 +10,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="The Best App EVER"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="The Best App EVER"/>
-
+        tools:layout_editor_absoluteY="16dp" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment"
