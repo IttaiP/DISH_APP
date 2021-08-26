@@ -43,6 +43,7 @@ public class resturant_menu extends Fragment {
         dishes.add(new DishItem("salad", "aroma", R.drawable.salad_2756467_1920));
 
         DishesAdapter adapter = new DishesAdapter();
+        recyclerView.setAdapter(adapter);
         adapter.submitList(dishes); // adapter got method "submitList()" by inheritance
 
 //        recyclerView.setHasFixedSize(true);
@@ -51,8 +52,8 @@ public class resturant_menu extends Fragment {
 
         dishes.add(new DishItem("salmon", "aroma324", R.drawable.salmon_518032_1920));
         adapter.submitList(dishes);
-        recyclerView.setAdapter(adapter);
-
+        dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
+        adapter.submitList(dishes);
 
 
 
@@ -60,7 +61,7 @@ public class resturant_menu extends Fragment {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.salad_2756467_1920));
+                dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.salmon_518032_1920));
                 adapter.submitList(dishes);
             }
         });
