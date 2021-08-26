@@ -45,8 +45,10 @@ public class resturant_menu extends Fragment {
         DishesAdapter adapter = new DishesAdapter();
         adapter.submitList(dishes); // adapter got method "submitList()" by inheritance
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false));
+//        recyclerView.setHasFixedSize(true);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false));
+        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 3));
+
         dishes.add(new DishItem("salmon", "aroma324", R.drawable.salmon_518032_1920));
         adapter.submitList(dishes);
         recyclerView.setAdapter(adapter);
