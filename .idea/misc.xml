@@ -3,12 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.28958333333333336" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/drawable/ic_launcher_background.xml" value="0.28958333333333336" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/activity_main.xml" value="0.2734375" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/choose_dishes_fragment.xml" value="0.2734375" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/create_user_fragment.xml" value="0.375" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/welcome_screen_fragment.xml" value="0.2734375" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1671875" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/choose_dishes_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/create_user_fragment.xml" value="0.264" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/firestore_trial.xml" value="0.15104166666666666" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/rate_recommendation_fragment.xml" value="0.536" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/restaurant_adapter.xml" value="0.4" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/resturant_custom_menu_fragment.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/resturant_menu_fragment.xml" value="0.536" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/search_resturants_fragment.xml" value="0.536" />
+        <entry key="..\:/Users/ASUS/AndroidStudioProjects/Dish_app/DISH_APP/app/src/main/res/layout/welcome_screen_fragment.xml" value="0.4" />
       </map>
     </option>
   </component>
