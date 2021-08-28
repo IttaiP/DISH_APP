@@ -1,8 +1,10 @@
 package com.postpc.dish;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class search_resturants extends Fragment {
 
@@ -68,7 +71,8 @@ public class search_resturants extends Fragment {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 String search_text = search.getText().toString();
-                search_in_firestore(search_text.toLowerCase());
+                Log.d("Search is", search_text);
+                search_in_firestore(search_text);
             }
 
             @Override
@@ -99,15 +103,19 @@ public class search_resturants extends Fragment {
     }
 
     private void search_in_firestore(String search) {
+        Log.d("Here", "im here");
         database.collection("restaurants").orderBy("name")
                 .startAt(search).endAt("search\uf8ff")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
-                    restaurants = (ArrayList<Restaurant>) task.getResult().toObjects(Restaurant.class);
+                    restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
                     adapter.setAdapter(restaurants);
                     adapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Not Found", "Error: " + task.getException().getMessage());
                 }
             }
         });
