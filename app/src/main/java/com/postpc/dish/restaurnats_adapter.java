@@ -29,7 +29,7 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
 
     @Override
     public void onBindViewHolder(@NonNull restaurant_view holder, int position) {
-        holder.bind(restaurants.get(position));
+        holder.bind(restaurants.get(position), context);
     }
 
     @Override

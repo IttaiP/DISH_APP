@@ -7,12 +7,14 @@
     tools:context=".choose_dishes">
 
     <ImageButton
+        android:id="@+id/magnifying"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="32dp"
         android:src="@drawable/ic_baseline_search_24"
         app:layout_constraintEnd_toStartOf="@id/search_bar"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="SpeakableTextPresentCheck" />
@@ -21,13 +23,12 @@
         android:id="@+id/search_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="32dp"
+        android:hint="Search restaurant"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:hint="Search restaurant"
         app:actionViewClass="android:support.v7.widget.SearchView"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/magnifying"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
