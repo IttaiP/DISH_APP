@@ -2,7 +2,6 @@ package com.postpc.dish;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -31,12 +28,15 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.concurrent.Executor;
 
+@SuppressWarnings("ALL")
 public class create_user extends Fragment {
 
     private CreateUserViewModel mViewModel;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    @Nullable
+    private Bundle savedInstanceState;
 
     public static create_user newInstance() {
         return new create_user();
@@ -86,7 +86,7 @@ public class create_user extends Fragment {
     private void createRequest() {
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("default_web_client_id")
                 .requestEmail()
                 .build();
 
@@ -122,25 +122,26 @@ public class create_user extends Fragment {
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Intent intent = new Intent(getActivity(), Profile.class);
-                            startActivity(intent);
-                            
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "auth failed", Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener((Executor) this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        Intent intent = new Intent(getActivity(), Profile.class);
+                        startActivity(intent);
+
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(getActivity(), "auth failed", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        this.savedInstanceState = savedInstanceState;
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(CreateUserViewModel.class);
         // TODO: Use the ViewModel
