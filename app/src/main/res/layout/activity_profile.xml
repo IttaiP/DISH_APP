@@ -22,17 +22,21 @@
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="77dp"
-        tools:layout_editor_absoluteY="85dp" />
+        android:layout_marginStart="77dp"
+        android:layout_marginTop="85dp"
+        android:text="name"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
-        tools:layout_editor_absoluteX="80dp"
-        tools:layout_editor_absoluteY="143dp" />
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="39dp"
+        android:text="mail"
+        app:layout_constraintStart_toStartOf="@+id/name"
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

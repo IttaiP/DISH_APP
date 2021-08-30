@@ -9,13 +9,13 @@
 
     <ImageView
         android:id="@+id/google_icon"
-        android:layout_width="75dp"
-        android:layout_height="49dp"
+        android:layout_width="44dp"
+        android:layout_height="37dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="304dp"
         android:src="@drawable/google_icon"
-        android:layout_marginTop="300dp"
         app:layout_constraintEnd_toStartOf="@id/google_signIn"
-        app:layout_constraintTop_toTopOf="@id/sign_in"/>
+        app:layout_constraintTop_toTopOf="@id/sign_in" />
 
     <TextView
         android:id="@+id/sign_in"
