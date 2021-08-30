@@ -7,51 +7,90 @@
     tools:context=".welcome_screen">
 
     <Button
-        android:id="@+id/sign_in"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="80dp"
-        android:text="Sign In"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/sign_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="80dp"
+        android:layout_width="111dp"
+        android:layout_height="39dp"
         android:text="Sign Up"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="651dp" />
 
     <Button
         android:id="@+id/resturant_custom_menu"
+        android:layout_width="71dp"
+        android:layout_height="11dp"
+        android:text="To Custom Menu"
+        tools:layout_editor_absoluteX="150dp"
+        tools:layout_editor_absoluteY="704dp" />
+
+    <Button
+        android:id="@+id/sign_in"
+        android:layout_width="53dp"
+        android:layout_height="18dp"
+        android:text="Sign In"
+        tools:layout_editor_absoluteX="60dp"
+        tools:layout_editor_absoluteY="659dp" />
+
+    <ImageView
+        android:id="@+id/welcome_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="188dp"
-        android:layout_marginEnd="159dp"
-        android:layout_marginBottom="143dp"
-        android:text="To Custom Menu"
-        app:layout_constraintBottom_toTopOf="@+id/rate_recommendation"
+        android:src="@drawable/welcome_screen_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/welcome_screen_photo2" />
 
     <Button
         android:id="@+id/rate_recommendation"
+        android:layout_width="51dp"
+        android:layout_height="12dp"
+        android:text="Rate Recomendation"
+        tools:layout_editor_absoluteX="9dp"
+        tools:layout_editor_absoluteY="639dp" />
+
+    <EditText
+        android:id="@+id/EmailAddress"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/PersonName" />
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="29dp"
+        android:layout_height="25dp"
+        android:src="@android:drawable/ic_dialog_email"
+        app:layout_constraintBottom_toBottomOf="@+id/EmailAddress"
+        app:layout_constraintTop_toTopOf="@+id/EmailAddress"
+        app:layout_constraintVertical_bias="0.2"
+        tools:layout_editor_absoluteX="355dp" />
+
+    <ImageView
+        android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="143dp"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="176dp"
-        android:text="Rate Recomendation"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@android:drawable/ic_menu_help"
+        app:layout_constraintBottom_toTopOf="@+id/EmailAddress"
+        app:layout_constraintTop_toTopOf="@+id/PersonName"
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="352dp" />
+
+    <EditText
+        android:id="@+id/PersonName"
+        android:layout_width="370dp"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/resturant_custom_menu" />
+        tools:layout_editor_absoluteY="548dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
