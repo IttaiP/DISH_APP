@@ -15,7 +15,7 @@ public class DishHolder extends RecyclerView.ViewHolder {
     public DishHolder(@NonNull View itemView) {
         super(itemView);
         dishName = itemView.findViewById(R.id.dish_name);
-        dishImage = itemView.findViewById(R.id.dish_image);
+//        dishImage = itemView.findViewById(R.id.dish_image);
     }
 
     public ImageView getDishImage() {

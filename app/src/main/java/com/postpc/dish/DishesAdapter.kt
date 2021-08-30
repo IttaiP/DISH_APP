@@ -21,7 +21,7 @@ class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
     override fun onBindViewHolder(holder: DishHolder, position: Int) {
         val dish = getItem(position) // we have "getItem(int)" by inheritance from ListAdapter
         holder.setDishName(dish!!.name)
-        holder.dishImage.setImageResource(dish.image)
+//        holder.dishImage.setImageResource(dish.image)
     }
 }
 
