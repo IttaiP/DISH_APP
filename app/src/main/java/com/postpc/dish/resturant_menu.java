@@ -46,16 +46,14 @@ public class resturant_menu extends Fragment {
         recyclerView.setAdapter(adapter);
 
         dishes.add(new DishItem("salad", "aroma", R.drawable.salad_2756467_1920));
-
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false));
-//        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 4));
-
         dishes.add(new DishItem("salmon", "aroma324", R.drawable.salmon_518032_1920));
-//        dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
-//        adapter.submitList(dishes);
         dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
-        dishes.add(new DishItem("ergr", "wergkjreh", R.drawable.cala_w6ftfbpcs9i_unsplash));
+        dishes.add(new DishItem("salad1", "aroma", R.drawable.salad_2756467_1920));
+        dishes.add(new DishItem("salmon1", "aroma324", R.drawable.salmon_518032_1920));
+        dishes.add(new DishItem("sartgrtglad3", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
+        dishes.add(new DishItem("salad3", "aroma", R.drawable.salad_2756467_1920));
+        dishes.add(new DishItem("salmon3", "aroma324", R.drawable.salmon_518032_1920));
+        dishes.add(new DishItem("sartgrtglad23", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
         adapter.submitList(dishes);
 
 
