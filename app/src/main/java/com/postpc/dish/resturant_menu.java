@@ -1,41 +1,37 @@
 package com.postpc.dish;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class resturant_menu extends Fragment {
 
     private ResturantMenuViewModel mViewModel;
+    private SharedViewModel sharedViewModel;
     private RecyclerView recycler_view;
     private FirebaseFirestore database;
 
     private DishesAdapter adapter;
     private List<DishItem> dishes;
+
+    private String restaurant;
 
     public static resturant_menu newInstance() {
         return new resturant_menu();
@@ -51,6 +47,9 @@ public class resturant_menu extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+        restaurant = sharedViewModel.getRestuarant();
+
         recycler_view = view.findViewById(R.id.list_of_dishes);
         dishes = new ArrayList<>();
         adapter = new DishesAdapter();
@@ -59,7 +58,7 @@ public class resturant_menu extends Fragment {
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler_view.setAdapter(adapter);
 
-        String restaurant = getActivity().getIntent().getStringExtra("restaurant");
+//        String restaurant = getActivity().getIntent().getStringExtra("restaurant");
 //        collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
         database.collection("restaurants").document(restaurant)
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
