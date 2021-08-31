@@ -39,6 +39,8 @@ public class restaurant_view extends RecyclerView.ViewHolder {
         return category;
     }
 
+    public ImageView get_restaurant_image() { return image; }
+
     public void bind(Restaurant restaurant, Context context) {
         name.setText(restaurant.name);
         city.setText(restaurant.city);

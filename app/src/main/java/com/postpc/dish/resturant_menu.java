@@ -1,5 +1,6 @@
 package com.postpc.dish;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,14 +17,25 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class resturant_menu extends Fragment {
 
     private ResturantMenuViewModel mViewModel;
-    private RecyclerView recyclerView;
-    List<DishItem> dishes;
+    private RecyclerView recycler_view;
+    private FirebaseFirestore database;
+
+    private DishesAdapter adapter;
+    private List<DishItem> dishes;
 
     public static resturant_menu newInstance() {
         return new resturant_menu();
@@ -38,24 +50,39 @@ public class resturant_menu extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = view.findViewById(R.id.list_of_dishes);
 
-        List<DishItem> dishes = new ArrayList<>();
+        recycler_view = view.findViewById(R.id.list_of_dishes);
+        dishes = new ArrayList<>();
+        adapter = new DishesAdapter();
 
-        DishesAdapter adapter = new DishesAdapter();
-        recyclerView.setAdapter(adapter);
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recycler_view.setAdapter(adapter);
 
-        dishes.add(new DishItem("salad", "aroma", R.drawable.salad_2756467_1920));
+        String restaurant = getActivity().getIntent().getStringExtra("restaurant");
+//        collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
+        database.collection("restaurants").document(restaurant)
+                .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                DishItem item = documentSnapshot.toObject(DishItem.class);
+                Log.d("Value is", item.getName());
+            }
+        });
+//        {
+//            @SuppressLint("NotifyDataSetChanged")
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful()) {
+//                    dishes = (ArrayList<DishItem>) Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
+//                    adapter.setAdapter(dishes);
+//                    adapter.notifyDataSetChanged();
+//                } else {
+//                    Log.d("Not Found", "Error: " + task.getException().getMessage());
+//                }
+//            }
+//        });
 
-//        recyclerView.setHasFixedSize(true);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(), RecyclerView.VERTICAL, false));
-//        recyclerView.setLayoutManager(new GridLayoutManager(view.getContext(), 4));
-
-        dishes.add(new DishItem("salmon", "aroma324", R.drawable.salmon_518032_1920));
-//        dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
-//        adapter.submitList(dishes);
-        dishes.add(new DishItem("sartgrtglad2", "aroergtgma", R.drawable.cala_w6ftfbpcs9i_unsplash));
-        dishes.add(new DishItem("ergr", "wergkjreh", R.drawable.cala_w6ftfbpcs9i_unsplash));
         adapter.submitList(dishes);
 
 

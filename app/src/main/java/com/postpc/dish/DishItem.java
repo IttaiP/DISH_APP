@@ -5,24 +5,23 @@ import android.media.Image;
 
 public class DishItem {
     private String name;
-    private String resturant;
-    private int image;
+    private String description;
+    private String restaurant;
+    private String id;
 
-    public DishItem(String name, String resturant, int image){
+    public DishItem(String name, String description, String restaurant){
         this.name = name;
-        this.resturant = resturant;
-        this.image = image;
+        this.description = description;
+        this.restaurant = restaurant;
     }
 
-    public int getImage() {
-        return this.image;
-    }
+    public DishItem() { }
 
     public String getName() {
         return this.name;
     }
 
-    public String getResturant() {
-        return this.resturant;
-    }
+    public String getDescription() { return this.description; }
+
+    public String getRestaurant() { return this.restaurant; }
 }

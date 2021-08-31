@@ -64,6 +64,21 @@ public class search_resturants extends Fragment {
         recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         recycler_view.setAdapter(adapter);
 
+        database.collection("restaurants").orderBy("name")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if(task.isSuccessful()) {
+                    restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
+                    adapter.setAdapter(restaurants);
+                    adapter.notifyDataSetChanged();
+                } else {
+                    Log.d("Not Found", "Error: " + task.getException().getMessage());
+                }
+            }
+        });
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -119,6 +134,15 @@ public class search_resturants extends Fragment {
                 }
             }
         });
+    }
+
+    public Restaurant find_restaurant_by_name(String name) {
+        for(Restaurant restaurant : restaurants) {
+            if(restaurant.name.equals(name)) {
+                return restaurant;
+            }
+        }
+        return null;
     }
 
     @Override
