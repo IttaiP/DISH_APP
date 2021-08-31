@@ -85,15 +85,6 @@ public class resturant_menu extends Fragment {
         adapter.submitList(dishes);
 
 
-        TextView textView = view.findViewById(R.id.restaurant_name);
-        textView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d("pressed", "ffgrgrgrg");
-
-            }
-        });
-
     }
 
     @Override

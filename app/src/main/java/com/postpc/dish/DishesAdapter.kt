@@ -40,5 +40,5 @@ private class DishDiffCallBack : DiffUtil.ItemCallback<DishItem>() {
             oldItem == newItem
 
     override fun areContentsTheSame(oldItem: DishItem, newItem: DishItem): Boolean =
-            oldItem.name == newItem.name && oldItem.restaurant == newItem.restaurant
+            oldItem.name == newItem.name
 }
