@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class DishHolder extends RecyclerView.ViewHolder {
 
-    private TextView dish_name;
-    private TextView dish_description;
+    private final TextView dish_name;
+    private final TextView dish_description;
     private TextView restaurant_name;
 
     public DishHolder(@NonNull View itemView) {
@@ -39,7 +39,7 @@ public class DishHolder extends RecyclerView.ViewHolder {
     }
 
 
-    public void bind(DishItem dish, Context context) {
+    public void bind(DishItem dish) {
         dish_name.setText(dish.getName());
         dish_description.setText(dish.getDescription());
     }

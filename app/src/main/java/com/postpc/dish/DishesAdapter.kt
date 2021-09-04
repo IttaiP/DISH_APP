@@ -1,6 +1,7 @@
 package com.postpc.dish
 
 import android.content.Context
+import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 import com.postpc.dish.DishItem
 import com.postpc.dish.DishHolder
@@ -11,10 +12,10 @@ import com.postpc.dish.R
 
 class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
 
-    private var dishes: List<DishItem>? = null
+    private var dishes = emptyList<DishItem>()
     private var context: Context? = null
 
-    fun dishes_adapter(dishes: List<DishItem>) {
+    fun setDishesAdapter(dishes: List<DishItem>) {
         this.dishes = dishes
     }
 
@@ -26,12 +27,12 @@ class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
     }
 
     override fun onBindViewHolder(holder: DishHolder, position: Int) {
-        holder.bind(dishes?.get(position), context)
+        Log.d("here", "im here")
+//        ?.get(position)?.let { Log.d("Dish", it.name) }
+        holder.bind(dishes[position])
     }
 
-    fun setAdapter(new_dishes: List<DishItem>) {
-        this.dishes = new_dishes
-    }
+    override fun getItemCount() = dishes.size
 
 }
 

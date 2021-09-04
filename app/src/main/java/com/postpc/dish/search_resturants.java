@@ -127,7 +127,6 @@ public class search_resturants extends Fragment {
     }
 
     private void search_in_firestore(String search) {
-        Log.d("Here", "im here");
         database.collection("restaurants").orderBy("name")
                 .startAt(search).endAt("search\uf8ff")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
