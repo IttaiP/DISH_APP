@@ -15,18 +15,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class welcome_screen extends Fragment {
+public class welcome_screen extends Fragment implements View.OnClickListener{
 
     private WelcomeScreenViewModel mViewModel;
     private FirebaseAuth auth;
     private EditText name;
     private EditText email;
+    private Button signInButton;
+    private TextView register;
 
     public static welcome_screen newInstance() {
         return new welcome_screen();
@@ -39,6 +42,18 @@ public class welcome_screen extends Fragment {
     }
 
     @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.register:
+                NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
+                        .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                NavController navController = navHostFragment.getNavController();
+                navController.navigate(R.id.action_welcome_screen_to_create_user);
+                break;
+        }
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -48,44 +63,10 @@ public class welcome_screen extends Fragment {
         auth = FirebaseAuth.getInstance();
 
         // get buttons
-        Button signInButton = view.findViewById(R.id.sign_in);
-        Button signUpButton = view.findViewById(R.id.sign_up);
+        signInButton = view.findViewById(R.id.sign_in);
+        register = view.findViewById(R.id.register);
 
-
-        // must insert name and email to connect to the app
-        signInButton.setEnabled(false);
-
-        name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (!email.getText().toString().matches("")){
-                    signInButton.setEnabled(true);
-                }
-            }
-        });
-
-        email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                if (!name.getText().toString().matches("")){
-                    signInButton.setEnabled(true);
-                }
-            }
-        });
-
-        signUpButton.setOnClickListener(v -> {
+        register.setOnClickListener(v -> {
 
             NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
             NavController navController = navHostFragment.getNavController();
@@ -148,4 +129,6 @@ public class welcome_screen extends Fragment {
                 });
         return emailExist.get();
     }
+
+
 }
