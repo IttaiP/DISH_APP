@@ -3,9 +3,13 @@ package com.postpc.dish;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,28 +23,28 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.concurrent.Executor;
-
 @SuppressWarnings("ALL")
-public class create_user extends Fragment {
+public class CreateUser extends Fragment implements View.OnClickListener {
 
     private CreateUserViewModel mViewModel;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
+    private EditText editTextName, editTextEmail;
+    private Button registerButton;
+    private AppCompatButton signUpWithGoogleButton;
+    private ProgressBar progressBar;
     @Nullable
     private Bundle savedInstanceState;
 
-    public static create_user newInstance() {
-        return new create_user();
+    public static CreateUser newInstance() {
+        return new CreateUser();
     }
 
     @Override
@@ -62,11 +66,22 @@ public class create_user extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AppCompatButton signInButton = view.findViewById(R.id.google_signIn);
+
         mAuth = FirebaseAuth.getInstance();
 
+        signUpWithGoogleButton = view.findViewById(R.id.google_signIn);
+        signUpWithGoogleButton.setOnClickListener(this);
+
+        registerButton = view.findViewById(R.id.register);
+        registerButton.setOnClickListener(this);
+
+        editTextName = view.findViewById(R.id.register_person_name);
+        editTextEmail = view.findViewById(R.id.register_email_address);
+
+        progressBar = view.findViewById(R.id.progress_bar);
+
         createRequest();
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        signUpWithGoogleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 signIn();
@@ -149,4 +164,35 @@ public class create_user extends Fragment {
         // TODO: Use the ViewModel
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.register:
+                registerUser();
+                break;
+        }
+    }
+
+    private void registerUser() {
+        String email = editTextEmail.getText().toString().trim();
+        String name = editTextName.getText().toString().trim();
+
+        if (name.isEmpty()){
+            editTextName.setError("Full name is required!");
+            editTextName.requestFocus();
+            return;
+        }
+
+        if (email.isEmpty()){
+            editTextEmail.setError("Email is required!");
+            editTextEmail.requestFocus();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+            editTextEmail.setError("Please provied valid email!");
+            editTextEmail.requestFocus();
+            return;
+        }
+    }
 }
