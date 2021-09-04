@@ -23,11 +23,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.FirebaseDatabase;
 
 @SuppressWarnings("ALL")
 public class CreateUser extends Fragment implements View.OnClickListener {
@@ -52,7 +55,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         super.onStart();
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null){
-            Intent intent = new Intent(getActivity(), Profile.class);
+            Intent intent = new Intent(getActivity(), User.class);
             startActivity(intent);
         }
     }
@@ -72,13 +75,13 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         signUpWithGoogleButton = view.findViewById(R.id.google_signIn);
         signUpWithGoogleButton.setOnClickListener(this);
 
-        registerButton = view.findViewById(R.id.register);
+        registerButton = view.findViewById(R.id.register_button);
         registerButton.setOnClickListener(this);
 
         editTextName = view.findViewById(R.id.register_person_name);
         editTextEmail = view.findViewById(R.id.register_email_address);
 
-        progressBar = view.findViewById(R.id.progress_bar);
+        progressBar = view.findViewById(R.id.progress_bar_register_screen);
 
         createRequest();
         signUpWithGoogleButton.setOnClickListener(new View.OnClickListener() {
@@ -87,17 +90,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                 signIn();
             }
         });
-
-//        view.findViewById(R.id.search_resturant_button).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//                NavController navController = navHostFragment.getNavController();
-//                navController.navigate(R.id.action_create_user_to_search_resturants2);
-//
-//            }
-        }
+    }
 
     private void createRequest() {
         // Configure Google Sign In
@@ -108,8 +101,6 @@ public class CreateUser extends Fragment implements View.OnClickListener {
 
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso);
-
-
     }
 
     private void signIn() {
@@ -143,7 +134,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         FirebaseUser user = mAuth.getCurrentUser();
-                        Intent intent = new Intent(getActivity(), Profile.class);
+                        Intent intent = new Intent(getActivity(), User.class);
                         startActivity(intent);
 
                     } else {
@@ -167,7 +158,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.register:
+            case R.id.register_button:
                 registerUser();
                 break;
         }
@@ -194,5 +185,42 @@ public class CreateUser extends Fragment implements View.OnClickListener {
             editTextEmail.requestFocus();
             return;
         }
+
+        progressBar.setVisibility(View.VISIBLE);
+        mAuth.createUserWithEmailAndPassword(email, null)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+                            User user = new User(name, email);
+                            FirebaseDatabase.getInstance().getReference("Users").
+                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                    .setValue(user)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(CreateUser.newInstance().getActivity(),
+                                                "User has been registered successfully!",
+                                                Toast.LENGTH_LONG).show();
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+                                    else {
+                                        Toast.makeText(CreateUser.newInstance().getActivity(),
+                                                "Failed to register! Try again...",
+                                                Toast.LENGTH_LONG).show();
+                                        progressBar.setVisibility(View.GONE);
+                                    }
+                                }
+                            });
+                        }
+                        else {
+                            Toast.makeText(CreateUser.newInstance().getActivity(),
+                                    "Failed to register!",
+                                    Toast.LENGTH_LONG).show();
+                            progressBar.setVisibility(View.GONE);
+                        }
+                    }
+                });
     }
 }
