@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class Profile extends AppCompatActivity {
 
-    TextView name, mail;
+    TextView name, email;
     View logout;
 
     @Override
@@ -23,12 +23,12 @@ public class Profile extends AppCompatActivity {
 
         logout = findViewById(R.id.logout);
         name = findViewById(R.id.name);
-        mail = findViewById(R.id.mail);
+        email = findViewById(R.id.mail);
 
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount != null) {
             name.setText(signInAccount.getDisplayName());
-            mail.setText(signInAccount.getEmail());
+            email.setText(signInAccount.getEmail());
         }
         logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
