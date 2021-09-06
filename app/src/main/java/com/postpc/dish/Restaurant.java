@@ -1,6 +1,7 @@
 package com.postpc.dish;
 
 public class Restaurant {
+    public String id;
     public String name;
     public String city;
     public String category;
@@ -11,6 +12,7 @@ public class Restaurant {
         this.city = city;
         this.category = category;
         this.code = code;
+        this.id = "";
     }
 
     Restaurant() { }
