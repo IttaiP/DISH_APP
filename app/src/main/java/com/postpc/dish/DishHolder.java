@@ -6,18 +6,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class DishHolder extends RecyclerView.ViewHolder {
 
     private final TextView dish_name;
     private final TextView dish_description;
+    private final ConstraintLayout dish;
     private TextView restaurant_name;
 
     public DishHolder(@NonNull View itemView) {
         super(itemView);
         dish_name = itemView.findViewById(R.id.dish_name);
         dish_description = itemView.findViewById(R.id.dish_description);
+        dish = itemView.findViewById(R.id.dish);
 //        dishImage = itemView.findViewById(R.id.dish_image);
     }
 
@@ -29,6 +32,8 @@ public class DishHolder extends RecyclerView.ViewHolder {
     public TextView get_dish_description() {
         return dish_description;
     }
+
+    public ConstraintLayout get_dish() {return dish;}
 
     public void set_dish_name(String name) {
         dish_name.setText(name);

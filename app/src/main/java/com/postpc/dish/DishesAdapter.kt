@@ -7,6 +7,7 @@ import com.postpc.dish.DishItem
 import com.postpc.dish.DishHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
 import com.postpc.dish.R
 
@@ -27,9 +28,12 @@ class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
     }
 
     override fun onBindViewHolder(holder: DishHolder, position: Int) {
-        Log.d("here", "im here")
-//        ?.get(position)?.let { Log.d("Dish", it.name) }
         holder.bind(dishes[position])
+        var dish = holder._dish
+
+        dish.setOnClickListener() {
+            dish.setBackgroundResource(R.drawable.background_description_pressed)
+        }
     }
 
     override fun getItemCount() = dishes.size
