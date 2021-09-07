@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 @SuppressWarnings("ALL")
 public class CreateUser extends Fragment implements View.OnClickListener {
@@ -39,7 +40,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
     private FirebaseAuth mAuth;
-    private EditText editTextName, editTextEmail;
+    private EditText editTextName, editTextEmail, editTextPassword;
     private Button registerButton;
     private AppCompatButton signUpWithGoogleButton;
     private ProgressBar progressBar;
@@ -48,16 +49,6 @@ public class CreateUser extends Fragment implements View.OnClickListener {
 
     public static CreateUser newInstance() {
         return new CreateUser();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null){
-            Intent intent = new Intent(getActivity(), User.class);
-            startActivity(intent);
-        }
     }
 
     @Override
@@ -75,11 +66,12 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         signUpWithGoogleButton = view.findViewById(R.id.google_signIn);
         signUpWithGoogleButton.setOnClickListener(this);
 
-        registerButton = view.findViewById(R.id.register_button);
+        registerButton = view.findViewById(R.id.create_user_register_button);
         registerButton.setOnClickListener(this);
 
-        editTextName = view.findViewById(R.id.register_person_name);
-        editTextEmail = view.findViewById(R.id.register_email_address);
+        editTextName = view.findViewById(R.id.create_user_person_name_field);
+        editTextEmail = view.findViewById(R.id.create_user_email_address_field);
+        editTextPassword = view.findViewById(R.id.create_user_password_field);
 
         progressBar = view.findViewById(R.id.progress_bar_register_screen);
 
@@ -158,7 +150,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.register_button:
+            case R.id.create_user_register_button:
                 registerUser();
                 break;
         }
@@ -167,6 +159,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     private void registerUser() {
         String email = editTextEmail.getText().toString().trim();
         String name = editTextName.getText().toString().trim();
+        String password = editTextPassword.getText().toString().trim();
 
         if (name.isEmpty()){
             editTextName.setError("Full name is required!");
@@ -186,41 +179,58 @@ public class CreateUser extends Fragment implements View.OnClickListener {
             return;
         }
 
+        if (password.isEmpty()){
+            editTextPassword.setError("Password is required!");
+            editTextPassword.requestFocus();
+            return;
+        }
+
+        if (password.length() < 6){
+            editTextPassword.setError("Min password length should be 6 characters!");
+            editTextPassword.requestFocus();
+            return;
+        }
+
         progressBar.setVisibility(View.VISIBLE);
-        mAuth.createUserWithEmailAndPassword(email, null)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()){
-                            User user = new User(name, email);
-                            FirebaseDatabase.getInstance().getReference("Users").
-                                    child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                    .setValue(user)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()){
-                                        Toast.makeText(CreateUser.newInstance().getActivity(),
-                                                "User has been registered successfully!",
-                                                Toast.LENGTH_LONG).show();
-                                        progressBar.setVisibility(View.GONE);
-                                    }
-                                    else {
-                                        Toast.makeText(CreateUser.newInstance().getActivity(),
-                                                "Failed to register! Try again...",
-                                                Toast.LENGTH_LONG).show();
-                                        progressBar.setVisibility(View.GONE);
-                                    }
-                                }
-                            });
-                        }
-                        else {
-                            Toast.makeText(CreateUser.newInstance().getActivity(),
-                                    "Failed to register!",
-                                    Toast.LENGTH_LONG).show();
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-                });
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(requireActivity(), task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser currentUser = mAuth.getCurrentUser();
+                        User user = new User(editTextName.getText().toString(),
+                                editTextEmail.getText().toString());
+
+                        FirebaseFirestore.getInstance().collection("users").
+                                document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                                .set(user)
+                                .addOnCompleteListener(requireActivity(), subTask -> {
+
+                                if (subTask.isSuccessful()){
+                                    Toast.makeText(requireContext(),
+                                            "User has been registered successfully!",
+                                            Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.GONE);
+                                } else {
+                                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                    firebaseUser.delete()
+                                            .addOnCompleteListener(requireActivity(), subTask1 -> {
+
+                                                    if (subTask1.isSuccessful()) {
+                                                        Log.d("DELETE CURRENT USER",
+                                                                "User account deleted.");
+                                                    }});
+
+                                    Toast.makeText(requireContext(),
+                                            "Failed to register! Try again...",
+                                            Toast.LENGTH_LONG).show();
+                                    progressBar.setVisibility(View.GONE);
+                                }});
+                    } else {
+                        Exception exception = task.getException();
+                        Toast.makeText(requireContext(),
+                                "Failed to register!",
+                                Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                    }});
     }
 }
