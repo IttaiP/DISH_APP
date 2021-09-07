@@ -23,14 +23,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 @SuppressWarnings("ALL")
@@ -84,6 +81,28 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         });
     }
 
+    /**
+     * @param savedInstanceState
+     */
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        this.savedInstanceState = savedInstanceState;
+        super.onActivityCreated(savedInstanceState);
+        mViewModel = new ViewModelProvider(this).get(CreateUserViewModel.class);
+        // TODO: Use the ViewModel
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.create_user_register_button:
+                registerUser();
+                break;
+        }
+    }
+
+    // ==================================== REGISTER WITH GOOGLE ===================================
+
     private void createRequest() {
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -135,27 +154,10 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     }
                 });
     }
+    // =============================================================================================
 
-    /**
-     * @param savedInstanceState
-     */
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        this.savedInstanceState = savedInstanceState;
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CreateUserViewModel.class);
-        // TODO: Use the ViewModel
-    }
 
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.create_user_register_button:
-                registerUser();
-                break;
-        }
-    }
-
+    // =============================== REGISTER WITH EMAIL & PASSWORD ==============================
     private void registerUser() {
         String email = editTextEmail.getText().toString().trim();
         String name = editTextName.getText().toString().trim();
@@ -233,4 +235,5 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                         progressBar.setVisibility(View.GONE);
                     }});
     }
+    // =============================================================================================
 }

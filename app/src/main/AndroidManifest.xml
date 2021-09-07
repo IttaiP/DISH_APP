@@ -12,6 +12,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DISH">
         <activity
+            android:name=".HomeScreen"
+            android:exported="true"
+            android:label="@string/title_activity_main_screen"
+            android:theme="@style/Theme.DISH.NoActionBar" />
+        <activity
             android:name=".User"
             android:exported="true" />
         <activity
