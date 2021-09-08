@@ -38,6 +38,8 @@ public class search_resturants extends Fragment {
     private restaurnats_adapter adapter;
 
     private SearchResturantsViewModel mViewModel;
+    private SharedViewModel sharedViewModel;
+
 
     public static search_resturants newInstance() {
         return new search_resturants();
@@ -55,6 +57,8 @@ public class search_resturants extends Fragment {
         search = view.findViewById(R.id.search_bar);
         recycler_view = view.findViewById(R.id.recycler_view);
         database = FirebaseFirestore.getInstance();
+
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         restaurants = new ArrayList<>();
         adapter = new restaurnats_adapter(restaurants);
@@ -79,6 +83,9 @@ public class search_resturants extends Fragment {
             }
         });
 
+        // Todo: add onclick listener for each restaurant. within, write the following:
+        // sharedViewModel.setRestuarant(todo restaurant name here);
+
         search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
@@ -98,6 +105,7 @@ public class search_resturants extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
                 navController.navigate(R.id.action_search_resturants2_to_resturant_menu);
@@ -109,6 +117,7 @@ public class search_resturants extends Fragment {
             @Override
             public void onClick(View v) {
 
+
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
                 navController.navigate(R.id.action_search_resturants2_to_resturant_custom_menu);
@@ -118,7 +127,6 @@ public class search_resturants extends Fragment {
     }
 
     private void search_in_firestore(String search) {
-        Log.d("Here", "im here");
         database.collection("restaurants").orderBy("name")
                 .startAt(search).endAt("search\uf8ff")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
