@@ -4,18 +4,17 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 
 public class DishItem {
-    private String name;
-    private String description;
-    private String restaurant;
-    private String id;
+    public String name;
+    public String description;
 
-    public DishItem(String name, String description, String restaurant){
+
+    public DishItem(String name, String description){
         this.name = name;
         this.description = description;
-        this.restaurant = restaurant;
     }
 
-    public DishItem() { }
+    DishItem() {}
+
 
     public String getName() {
         return this.name;
@@ -23,5 +22,4 @@ public class DishItem {
 
     public String getDescription() { return this.description; }
 
-    public String getRestaurant() { return this.restaurant; }
 }
