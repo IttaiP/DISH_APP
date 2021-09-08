@@ -7,7 +7,7 @@
     tools:context=".welcome_screen">
 
     <TextView
-        android:id="@+id/register"
+        android:id="@+id/welcome_screen_register"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="100dp"
@@ -29,7 +29,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
-        android:id="@+id/EmailAddress"
+        android:id="@+id/welcome_screen_EmailAddress_field"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -41,31 +41,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/PersonName" />
-
-    <ImageView
-        android:id="@+id/email_icon"
-        android:layout_width="29dp"
-        android:layout_height="25dp"
-        android:layout_marginEnd="4dp"
-        android:src="@android:drawable/ic_dialog_email"
-        app:layout_constraintBottom_toBottomOf="@+id/EmailAddress"
-        app:layout_constraintEnd_toEndOf="@+id/EmailAddress"
-        app:layout_constraintTop_toBottomOf="@+id/PersonName" />
-
-    <ImageView
-        android:id="@+id/name_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@android:drawable/ic_menu_help"
-        app:layout_constraintBottom_toTopOf="@+id/EmailAddress"
-        app:layout_constraintEnd_toEndOf="@+id/PersonName"
-        app:layout_constraintTop_toTopOf="@+id/PersonName"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@android:drawable/ic_menu_edit" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_name_field" />
 
     <EditText
-        android:id="@+id/PersonName"
+        android:id="@+id/welcome_screen_name_field"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -90,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/sign_in"
+        android:id="@+id/welcome_screen_sign_in_button"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="152dp"
@@ -137,16 +116,9 @@
         android:fontFamily="@font/bitter"
         android:hint="Password"
         android:inputType="textPassword"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/EmailAddress" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="?android:attr/fingerprintAuthDrawable"
-        app:layout_constraintTop_toBottomOf="@+id/EmailAddress"
-        tools:layout_editor_absoluteX="288dp" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_EmailAddress_field" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
