@@ -87,12 +87,8 @@ public class resturant_menu extends Fragment {
 
         restaurant_name.setText(restaurant);
 
-//        Restaurant restaurant1 = search_resturants.newInstance().find_restaurant_by_name(restaurant);
-
         Log.d("restaurant", restaurant);
 
-//        String restaurant = getActivity().getIntent().getStringExtra("restaurant");
-//        collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>()
         database.collection("restaurants").whereEqualTo("name", restaurant)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -110,11 +106,7 @@ public class resturant_menu extends Fragment {
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()) {
                                     dishes = (ArrayList<DishItem>) Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
-//                                    for (DishItem dish : dishes) {
-//                                        Log.d("dish name", dish.getName());
-//                                    }
                                     adapter.setDishesAdapter(dishes);
-//                                    adapter.submitList(dishes);
                                     adapter.notifyDataSetChanged();
                                 } else {
                                     Log.d("Not Found", "Error: " + task.getException().getMessage());
@@ -128,23 +120,6 @@ public class resturant_menu extends Fragment {
                 }
             }
         });
-//        {
-//            @SuppressLint("NotifyDataSetChanged")
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()) {
-//                    dishes = (ArrayList<DishItem>) Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
-//                    adapter.setAdapter(dishes);
-//                    adapter.notifyDataSetChanged();
-//                } else {
-//                    Log.d("Not Found", "Error: " + task.getException().getMessage());
-//                }
-//            }
-//        });
-
-//        adapter.submitList(dishes);
-
-
     }
 
     @Override

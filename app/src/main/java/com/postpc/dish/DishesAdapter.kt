@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.postpc.dish.R
 
 class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
@@ -29,11 +32,22 @@ class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
 
     override fun onBindViewHolder(holder: DishHolder, position: Int) {
         holder.bind(dishes[position])
-        var dish = holder._dish
+        var mAuth = FirebaseAuth.getInstance()
+        var database = FirebaseFirestore.getInstance()
+        // need to get uid from mAuth and then gets its User from firebase
 
+        var dish = holder._dish
         dish.setOnClickListener() {
+            var name_dish = holder._dish_name
             dish.setBackgroundResource(R.drawable.background_description_pressed)
         }
+        database.collection("user").document("NcTJ0OWlGiXOGGxNVmtpCGknhxn1").get().addOnSuccessListener { result:DocumentSnapshot? ->
+            if(result != null) {
+                // do something
+            }
+        }
+
+
     }
 
     override fun getItemCount() = dishes.size
