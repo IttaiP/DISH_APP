@@ -129,19 +129,15 @@ public class search_resturants extends Fragment {
     private void search_in_firestore(String search) {
         database.collection("restaurants").orderBy("name")
                 .startAt(search).endAt("search\uf8ff")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
-                    adapter.setAdapter(restaurants);
-                    adapter.notifyDataSetChanged();
-                } else {
-                    Log.d("Not Found", "Error: " + task.getException().getMessage());
-                }
-            }
-        });
+                .get().addOnCompleteListener(task -> {
+                    if(task.isSuccessful()) {
+                        restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
+                        adapter.setAdapter(restaurants);
+                        adapter.notifyDataSetChanged();
+                    } else {
+                        Log.d("Not Found", "Error: " + task.getException().getMessage());
+                    }
+                });
     }
 
     public Restaurant find_restaurant_by_name(String name) {
