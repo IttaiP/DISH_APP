@@ -19,6 +19,14 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="RobotoFont" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/bitter</item>
+    </style>
+
+    <style name="RobotoButtonStyle" parent="android:Widget.Button">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
     <style name="Theme.DISH.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="Theme.DISH.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
