@@ -6,32 +6,6 @@
     app:startDestination="@id/welcome_screen">
 
     <fragment
-        android:id="@+id/create_user"
-        android:name="com.postpc.dish.CreateUser"
-        android:label="create_user_fragment"
-        tools:layout="@layout/create_user_fragment" >
-        <action
-            android:id="@+id/action_create_user_to_search_resturants2"
-            app:destination="@id/search_resturants2"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
-    </fragment>
-    <fragment
-        android:id="@+id/search_resturants2"
-        android:name="com.postpc.dish.search_resturants"
-        android:label="search_resturants" >
-        <action
-            android:id="@+id/action_search_resturants2_to_resturant_menu"
-            app:destination="@id/resturant_menu"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_search_resturants2_to_resturant_custom_menu"
-            app:destination="@id/resturant_custom_menu"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
-    </fragment>
-    <fragment
         android:id="@+id/welcome_screen"
         android:name="com.postpc.dish.welcome_screen"
         android:label="welcome_screen_fragment"
@@ -41,32 +15,25 @@
             app:destination="@id/create_user"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/create_user"
+        android:name="com.postpc.dish.CreateUser"
+        android:label="create_user_fragment"
+        tools:layout="@layout/create_user_fragment" >
         <action
-            android:id="@+id/action_welcome_screen_to_search_resturants2"
-            app:destination="@id/search_resturants2"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left" />
-        <action
-            android:id="@+id/action_welcome_screen_to_rate_recommendation"
-            app:destination="@id/rate_recommendation"
-            app:enterAnim="@anim/nav_default_pop_enter_anim" />
-        <action
-            android:id="@+id/action_welcome_screen_to_resturant_custom_menu"
-            app:destination="@id/resturant_custom_menu"
+            android:id="@+id/action_create_user_to_init_user_dish_data"
+            app:destination="@id/init_user_dish_data"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left" />
     </fragment>
+
     <fragment
-        android:id="@+id/resturant_custom_menu"
-        android:name="com.postpc.dish.resturant_custom_menu"
-        android:label="resturant_custom_menu" />
-    <fragment
-        android:id="@+id/resturant_menu"
-        android:name="com.postpc.dish.resturant_menu"
-        android:label="rate_recommendation_fragment"
-        tools:layout="@layout/rate_recommendation_fragment" />
-    <fragment
-        android:id="@+id/rate_recommendation"
-        android:name="com.postpc.dish.rate_recommendation"
-        android:label="rate_recommendation" />
+        android:id="@+id/init_user_dish_data"
+        android:name="com.postpc.dish.InitUserDishDataFragment"
+        android:label="init_user_dish_data"
+        tools:layout="@layout/init_user_dish_data_fragment"/>
+
+
 </navigation>
