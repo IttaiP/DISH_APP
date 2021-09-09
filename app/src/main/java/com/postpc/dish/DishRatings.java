@@ -1,6 +1,6 @@
 package com.postpc.dish;
 
 public class DishRatings {
-    public String Dish_Resaurant;
+    public String Dish_Restaurant;
     public float Rating;
 }

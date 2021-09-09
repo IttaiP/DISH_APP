@@ -16,6 +16,7 @@ public class OtherUser {
     }
 
     public void addRating(DishRatings rating){
+
         ratings.add(rating);
     }
 
@@ -29,5 +30,9 @@ public class OtherUser {
 
     public void setSimilarity(Float similarity) {
         this.similarity = similarity;
+    }
+
+    public Float getSimilarity() {
+        return similarity;
     }
 }
