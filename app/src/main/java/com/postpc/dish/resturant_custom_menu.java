@@ -28,7 +28,7 @@ public class resturant_custom_menu extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ResturantCustomMenuViewModel.class);
-        mViewModel.rated_dishes();
+        mViewModel.load_rated_dishes();
     }
 
     @Override
