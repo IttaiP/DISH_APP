@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,9 +108,10 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
             if (emailExist(email)){
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
-                navController.navigate(R.id.action_welcome_screen_to_search_resturants2);
+                navController.navigate(R.id.action_create_user_to_init_user_dish_data);
             }
             else {
+                Log.d("Not found", email.getText().toString());
                 name.setText("");
                 email.setText("");
                 Toast.makeText(getContext(), "Email not found, Please sign up first.", Toast.LENGTH_SHORT).show();

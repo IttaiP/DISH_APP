@@ -108,7 +108,7 @@ public class search_resturants extends Fragment {
 
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
-                navController.navigate(R.id.action_search_resturants2_to_resturant_menu);
+//                navController.navigate(R.id.action_search_resturants2_to_resturant_menu);
 
             }
         });
@@ -120,7 +120,7 @@ public class search_resturants extends Fragment {
 
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                 NavController navController = navHostFragment.getNavController();
-                navController.navigate(R.id.action_search_resturants2_to_resturant_custom_menu);
+//                navController.navigate(R.id.action_search_resturants2_to_resturant_custom_menu);
 
             }
         });

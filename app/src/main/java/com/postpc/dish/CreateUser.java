@@ -17,6 +17,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -212,6 +214,11 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                                             "User has been registered successfully!",
                                             Toast.LENGTH_LONG).show();
                                     progressBar.setVisibility(View.GONE);
+                                    NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
+                                            .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                                    assert navHostFragment != null;
+                                    NavController navController = navHostFragment.getNavController();
+                                    navController.navigate(R.id.init_user_dish_data);
                                 } else {
                                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                                     firebaseUser.delete()
