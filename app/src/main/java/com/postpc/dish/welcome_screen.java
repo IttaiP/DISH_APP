@@ -1,7 +1,6 @@
 package com.postpc.dish;
 
 import androidx.lifecycle.ViewModelProvider;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,17 +16,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.core.UserWriteRecord;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.w3c.dom.Document;
-
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class welcome_screen extends Fragment implements View.OnClickListener{
 
@@ -128,16 +118,4 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         mViewModel = new ViewModelProvider(this).get(WelcomeScreenViewModel.class);
         // TODO: Use the ViewModel
     }
-
-//    public boolean emailExist(View v){
-//        AtomicBoolean emailExist = new AtomicBoolean(false);
-//        auth.fetchSignInMethodsForEmail(email.getText().toString())
-//                .addOnCompleteListener(task -> {
-//                    boolean check = !task.getResult().getSignInMethods().isEmpty();
-//                    if (check){
-//                        emailExist.set(true);
-//                        Toast.makeText(getContext(), "Email already exist", Toast.LENGTH_SHORT).show();                    }
-//                });
-//        return emailExist.get();
-//    }
 }

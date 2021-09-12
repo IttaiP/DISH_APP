@@ -211,8 +211,9 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     }
 
     private void writeNewUserToFirestoreDatabase() {
-        User user = new User(editTextName.getText().toString(),
-                editTextEmail.getText().toString());
+        User user = new User(editTextName.getText().toString().trim(),
+                editTextEmail.getText().toString().trim(),
+                editTextPassword.getText().toString().trim());
 
         FirebaseFirestore.getInstance().collection("users").
                 document(FirebaseAuth.getInstance().getCurrentUser().getUid())
