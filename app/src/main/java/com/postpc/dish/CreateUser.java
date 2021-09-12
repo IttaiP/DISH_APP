@@ -43,6 +43,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     private Button registerButton;
     private AppCompatButton signUpWithGoogleButton;
     private ProgressBar progressBar;
+    private FirebaseFirestore firebaseFirestore;
     @Nullable
     private Bundle savedInstanceState;
 
@@ -61,6 +62,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         super.onViewCreated(view, savedInstanceState);
 
         mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         signUpWithGoogleButton = view.findViewById(R.id.google_signIn);
         signUpWithGoogleButton.setOnClickListener(this);
@@ -146,13 +148,13 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(this.getActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        Intent intent = new Intent(getActivity(), User.class);
-                        startActivity(intent);
+                        writeNewUserToFirestoreDatabase();
 
                     } else {
                         // If sign in fails, display a message to the user.
-                        Toast.makeText(getActivity(), "auth failed", Toast.LENGTH_SHORT).show();
+                        Exception exception = task.getException();
+                        Toast.makeText(requireContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
                     }
                 });
     }
@@ -200,44 +202,45 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()){
-                        FirebaseUser currentUser = mAuth.getCurrentUser();
-                        User user = new User(editTextName.getText().toString(),
-                                editTextEmail.getText().toString());
-
-                        FirebaseFirestore.getInstance().collection("users").
-                                document(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                                .set(user)
-                                .addOnCompleteListener(requireActivity(), subTask -> {
-
-                                if (subTask.isSuccessful()){
-                                    Toast.makeText(requireContext(),
-                                            "User has been registered successfully!",
-                                            Toast.LENGTH_LONG).show();
-                                    progressBar.setVisibility(View.GONE);
-                                    NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
-                                            .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                                    assert navHostFragment != null;
-                                    NavController navController = navHostFragment.getNavController();
-                                    navController.navigate(R.id.init_user_dish_data);
-                                } else {
-                                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                    firebaseUser.delete()
-                                            .addOnCompleteListener(requireActivity(), subTask1 -> {
-
-                                                    if (subTask1.isSuccessful()) {
-                                                        Log.d("DELETE CURRENT USER",
-                                                                "User account deleted.");
-                                                    }});
-
-                                    Toast.makeText(requireContext(),
-                                            "Failed to register! Try again...",
-                                            Toast.LENGTH_LONG).show();
-                                    progressBar.setVisibility(View.GONE);
-                                }});
+                        writeNewUserToFirestoreDatabase();
                     } else {
                         Exception exception = task.getException();
+                        Toast.makeText(requireContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                    }});
+    }
+
+    private void writeNewUserToFirestoreDatabase() {
+        User user = new User(editTextName.getText().toString(),
+                editTextEmail.getText().toString());
+
+        FirebaseFirestore.getInstance().collection("users").
+                document(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .set(user)
+                .addOnCompleteListener(requireActivity(), subTask -> {
+
+                    if (subTask.isSuccessful()){
                         Toast.makeText(requireContext(),
-                                "Failed to register!",
+                                "User has been registered successfully!",
+                                Toast.LENGTH_LONG).show();
+                        progressBar.setVisibility(View.GONE);
+                        NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
+                                .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                        assert navHostFragment != null;
+                        NavController navController = navHostFragment.getNavController();
+                        navController.navigate(R.id.init_user_dish_data);
+                    } else {
+                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        firebaseUser.delete()
+                                .addOnCompleteListener(requireActivity(), subTask1 -> {
+
+                                    if (subTask1.isSuccessful()) {
+                                        Log.d("DELETE CURRENT USER",
+                                                "User account deleted.");
+                                    }});
+
+                        Toast.makeText(requireContext(),
+                                "Failed to register! Try again...",
                                 Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                     }});

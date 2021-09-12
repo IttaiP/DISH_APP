@@ -82,24 +82,24 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
 
             // exist user
             case R.id.welcome_screen_sign_in_button:
-                firebaseFirestore.collectionGroup("users")
-                        .whereEqualTo("email", email).get()
+                firebaseFirestore.collection("users")
+                        .whereEqualTo("email", email.getText().toString()).get()
                         .addOnCompleteListener(task -> {
 
                             // found user with provided email
                             if (task.isSuccessful()){
                                 // DocumentSnapshot document = task.getResult().getDocuments().get(0);
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
-                                intent.putExtra("Full Name" , name.toString()); // todo: check if this works
+                                intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
                                 startActivity(intent);
                             }
+
                             //user was not found
                             else {
                                 Toast.makeText(this.getContext(), "User was not found.", Toast.LENGTH_SHORT).show();
                             }
                         });
                 break;
-
         }
     }
 
@@ -116,7 +116,10 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
 
         // get buttons
         signInButton = view.findViewById(R.id.welcome_screen_sign_in_button);
+        signInButton.setOnClickListener(this);
+
         register = view.findViewById(R.id.welcome_screen_register);
+        register.setOnClickListener(this);
     }
 
     @Override
