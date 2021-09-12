@@ -38,7 +38,6 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
 
     @Override
     public void onBindViewHolder(@NonNull restaurant_view holder, int position) {
-//        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         holder.bind(restaurants.get(position), context);
         ImageView restaurant_image = holder.get_restaurant_image();
