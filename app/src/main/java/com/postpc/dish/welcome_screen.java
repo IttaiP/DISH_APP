@@ -3,6 +3,7 @@ package com.postpc.dish;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -20,6 +21,12 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.core.UserWriteRecord;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import org.w3c.dom.Document;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -27,6 +34,7 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
 
     private WelcomeScreenViewModel mViewModel;
     private FirebaseAuth auth;
+    private FirebaseFirestore firebaseFirestore;
     private EditText name, email, password;
     private Button signInButton;
     private TextView register;
@@ -63,6 +71,7 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         switch (view.getId()){
 
+            // new user
             case R.id.welcome_screen_register:
                 NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
                         .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
@@ -71,13 +80,25 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
                 navController.navigate(R.id.action_welcome_screen_to_create_user);
                 break;
 
-//            case R.id.welcome_screen_sign_in_button:
-//                NavHostFragment navHostFragment1 = (NavHostFragment) requireActivity()
-//                        .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//                assert navHostFragment1 != null;
-//                NavController navController1 = navHostFragment1.getNavController();
-//                navController1.navigate(R.id.resturant_custom_menu);
-//                break;
+            // exist user
+            case R.id.welcome_screen_sign_in_button:
+                firebaseFirestore.collectionGroup("users")
+                        .whereEqualTo("email", email).get()
+                        .addOnCompleteListener(task -> {
+
+                            // found user with provided email
+                            if (task.isSuccessful()){
+                                DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                                Intent intent = new Intent(this.getContext(), HomeScreen.class);
+                                intent.putExtra("Full Name" , document.get("name").toString()); // todo: check if this works
+                                startActivity(intent);
+                            }
+                            //user was not found
+                            else {
+                                Toast.makeText(this.getContext(), "User was not found.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                break;
 
         }
     }
@@ -91,6 +112,7 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         email = view.findViewById(R.id.welcome_screen_EmailAddress_field);
         password = view.findViewById(R.id.welcome_screen_password_field);
         auth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         // get buttons
         signInButton = view.findViewById(R.id.welcome_screen_sign_in_button);
