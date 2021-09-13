@@ -26,14 +26,25 @@ public class DishApplication extends Application {
         super.onCreate();
 
         info = new UserInfoStorage(this);
+
+//        runWork();
+    }
+
+    public void findUserID(){
+        info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        info.myID = task.getResult().getDocuments().get(0).getId();
+                    }
+                });
     }
 
     public void runWork(){
         if(!info.otherUsersEmails.contains("shmu@gmail.com")) {// todo change to bottom
             info.otherUsersEmails.add("shmu@gmail.com");
         }
-//        if(!otherUsersEmails.contains(getUser_Email())) {
-//            otherUsersEmails.add(getUser_Email());
+//        if(!info.otherUsersEmails.contains(info.getUser_Email())) {
+//            info.otherUsersEmails.add(info.getUser_Email());
 //        }
 
         Constraints constraints = new Constraints.Builder() // todo: decide if we want constraints
