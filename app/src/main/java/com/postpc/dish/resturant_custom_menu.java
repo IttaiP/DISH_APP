@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 public class resturant_custom_menu extends Fragment {
+    DishApplication app = (DishApplication)getActivity().getApplicationContext();
 
     private ResturantCustomMenuViewModel mViewModel;
 
@@ -29,23 +30,19 @@ public class resturant_custom_menu extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ResturantCustomMenuViewModel.class);
-        mViewModel.load_rated_dishes();
-        Log.e("SOOON", "load_similar_users");
+//        mViewModel = new ViewModelProvider(this).get(ResturantCustomMenuViewModel.class);
+        app.load_rated_dishes_from_sp();
+        Log.e("rated dishes", app.info.ratings.toString());
 
-        view.findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewModel.load_similar_users();
-            }
-        });
 
-        view.findViewById(R.id.button2).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewModel.calculateSimilarities();
-            }
-        });
+
+//        view.findViewById(R.id.button1).setOnClickListener(view1 -> app.load_similar_users());
+
+//        view.findViewById(R.id.button3).setOnClickListener(view12 -> mViewModel.calculateSimilarities());
+
+        view.findViewById(R.id.button2).setOnClickListener(view13 -> mViewModel.personalizeReccomendation());
+
+
 
 
 

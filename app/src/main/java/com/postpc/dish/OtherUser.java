@@ -1,9 +1,10 @@
 package com.postpc.dish;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OtherUser {
+public class OtherUser implements Serializable {
     private Float similarity;
     private String User_email;
     private List<DishRatings> ratings;
@@ -21,7 +22,7 @@ public class OtherUser {
     }
 
     public List<DishRatings> getRatings() {
-        return ratings;
+        return this.ratings;
     }
 
     public void setBoth_rated(int both_rated) {
@@ -33,6 +34,10 @@ public class OtherUser {
     }
 
     public Float getSimilarity() {
-        return similarity;
+        return this.similarity;
+    }
+
+    public String getUser_email() {
+        return User_email;
     }
 }
