@@ -1,25 +1,16 @@
-package com.postpc.dish.ui;
-import com.postpc.dish.R;
+package com.postpc.dish;
 
 
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-
-import com.postpc.dish.DishApplication;
 
 public class HomeFragment extends Fragment {
 

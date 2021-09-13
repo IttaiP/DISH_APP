@@ -17,6 +17,7 @@
     <string name="get_custom_menu">Get Custom Menu</string>
     <string name="search">Search</string>
     <string name="rate_recommendation">Rate Recommendation</string>
+    <string name="title_activity_to_delete_later">ToDeleteLater</string>
     <!--    <string name="default_web_client_id" />-->
     \
 </resources>

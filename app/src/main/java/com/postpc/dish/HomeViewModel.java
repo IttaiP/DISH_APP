@@ -1,4 +1,4 @@
-package com.postpc.dish.ui;
+package com.postpc.dish;
 
 import androidx.lifecycle.ViewModel;
 

@@ -19,6 +19,7 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent" android:layout_height="match_parent">
+
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
@@ -26,7 +27,7 @@
             android:layout_marginLeft="80dp"
             android:layout_marginTop="200dp"
             android:numStars="5"
-            android:rating="0"/>
+            android:rating="0" />
         <Button
             android:id="@+id/btnRate"
             android:layout_width="wrap_content"

@@ -1,6 +1,10 @@
 package com.postpc.dish;
 
 import android.app.Application;
+import android.content.SharedPreferences;
+import android.util.Log;
+
+import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -11,15 +15,15 @@ import androidx.lifecycle.ViewModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
+import com.postpc.dish.DishApplication;
+import com.postpc.dish.DishRatings;
+import com.postpc.dish.SharedViewModel;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class RateRecommendationViewModel extends SharedViewModel {
     DishApplication app = (DishApplication)getApplication().getApplicationContext();
-
-
-
 
     public RateRecommendationViewModel(@NonNull Application application) {
         super(application);
@@ -88,6 +92,5 @@ public class RateRecommendationViewModel extends SharedViewModel {
         String ratingsAsJson = gson.toJson(app.info.ratings);
         SharedPreferences sp = ((DishApplication)getApplication()).info.sp;
         sp.edit().putString("ratings", ratingsAsJson).apply();
-
     }
 }

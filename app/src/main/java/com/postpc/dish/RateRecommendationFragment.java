@@ -7,21 +7,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RatingBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-public class rate_recommendation extends Fragment {
+public class RateRecommendationFragment extends Fragment {
 
     private RateRecommendationViewModel mViewModel;
     private RatingBar stars;
     private TextView tView;
     private Button rateBtn;
 
-    public static rate_recommendation newInstance() {
-        return new rate_recommendation();
+    public static RateRecommendationFragment newInstance() {
+        return new RateRecommendationFragment();
     }
 
     @Override
@@ -33,7 +32,7 @@ public class rate_recommendation extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel =new ViewModelProvider(this).get(RateRecommendationViewModel.class);
+        mViewModel =new ViewModelProvider(this).get(com.postpc.dish.RateRecommendationViewModel.class);
 //        mViewModel.setUser_Email("shmu@gmail.com");
 //        mViewModel.setRestuarant("Pizza Lila");
         // todo: add user email , and restaurant and dish (after chosed dish) to shared preferences

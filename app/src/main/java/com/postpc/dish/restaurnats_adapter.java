@@ -16,6 +16,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.postpc.dish.R;
+import com.postpc.dish.Restaurant;
+import com.postpc.dish.SharedViewModel;
+import com.postpc.dish.restaurant_view;
+import com.postpc.dish.resturant_menu;
+
 import java.util.List;
 
 public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {

@@ -17,8 +17,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 
 public class welcome_screen extends Fragment implements View.OnClickListener{
 
@@ -39,22 +39,20 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         return inflater.inflate(R.layout.welcome_screen_fragment, container, false);
     }
 
-//    /**
-//     * If the user is already logged in to the app, when the app uploads it will take it directly
-//     * to the restaurant search screen
-//     */
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        FirebaseUser user = auth.getCurrentUser();
-//        if (user != null){
-//            NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
-//                    .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-//            assert navHostFragment != null;
-//            NavController navController = navHostFragment.getNavController();
-//            navController.navigate(R.id.resturant_custom_menu);
-//        }
-//    }
+    /**
+     * If the user is already logged in to the app, when the app uploads it will take it directly
+     * to the restaurant search screen
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser user = auth.getCurrentUser();
+        if (user != null){
+            Intent intent = new Intent(this.getContext(), HomeScreen.class);
+            intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
+            startActivity(intent);
+        }
+    }
 
     @SuppressLint("NonConstantResourceId")
     @Override
@@ -73,12 +71,12 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
             // exist user
             case R.id.welcome_screen_sign_in_button:
                 firebaseFirestore.collection("users")
-                        .whereEqualTo("email", email.getText().toString()).get()
+                        .whereEqualTo("email", email.getText().toString())
+                        .whereEqualTo("password", password.getText().toString()).get()
                         .addOnCompleteListener(task -> {
 
                             // found user with provided email
                             if (task.isSuccessful()){
-                                // DocumentSnapshot document = task.getResult().getDocuments().get(0);
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
                                 intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
                                 startActivity(intent);

@@ -1,7 +1,18 @@
 package com.postpc.dish;
 
+import androidx.lifecycle.ViewModelProvider;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -9,16 +20,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class search_resturants extends Fragment {
+public class SearchFragment extends Fragment {
 
     private EditText search;
     private RecyclerView recycler_view;
@@ -130,14 +131,14 @@ public class search_resturants extends Fragment {
         database.collection("restaurants").orderBy("name")
                 .startAt(search).endAt("search\uf8ff")
                 .get().addOnCompleteListener(task -> {
-                    if(task.isSuccessful()) {
-                        restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
-                        adapter.setAdapter(restaurants);
-                        adapter.notifyDataSetChanged();
-                    } else {
-                        Log.d("Not Found", "Error: " + task.getException().getMessage());
-                    }
-                });
+            if(task.isSuccessful()) {
+                restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
+                adapter.setAdapter(restaurants);
+                adapter.notifyDataSetChanged();
+            } else {
+                Log.d("Not Found", "Error: " + task.getException().getMessage());
+            }
+        });
     }
 
     public Restaurant find_restaurant_by_name(String name) {
@@ -155,5 +156,4 @@ public class search_resturants extends Fragment {
         mViewModel = new ViewModelProvider(this).get(SearchResturantsViewModel.class);
         // TODO: Use the ViewModel
     }
-
 }
