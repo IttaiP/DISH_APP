@@ -100,4 +100,15 @@ dependencies {
 
     implementation 'com.google.android.material:material:1.4.0'
     implementation 'com.yuyakaido.android:card-stack-view:2.3.4'
+
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    def work_version = "2.6.0"
+    // base dependency, for java usage only:
+    implementation "androidx.work:work-runtime:$work_version"
+    // for Kotlin usage add this line as well:
+//    implementation "androidx.work:work-runtime-ktx:$work_version"
+    // add this line if you plan to use ListenableWork:
+    implementation 'com.google.guava:guava:30.0-android'
+
 }
