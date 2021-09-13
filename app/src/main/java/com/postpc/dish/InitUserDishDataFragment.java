@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -38,9 +39,9 @@ import java.util.Objects;
 public class InitUserDishDataFragment extends Fragment {
 
     private InitUserDishDataViewModel mViewModel;
-    private CardStackLayoutManager manager;
-    private card_dish_adapter adapter;
     private FirebaseFirestore database;
+    private card_dish_adapter adapter;
+    private CardStackLayoutManager layoutManager;
     private List<DishItem> dishes;
     private Context context;
 
@@ -59,92 +60,100 @@ public class InitUserDishDataFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
         database = FirebaseFirestore.getInstance();
-        dishes = new ArrayList<>();
-        CardStackView card_dish_view = view.findViewById(R.id.dish_card_view);
-        manager = new CardStackLayoutManager(context, new CardStackListener() {
+        CardStackView cardStackView = view.findViewById(R.id.stack_view);
+        layoutManager = new CardStackLayoutManager(context, new CardStackListener() {
             @Override
             public void onCardDragging(Direction direction, float ratio) {
-                Log.d("DRAGGED", direction.name() + " RATIO " + ratio);
+                Log.d("MESSAGE", "onCardDragging: d=" + direction.name() + " ratio=" + ratio);
             }
 
             @Override
             public void onCardSwiped(Direction direction) {
-                Log.d("MSG:", "onCardSwiped: p=" + manager.getTopPosition() + "d=" + direction);
-                if(direction == Direction.Right) {
-                    Toast.makeText(getContext(), "Direction Right", Toast.LENGTH_SHORT).show();
+                Log.d("MESSAGE", "onCardSwiped: p=" + layoutManager.getTopPosition() + " d=" + direction);
+                if (direction == Direction.Right){
+                    Toast.makeText(context, "Direction Right", Toast.LENGTH_SHORT).show();
                 }
-                if(direction == Direction.Left) {
-                    Toast.makeText(getContext(), "Direction Left", Toast.LENGTH_SHORT).show();
+                if (direction == Direction.Left){
+                    Toast.makeText(context, "Direction Left", Toast.LENGTH_SHORT).show();
                 }
 
-                if(manager.getTopPosition() == adapter.getItemCount() - 5) {
+                // Paginating
+                if (layoutManager.getTopPosition() == adapter.getItemCount() - 5){
                     paginate();
                 }
             }
 
             @Override
             public void onCardRewound() {
-
+                Log.d("MESSAGE", "onCardRewound: " + layoutManager.getTopPosition());
             }
 
             @Override
             public void onCardCanceled() {
-
+                Log.d("MESSAGE", "onCardCanceled: " + layoutManager.getTopPosition());
             }
 
             @Override
             public void onCardAppeared(View view, int position) {
-
+                TextView tv = view.findViewById(R.id.dish_name);
+                Log.d("MESSAGE", "onCardAppeared: " + position + ", name: " + tv.getText());
             }
 
             @Override
             public void onCardDisappeared(View view, int position) {
-
+                TextView tv = view.findViewById(R.id.dish_name);
+                Log.d("MESSAGE", "onCardDisappeared: " + position + ", nama: " + tv.getText());
             }
         });
-        manager.setDirections(Direction.HORIZONTAL);
-        manager.setStackFrom(StackFrom.None);
-        manager.setVisibleCount(3);
-        manager.setTranslationInterval(8.0f);
-        manager.setScaleInterval(0.95f);
-        manager.setSwipeThreshold(0.3f);
-        manager.setMaxDegree(20.0f);
-        manager.setDirections(Direction.FREEDOM);
-        manager.setCanScrollHorizontal(true);
-        manager.setSwipeableMethod(SwipeableMethod.Manual);
-        manager.setOverlayInterpolator(new LinearInterpolator());
-        adapter = new card_dish_adapter(addList());
-        card_dish_view.setLayoutManager(manager);
-        card_dish_view.setAdapter(adapter);
-        card_dish_view.setItemAnimator(new DefaultItemAnimator());
+        layoutManager.setStackFrom(StackFrom.None);
+        layoutManager.setVisibleCount(3);
+        layoutManager.setTranslationInterval(8.0f);
+        layoutManager.setScaleInterval(0.95f);
+        layoutManager.setSwipeThreshold(0.3f);
+        layoutManager.setMaxDegree(20.0f);
+        layoutManager.setDirections(Direction.FREEDOM);
+        layoutManager.setCanScrollHorizontal(true);
+        layoutManager.setSwipeableMethod(SwipeableMethod.Manual);
+        layoutManager.setOverlayInterpolator(new LinearInterpolator());
+        adapter = new card_dish_adapter();
+        addList();
+        cardStackView.setLayoutManager(layoutManager);
+        cardStackView.setAdapter(adapter);
+        cardStackView.setItemAnimator(new DefaultItemAnimator());
+        database = FirebaseFirestore.getInstance();
     }
 
     private void paginate() {
         List<DishItem> oldList = adapter.getDishes();
         List<DishItem> newList = new ArrayList<>(addList());
         CardStackCallback callback = new CardStackCallback(oldList, newList);
-        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(callback);
+        DiffUtil.DiffResult results = DiffUtil.calculateDiff(callback);
         adapter.setDishes(newList);
-        diffResult.dispatchUpdatesTo(adapter);
+        results.dispatchUpdatesTo(adapter);
     }
 
     private List<DishItem> addList() {
-        database.collection("restaurants").whereEqualTo("name", "nam")
+        readData(new MyCallback() {
+            @Override
+            public void onCallback(List<DishItem> dishesList) {
+                adapter.setDishes(dishesList);
+            }
+        });
+        database.collection("restaurants").whereEqualTo("name", "Nam")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 if(task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : task.getResult()) {
                         Restaurant restaurant1 = document.toObject(Restaurant.class);
-                        int resourceId = context.getResources().getIdentifier(restaurant1.code, "drawable",
-                                context.getPackageName());
                         Log.d("name", restaurant1.name);
                         document.getReference().collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if(task.isSuccessful()) {
-                                    dishes = (ArrayList<DishItem>) Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
-                                    adapter.setDishes(dishes);
+                                    dishes = Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
+                                    Log.d("dishes", dishes.get(0).name);
+//                                    adapter.setDishes(dishes);
                                 } else {
                                     Log.d("Not Found", "Error: " + task.getException().getMessage());
                                 }
@@ -159,6 +168,45 @@ public class InitUserDishDataFragment extends Fragment {
         });
         return dishes;
     }
+
+    public interface MyCallback {
+        void onCallback(List<DishItem> dishesList);
+    }
+
+    public void readData(MyCallback myCallback) {
+        database.collection("restaurants").whereEqualTo("name", "Nam")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        Restaurant restaurant1 = document.toObject(Restaurant.class);
+                        Log.d("name", restaurant1.name);
+                        document.getReference().collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if(task.isSuccessful()) {
+                                    dishes = Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
+                                    myCallback.onCallback(dishes);
+//                                    Log.d("dishes", dishes.get(0).name);
+//                                    adapter.setDishes(dishes);
+                                } else {
+                                    Log.d("Not Found", "Error: " + task.getException().getMessage());
+                                }
+                            }
+                        });
+                    }
+//                    List<DishItem> newDishesList = new ArrayList<>();
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        DishItem dish = document.toObject(DishItem.class);
+//                        newDishesList.add(dish);
+//                    }
+//                    myCallback.onCallback(newDishesList);
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

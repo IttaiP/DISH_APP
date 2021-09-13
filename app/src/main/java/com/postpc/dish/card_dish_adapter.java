@@ -1,6 +1,7 @@
 package com.postpc.dish;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
@@ -15,8 +17,8 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
     private Context context;
     private List<DishItem> dishes;
 
-    card_dish_adapter(List<DishItem> dishes) {
-        this.dishes = dishes;
+    card_dish_adapter() {
+        this.dishes = new ArrayList<>();
     }
 
     @NonNull
@@ -44,5 +46,7 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
 
     public void setDishes(List<DishItem> newList) {
         this.dishes = newList;
+        notifyDataSetChanged();
     }
+
 }

@@ -12,19 +12,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/dish_title"
         android:text="DISH"
         android:textSize="20sp"/>
 
     <com.yuyakaido.android.cardstackview.CardStackView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dish_card_view"
-        android:padding="8dp"
-        android:clipToPadding="false"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/stack_view"
+        android:layout_width="380dp"
+        android:layout_height="404dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toTopOf="@id/dish_title"
         app:layout_constraintBottom_toBottomOf="parent"
-        />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
