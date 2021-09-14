@@ -111,4 +111,9 @@ dependencies {
     // add this line if you plan to use ListenableWork:
     implementation 'com.google.guava:guava:30.0-android'
 
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:26.1.0'
+
 }

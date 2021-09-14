@@ -8,6 +8,13 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:id="@+id/toolbar"
+        android:theme="@style/Theme.DISH.NoActionBar"
+        android:elevation="4dp"/>
+
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_home_screen"
         android:name="androidx.navigation.fragment.NavHostFragment"
