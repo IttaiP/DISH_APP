@@ -71,6 +71,7 @@ public class InitUserDishDataFragment extends Fragment {
             public void onCardSwiped(Direction direction) {
                 Log.d("MESSAGE", "onCardSwiped: p=" + layoutManager.getTopPosition() + " d=" + direction);
                 if (direction == Direction.Right){
+
                     Toast.makeText(context, "Fabulous!", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Left){
