@@ -28,14 +28,14 @@
     <item android:title="@string/settings">
         <menu>
             <item
-                android:id="@+id/nuv_swipe_dishes"
+                android:id="@+id/nav_swipe_dishes"
                 android:icon="@drawable/ic_swipe"
                 android:title="@string/swipe_to_improve" />
 
             <item
-                android:id="@+id/nuv_logout"
+                android:id="@+id/nav_logout"
                 android:icon="@drawable/ic_logout"
-                android:title="Logout" />
+                android:title="@string/logout" />
         </menu>
     </item>
 
