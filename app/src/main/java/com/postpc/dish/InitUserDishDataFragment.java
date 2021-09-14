@@ -71,14 +71,21 @@ public class InitUserDishDataFragment extends Fragment {
             public void onCardSwiped(Direction direction) {
                 Log.d("MESSAGE", "onCardSwiped: p=" + layoutManager.getTopPosition() + " d=" + direction);
                 if (direction == Direction.Right){
-                    Toast.makeText(context, "Direction Right", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Fabulous!", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Left){
-                    Toast.makeText(context, "Direction Left", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Never Again!", Toast.LENGTH_SHORT).show();
+                }
+                if (direction == Direction.Top){
+                    Toast.makeText(context, "Satisfying", Toast.LENGTH_SHORT).show();
+                }
+                if (direction == Direction.Bottom){
+                    Toast.makeText(context, "Fine", Toast.LENGTH_SHORT).show();
                 }
 
+
                 // Paginating
-                if (layoutManager.getTopPosition() == adapter.getItemCount() - 5){
+                if (layoutManager.getTopPosition() == adapter.getItemCount()){
                     paginate();
                 }
             }
@@ -102,7 +109,7 @@ public class InitUserDishDataFragment extends Fragment {
             @Override
             public void onCardDisappeared(View view, int position) {
                 TextView tv = view.findViewById(R.id.dish_name);
-                Log.d("MESSAGE", "onCardDisappeared: " + position + ", nama: " + tv.getText());
+                Log.d("MESSAGE", "onCardDisappeared: " + position + ", name: " + tv.getText());
             }
         });
         layoutManager.setStackFrom(StackFrom.None);
@@ -139,33 +146,33 @@ public class InitUserDishDataFragment extends Fragment {
                 adapter.setDishes(dishesList);
             }
         });
-        database.collection("restaurants").whereEqualTo("name", "Nam")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Restaurant restaurant1 = document.toObject(Restaurant.class);
-                        Log.d("name", restaurant1.name);
-                        document.getReference().collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if(task.isSuccessful()) {
-                                    dishes = Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
-                                    Log.d("dishes", dishes.get(0).name);
-//                                    adapter.setDishes(dishes);
-                                } else {
-                                    Log.d("Not Found", "Error: " + task.getException().getMessage());
-                                }
-                            }
-                        });
-                    }
-                }
-                else {
-                    Log.d("Error", "Error trying to receive");
-                }
-            }
-        });
+//        database.collection("restaurants").whereEqualTo("name", "Pizza Lila")
+//                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful()) {
+//                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                        Restaurant restaurant1 = document.toObject(Restaurant.class);
+//                        Log.d("name", restaurant1.name);
+//                        document.getReference().collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                            @Override
+//                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                if(task.isSuccessful()) {
+//                                    dishes = Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
+//                                    Log.d("dishes", dishes.get(0).name);
+////                                    adapter.setDishes(dishes);
+//                                } else {
+//                                    Log.d("Not Found", "Error: " + task.getException().getMessage());
+//                                }
+//                            }
+//                        });
+//                    }
+//                }
+//                else {
+//                    Log.d("Error", "Error trying to receive");
+//                }
+//            }
+//        });
         return dishes;
     }
 
@@ -174,7 +181,7 @@ public class InitUserDishDataFragment extends Fragment {
     }
 
     public void readData(MyCallback myCallback) {
-        database.collection("restaurants").whereEqualTo("name", "Nam")
+        database.collection("restaurants").whereEqualTo("name", "Taqueria")
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -196,12 +203,6 @@ public class InitUserDishDataFragment extends Fragment {
                             }
                         });
                     }
-//                    List<DishItem> newDishesList = new ArrayList<>();
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        DishItem dish = document.toObject(DishItem.class);
-//                        newDishesList.add(dish);
-//                    }
-//                    myCallback.onCallback(newDishesList);
                 }
             }
         });
