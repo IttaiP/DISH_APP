@@ -38,12 +38,12 @@ public class SearchFragment extends Fragment {
     private ArrayList<Restaurant> restaurants;
     private restaurnats_adapter adapter;
 
-    private SearchResturantsViewModel mViewModel;
+    private SearchViewModel mViewModel;
     private SharedViewModel sharedViewModel;
 
 
-    public static search_resturants newInstance() {
-        return new search_resturants();
+    public static SearchFragment newInstance() {
+        return new SearchFragment();
     }
 
     @Override
@@ -153,7 +153,7 @@ public class SearchFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SearchResturantsViewModel.class);
+        mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         // TODO: Use the ViewModel
     }
 }
