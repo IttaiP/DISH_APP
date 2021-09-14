@@ -39,6 +39,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/bitter"
         android:paddingTop="6dp"
-        android:text="<Email field>"
+        android:text="Email field"
         android:textSize="15sp"/>
 </LinearLayout>
