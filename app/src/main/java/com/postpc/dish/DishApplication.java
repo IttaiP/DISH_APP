@@ -1,8 +1,12 @@
 package com.postpc.dish;
 
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -16,19 +20,28 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class DishApplication extends Application {
     public UserInfoStorage info;
+    WifiScanner wifiScanner;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
         info = new UserInfoStorage(this);
+        wifiScanner = new WifiScanner(this);
+
 
 //        runWork();
     }
+
+
+
+
+
 
     public void findUserID(){
         info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
