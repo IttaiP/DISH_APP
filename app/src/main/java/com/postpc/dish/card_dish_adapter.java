@@ -44,6 +44,10 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
         return dishes;
     }
 
+    public void addDish(DishItem dish) {
+        this.dishes.add(dish);
+    }
+
     public void setDishes(List<DishItem> newList) {
         this.dishes = newList;
         notifyDataSetChanged();
