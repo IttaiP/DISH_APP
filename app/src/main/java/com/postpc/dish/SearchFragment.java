@@ -294,7 +294,7 @@ public class SearchFragment extends Fragment {
                         snackbar.show();
                     } else {
                         Snackbar snackbar = Snackbar
-                                .make(activity.getWindow().getDecorView(), "You Must Give The App Location Permission Through Phone Settings!", Snackbar.LENGTH_INDEFINITE)
+                                .make(activity.getWindow().getDecorView(), "You Must Allow Location Permission Through App Settings!", Snackbar.LENGTH_INDEFINITE)
                                 .setAction("Take Me There", new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
