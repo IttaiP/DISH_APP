@@ -28,7 +28,6 @@ public class WifiScanner {
     WifiManager wifiManager;
     BroadcastReceiver wifiScanReceiver;
     DishApplication app;
-    String[] missingPermissions;
     List<String> scannedRestaurants;
 
 
@@ -38,7 +37,7 @@ public class WifiScanner {
     }
 
 
-    private void initWifi(){
+    public void initWifi(){
         wifiManager = (WifiManager)
                 app.getSystemService(Context.WIFI_SERVICE);
 
@@ -62,7 +61,7 @@ public class WifiScanner {
 
     }
 
-    private void scanSuccess() {
+    public void scanSuccess() {
         List<ScanResult> results = wifiManager.getScanResults();
         List<String> scannedRestaurants = new ArrayList<>();
 
@@ -81,7 +80,7 @@ public class WifiScanner {
 
 
 
-    private void scanFailure() {
+    public void scanFailure() {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
         List<ScanResult> results = wifiManager.getScanResults();
@@ -90,98 +89,5 @@ public class WifiScanner {
 
     }
 
-    // todo: code below needs to be added in relevant activity
-//    private void beginWifiScan(Activity activity){
-//        permissionValidation(activity);
-//        boolean success = wifiManager.startScan();
-//        // get results of scan from app.WifiScanner
-//        if (!success) {
-//            // scan failure handling
-//            scanFailure();
-//        }
-//    }
-//
-//
-//    private void permissionValidation() {
-//        boolean hasFineLocationPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-//        boolean hasCoarseLocationPermission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
-//
-//        List<String> missingPermission = new ArrayList<>();
-//
-//        if (!hasFineLocationPermission) {
-//            missingPermission.add(Manifest.permission.ACCESS_FINE_LOCATION);
-//        }
-//        if (!hasCoarseLocationPermission) {
-//            missingPermission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
-//        }
-//
-//        missingPermissions = missingPermission.toArray(new String[missingPermission.size()]);
-//
-//        Log.e("MISSING", String.valueOf(missingPermission.isEmpty()));
-//
-//        if (!missingPermission.isEmpty()) {
-//
-//            ActivityCompat.requestPermissions(
-//                    activity,
-//                    missingPermissions, 1);
-//        }
-//
-//    }
-
-//    public boolean hasAllPermissionsGranted(@NonNull int[] grantResults) {
-//        for (int grantResult : grantResults) {
-//            if (grantResult == PackageManager.PERMISSION_DENIED) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//
-//    @SuppressLint("MissingSuperCall")
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode,
-//                                           @NonNull String[] permissions,
-//                                           @NonNull int[] grantResults) {
-//        Log.e("LENGTH", String.valueOf(grantResults.length));
-//        if (hasAllPermissionsGranted(grantResults)) {
-//            Log.e("SUCCES", "SSSSSSSSSSSSSSSSSSSS");
-//
-//            Snackbar snackbar = Snackbar
-//                    .make(activity.getWindow().getDecorView(), "GOOD CHOICE!", Snackbar.LENGTH_LONG);
-//            snackbar.show();
-//        } else {
-//            if(shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)){
-//                Log.e("FAILURE", "FFFFFFFFFFFFFFFFFFFFFFFF");
-//                Snackbar snackbar = Snackbar
-//                        .make(activity.getWindow().getDecorView(), "No Auto Restaurant Recognition For You!", Snackbar.LENGTH_INDEFINITE)
-//                        .setAction("regret", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Log.e("REGRET", "RRRRRR");
-//                                ActivityCompat.requestPermissions(
-//                                        activity,
-//                                        missingPermissions, 1);
-//                            }
-//                        });
-//                snackbar.show();
-//            }
-//            else{
-//                Snackbar snackbar = Snackbar
-//                        .make(activity.getWindow().getDecorView(), "You Must Give The App Location Permission Through Phone Settings!", Snackbar.LENGTH_INDEFINITE)
-//                        .setAction("Take Me There", new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View view) {
-//                                Log.e("REGRET", "RRRRRR");
-//                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-//                                Uri uri = Uri.fromParts("package", getPackageName(), null);
-//                                intent.setData(uri);
-//                                startActivity(intent);
-//                            }
-//
-//                        });
-//                snackbar.show();
-//            }
-//        }
-//    }
 
 }

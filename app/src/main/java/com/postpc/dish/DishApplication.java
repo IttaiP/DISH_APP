@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DishApplication extends Application {
     public UserInfoStorage info;
-    WifiScanner wifiScanner;
+    public WifiScanner wifiScanner;
 
     @Override
     public void onCreate() {
@@ -35,7 +35,8 @@ public class DishApplication extends Application {
         wifiScanner = new WifiScanner(this);
 
 
-//        runWork();
+//        runWork(); todo: this is background work to update similar users. is supposed to run once a week
+//         todo continuation: but need to check where the first run should be written
     }
 
 

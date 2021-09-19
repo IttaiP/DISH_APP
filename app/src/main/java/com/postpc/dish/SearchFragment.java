@@ -1,8 +1,18 @@
 package com.postpc.dish;
 
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +23,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -21,12 +32,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class SearchFragment extends Fragment {
@@ -40,6 +60,15 @@ public class SearchFragment extends Fragment {
 
     private SearchViewModel mViewModel;
     private SharedViewModel sharedViewModel;
+
+    // ---------------ADDED BY ITTAI --------------
+    Activity activity = getActivity();
+    private LocationRequest locationRequest;
+    private static final int REQUEST_CHECK_SETTINGS = 10001;
+    DishApplication app = (DishApplication)activity.getApplication().getApplicationContext();
+    List<String> scannedRestaurants;
+
+
 
 
     public static SearchFragment newInstance() {
@@ -66,7 +95,7 @@ public class SearchFragment extends Fragment {
 
         //Set up recycler view
         recycler_view.setHasFixedSize(true);
-        recycler_view.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false));
         recycler_view.setAdapter(adapter);
 
         database.collection("restaurants").orderBy("name")
@@ -125,6 +154,19 @@ public class SearchFragment extends Fragment {
 
             }
         });
+
+
+        // ---------------ADDED BY ITTAI --------------
+        mViewModel = new ViewModelProvider(this).get(com.postpc.dish.SearchViewModel.class);
+        mViewModel.activity = activity;
+
+        view.findViewById(R.id.WifiScanbutton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                beginWifiScan();
+                scannedRestaurants = app.wifiScanner.scannedRestaurants;
+            }
+        });
     }
 
     private void search_in_firestore(String search) {
@@ -156,4 +198,117 @@ public class SearchFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
         // TODO: Use the ViewModel
     }
+
+
+
+    // ---------------ADDED BY ITTAI --------------
+
+
+    private void beginWifiScan(){
+        EnableLocation();
+        mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+
+    public void EnableLocation(){
+        locationRequest = LocationRequest.create();
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        locationRequest.setInterval(5000);
+        locationRequest.setFastestInterval(2000);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+        builder.setAlwaysShow(true);
+
+        Task<LocationSettingsResponse> result = LocationServices.getSettingsClient(activity.getApplicationContext())
+                .checkLocationSettings(builder.build());
+
+
+        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
+            @Override
+            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+
+                } catch (ApiException e) {
+
+                    switch (e.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+
+                            try {
+                                ResolvableApiException resolvableApiException = (ResolvableApiException)e;
+                                resolvableApiException.startResolutionForResult(activity,REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException ex) {
+                                ex.printStackTrace();
+                            }
+                            break;
+
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            //Device does not have location
+                            break;
+                    }
+                }
+            }
+        });
+
+
+
+    }
+
+    private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
+            new ActivityResultContracts.RequestPermission(),
+            result -> {
+                if (result) {
+                    Log.e("SUCCESS", "onActivityResult: PERMISSION GRANTED");
+                    Snackbar snackbar = Snackbar
+                            .make(activity.getWindow().getDecorView(), "GOOD CHOICE!", Snackbar.LENGTH_LONG);
+                    snackbar.show();
+                    if(app.wifiScanner.wifiManager.isWifiEnabled()){
+                        boolean success = app.wifiScanner.wifiManager.startScan();
+                        if (!success) {
+                            app.wifiScanner.scanFailure();
+                        }
+                        Log.e("FAIL REASON", String.valueOf(success));
+                    }
+                    else {
+                        app.wifiScanner.wifiManager.setWifiEnabled(true);
+                        boolean success = app.wifiScanner.wifiManager.startScan();
+                        if (!success) {
+                            app.wifiScanner.scanFailure();
+                        }
+                        app.wifiScanner.wifiManager.setWifiEnabled(false);
+                    }
+
+                } else {
+                    Log.e("FAILURE", "onActivityResult: PERMISSION DENIED");
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                        Snackbar snackbar = Snackbar
+                                .make(activity.getWindow().getDecorView(), "You Must Allow Location For Restaurant Recognition!", Snackbar.LENGTH_INDEFINITE);
+                        snackbar.setAction("Got It", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.e("REGRET", "RRRRRR");
+                                snackbar.dismiss();
+                            }
+                        });
+                        snackbar.show();
+                    } else {
+                        Snackbar snackbar = Snackbar
+                                .make(activity.getWindow().getDecorView(), "You Must Give The App Location Permission Through Phone Settings!", Snackbar.LENGTH_INDEFINITE)
+                                .setAction("Take Me There", new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Log.e("REGRET", "RRRRRR");
+                                        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                        Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+                                        intent.setData(uri);
+                                        startActivity(intent);
+                                    }
+
+                                });
+                        snackbar.show();
+                    }
+                }
+            });
+
 }
