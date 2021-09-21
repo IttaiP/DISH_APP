@@ -122,6 +122,8 @@
         android:id="@+id/stack_view"
         android:layout_width="300dp"
         android:layout_height="404dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_centerHorizontal="true"
         app:layout_constraintTop_toBottomOf="@id/categoryChipsView"
         app:layout_constraintBottom_toTopOf="@id/box_hint"

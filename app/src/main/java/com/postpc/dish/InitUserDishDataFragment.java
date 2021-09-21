@@ -46,6 +46,7 @@ public class InitUserDishDataFragment extends Fragment {
     private final double FINE = 2;
     private final double NEVER_AGAIN = 0.5;
 
+    private UserInfoStorage info;
     private InitUserDishDataViewModel mViewModel;
     private FirebaseFirestore database;
     private card_dish_adapter adapter;
@@ -81,6 +82,7 @@ public class InitUserDishDataFragment extends Fragment {
             }
         });
         context = getContext();
+        info = new UserInfoStorage(getContext());
         database = FirebaseFirestore.getInstance();
         CardStackView cardStackView = view.findViewById(R.id.stack_view);
         layoutManager = new CardStackLayoutManager(context, new CardStackListener() {
@@ -161,7 +163,12 @@ public class InitUserDishDataFragment extends Fragment {
     }
 
     public void update_dish(String dish_name, double rating) {
-        String user_id = DishApplication.
+        info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        info.myID = task.getResult().getDocuments().get(0).getId();
+                    }
+                });
     }
 
     public void add_restaurant() {
