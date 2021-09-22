@@ -19,9 +19,12 @@ import androidx.work.WorkManager;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
+import java.security.AlgorithmParameterGenerator;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import io.paperdb.Paper;
 
 public class DishApplication extends Application {
     public UserInfoStorage info;
@@ -31,12 +34,16 @@ public class DishApplication extends Application {
     public void onCreate() {
         super.onCreate();
 
+        Paper.init(this);
+
+
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
 
 //        runWork(); todo: this is background work to update similar users. is supposed to run once a week
 //         todo continuation: but need to check where the first run should be written
+
     }
 
 
