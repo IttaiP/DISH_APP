@@ -63,14 +63,20 @@ public class WifiScanner {
 
     public void scanSuccess() {
         List<ScanResult> results = wifiManager.getScanResults();
-        List<String> scannedRestaurants = new ArrayList<>();
+        scannedRestaurants = new ArrayList<>();
 
         for (ScanResult result : results) {
             app.info.database.collection("restaurants").whereEqualTo("Wifi",result.SSID)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            scannedRestaurants.add(task.getResult().getDocuments().get(0).get("name").toString());
+                            if(task.getResult().getDocuments().size()>0){
+                                if(!scannedRestaurants.contains(task.getResult().getDocuments().get(0).get("name").toString())){
+                                    scannedRestaurants.add(task.getResult().getDocuments().get(0).get("name").toString());
+                                    Log.e("SCANNED REST",scannedRestaurants.toString());
+                                }
+
+                            }
                         }
                     });
         }

@@ -262,9 +262,6 @@ public class SearchFragment extends Fragment {
             result -> {
                 if (result) {
                     Log.e("SUCCESS", "onActivityResult: PERMISSION GRANTED");
-                    Snackbar snackbar = Snackbar
-                            .make(activity.getWindow().getDecorView(), "GOOD CHOICE!", Snackbar.LENGTH_LONG);
-                    snackbar.show();
                     if(app.wifiScanner.wifiManager.isWifiEnabled()){
                         boolean success = app.wifiScanner.wifiManager.startScan();
                         if (!success) {
