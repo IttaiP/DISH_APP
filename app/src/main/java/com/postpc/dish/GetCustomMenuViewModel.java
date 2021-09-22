@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import io.paperdb.Paper;
+
 public class GetCustomMenuViewModel extends ViewModel {
 
     private SharedViewModel sharedViewModel;
@@ -59,6 +61,8 @@ public class GetCustomMenuViewModel extends ViewModel {
                         Log.e("Reccomendation", app.info.DishReccomendationScores.toString());
                     }
                 });
+        Paper.book().write("DishReccomendationScores", app.info.DishReccomendationScores);
+
 
     }
 }

@@ -62,10 +62,10 @@ public class SearchFragment extends Fragment {
     private SharedViewModel sharedViewModel;
 
     // ---------------ADDED BY ITTAI --------------
-    Activity activity = getActivity();
+    Activity activity;
     private LocationRequest locationRequest;
     private static final int REQUEST_CHECK_SETTINGS = 10001;
-    DishApplication app = (DishApplication)activity.getApplication().getApplicationContext();
+    DishApplication app;
     List<String> scannedRestaurants;
 
 
@@ -87,6 +87,8 @@ public class SearchFragment extends Fragment {
         search = view.findViewById(R.id.search_bar);
         recycler_view = view.findViewById(R.id.recycler_view);
         database = FirebaseFirestore.getInstance();
+        activity = getActivity();
+        app = (DishApplication)activity.getApplication().getApplicationContext();
 
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
@@ -260,9 +262,6 @@ public class SearchFragment extends Fragment {
             result -> {
                 if (result) {
                     Log.e("SUCCESS", "onActivityResult: PERMISSION GRANTED");
-                    Snackbar snackbar = Snackbar
-                            .make(activity.getWindow().getDecorView(), "GOOD CHOICE!", Snackbar.LENGTH_LONG);
-                    snackbar.show();
                     if(app.wifiScanner.wifiManager.isWifiEnabled()){
                         boolean success = app.wifiScanner.wifiManager.startScan();
                         if (!success) {

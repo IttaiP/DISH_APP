@@ -10,16 +10,18 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class UserInfoStorage {
     private String restuarant;
     private String user_Email;
     public String myID = "E2JKt2QRRP8HnWkTAZMe";
     public FirebaseFirestore database = FirebaseFirestore.getInstance();
-    public List<DishRatings> ratings = new ArrayList<>();
-    public List<String> indicesInRatings = new ArrayList<>();
-    public List<OtherUser> otherUsers = new ArrayList<>();
-    public List<String> otherUsersEmails = new ArrayList<>();
-    public HashMap<String, Float> DishReccomendationScores = new HashMap<>();
+    public List<DishRatings> ratings;
+    public List<String> indicesInRatings;
+    public List<OtherUser> otherUsers;
+    public List<String> otherUsersEmails;
+    public HashMap<String, Float> DishReccomendationScores;
 
 
     SharedPreferences sp;
@@ -27,7 +29,11 @@ public class UserInfoStorage {
 
     public UserInfoStorage(Context context){
         sp = PreferenceManager.getDefaultSharedPreferences(context);
-
+        ratings = Paper.book().read("ratings", new ArrayList<>());
+        indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
+        otherUsers = Paper.book().read("otherUsers", new ArrayList<>());
+        otherUsersEmails = Paper.book().read("otherUsersEmails", new ArrayList<>());
+        DishReccomendationScores = Paper.book().read("DishReccomendationScores", new HashMap<>());
     }
 
 

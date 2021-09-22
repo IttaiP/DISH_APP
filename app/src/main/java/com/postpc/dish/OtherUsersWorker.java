@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class OtherUsersWorker extends Worker {
     private final DishApplication app = (DishApplication) getApplicationContext();
     private final FirebaseFirestore database = app.info.database;
@@ -39,6 +41,9 @@ public class OtherUsersWorker extends Worker {
             return Result.failure(); // todo: check what i should do here
         }
         load_similar_users();
+
+        Paper.book().write("otherUsers", app.info.otherUsers);
+        Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
 
         return Result.success();
     }

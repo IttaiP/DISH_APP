@@ -10,6 +10,8 @@ import androidx.work.WorkerParameters;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.paperdb.Paper;
+
 public class CalcSimilaritiesWorker extends Worker {
     private final DishApplication app = (DishApplication) getApplicationContext();
 
@@ -25,6 +27,12 @@ public class CalcSimilaritiesWorker extends Worker {
     @Override
     public Result doWork() {
         calculateSimilarities();
+
+        Paper.book().write("otherUsers", app.info.otherUsers);
+        Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
+        Paper.book().write("indicesInRatings", app.info.indicesInRatings);
+        Paper.book().write("DishReccomendationScores", app.info.DishReccomendationScores);
+
         return Result.success();
     }
 
@@ -42,7 +50,7 @@ public class CalcSimilaritiesWorker extends Worker {
                 }
             }
             otherUser.setSimilarity((float) (2.5 - differece_sum/both_rated));
-            otherUser.setBoth_rated(both_rated);
+//            otherUser.setBoth_rated(both_rated);
             Log.e(" SIMILARITY",otherUser.getUser_email() +  otherUser.getSimilarity().toString());
 
         }
