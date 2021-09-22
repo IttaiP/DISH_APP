@@ -87,7 +87,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
             case R.id.nav_swipe_dishes:
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new InitUserDishDataFragment()).commit();
+                        replace(R.id.fragment_container, new InitUserDishDataFragment()).addToBackStack(null).commit();
                 break;
 
             case R.id.nav_logout:

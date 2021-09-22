@@ -38,13 +38,14 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class InitUserDishDataFragment extends Fragment {
-    private final double FABULOUS = 5;
-    private final double SATISFYING = 3.5;
-    private final double FINE = 2;
-    private final double NEVER_AGAIN = 0.5;
+    private final float FABULOUS = 5;
+    private final float SATISFYING = 3.5F;
+    private final float FINE = 2;
+    private final float NEVER_AGAIN = 0.5F;
 
     private UserInfoStorage info;
     private InitUserDishDataViewModel mViewModel;
@@ -76,9 +77,9 @@ public class InitUserDishDataFragment extends Fragment {
         category.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, int checkedId) {
-                Chip current = (Chip) group.getChildAt(checkedId);
-                current_category = current.getText().toString();
-                addList(current_category);
+                Chip chip = group.findViewById(group.getCheckedChipId());
+                current_category = chip.getText().toString().toLowerCase(Locale.ROOT);
+                addList();
             }
         });
         context = getContext();
@@ -155,18 +156,19 @@ public class InitUserDishDataFragment extends Fragment {
         adapter = new card_dish_adapter();
 //        add_all_dishes();
 //        add_restaurant();
-        addList(current_category);
+        addList();
         cardStackView.setLayoutManager(layoutManager);
         cardStackView.setAdapter(adapter);
         cardStackView.setItemAnimator(new DefaultItemAnimator());
         database = FirebaseFirestore.getInstance();
     }
 
-    public void update_dish(String dish_name, double rating) {
+    public void update_dish(String dish_name, float rating) {
         info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        info.myID = task.getResult().getDocuments().get(0).getId();
+                        DishRatings new_rating = new DishRatings(dish_name, rating);
+//                        info.myID = task.getResult().getDocuments().get(0).getId();
                     }
                 });
     }
@@ -236,20 +238,20 @@ public class InitUserDishDataFragment extends Fragment {
 
     private void paginate() {
         List<DishItem> oldList = adapter.getDishes();
-        List<DishItem> newList = new ArrayList<>(addList("italian"));
+        List<DishItem> newList = new ArrayList<>(addList());
         CardStackCallback callback = new CardStackCallback(oldList, newList);
         DiffUtil.DiffResult results = DiffUtil.calculateDiff(callback);
         adapter.setDishes(newList);
         results.dispatchUpdatesTo(adapter);
     }
 
-    private List<DishItem> addList(String catgeory) {
+    private List<DishItem> addList() {
         readData(new MyCallback() {
             @Override
             public void onCallback(List<DishItem> dishesList) {
                 adapter.setDishes(dishesList);
             }
-        }, catgeory);
+        });
         return dishes;
     }
 
@@ -257,8 +259,8 @@ public class InitUserDishDataFragment extends Fragment {
         void onCallback(List<DishItem> dishesList);
     }
 
-    public void readData(MyCallback myCallback, String category) {
-        database.collection("all-dishes").whereEqualTo("category", category)
+    public void readData(MyCallback myCallback) {
+        database.collection("all-dishes").whereEqualTo("category", this.current_category)
                 .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
