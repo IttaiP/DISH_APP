@@ -1,5 +1,6 @@
 package com.postpc.dish;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,6 +31,8 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
     private List<Restaurant> restaurants;
     private SharedViewModel sharedViewModel;
 
+    private DishApplication app;
+
     restaurnats_adapter(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
@@ -52,7 +55,14 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
         restaurant_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                //Added by Ittai
+                app = (DishApplication) activity.getApplication();
+                app.info.setRestuarant(restaurant_name.getText().toString());
+
+
                 Bundle arguments = new Bundle();
                 Log.d("name", restaurant_name.getText().toString());
                 arguments.putString("restaurant", restaurant_name.getText().toString());
