@@ -23,7 +23,6 @@ public class UserInfoStorage {
     public List<String> otherUsersEmails;
     public HashMap<String, Float> DishReccomendationScores;
 
-
     SharedPreferences sp;
 
 

@@ -36,14 +36,19 @@ public class OtherUsersWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        Log.e("Started", "OtherUsersWorker doWork");
 
-        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) {
+//        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) { // not sure why had first 2 conds
+        if(app.info.ratings.isEmpty() ) {
             return Result.failure(); // todo: check what i should do here
         }
         load_similar_users();
 
+
         Paper.book().write("otherUsers", app.info.otherUsers);
         Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
+        Log.e("Wrote", "otherUsers:"+ app.info.otherUsers.toString());
+        Log.e("Wrote", "otherUsersEmails:"+ app.info.otherUsersEmails.toString());
 
         return Result.success();
     }
@@ -52,20 +57,19 @@ public class OtherUsersWorker extends Worker {
 
 
     public void load_similar_users() {
-        Log.e("Started", "load_similar_users");
+        Log.e("Started", "OtherUsersWorker load_similar_users");
 
 
         for (DishRatings rating : app.info.ratings) {
-            Log.e("Started", "DishRatings rating : ratings");
 
             database.collection("ittai-ratings")
                     .whereEqualTo("Dish_Restaurant", rating.Dish_Restaurant)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            Log.d("NEW RATING", task.getResult().getDocuments().toString());
+//                            Log.d("NEW RATING", task.getResult().getDocuments().toString());
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                if (!app.info.otherUsersEmails.contains(document.get("User_email"))) {
+                                if (!app.info.otherUsersEmails.contains(document.get("email"))) {
                                     addNewSimilarUser(document);
                                 }
                             }
@@ -74,23 +78,20 @@ public class OtherUsersWorker extends Worker {
                         }
                         // todo: fix!
 
-                        WorkRequest secondWorkRequest =
-                                new OneTimeWorkRequest.Builder(CalcSimilaritiesWorker.class)
-                                        .build();
-                        WorkManager.getInstance(getApplicationContext())
-                                .enqueue(secondWorkRequest);
+
 
                     });
         }
+
     }
 
     public void addNewSimilarUser(DocumentSnapshot document) {
-        app.info.otherUsersEmails.add(document.get("User_email").toString());
-        String otherMail = document.get("User_email", String.class);
+        app.info.otherUsersEmails.add(document.get("email").toString());
+        String otherMail = document.get("email", String.class);
         OtherUser newOtherUser = new OtherUser(otherMail);
         Log.e("other user", document.getData().toString());
-        database.collection("ittai-users-test")
-                .whereEqualTo("User_email", document.get("User_email"))
+        database.collection("users")
+                .whereEqualTo("email", document.get("email"))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -102,6 +103,7 @@ public class OtherUsersWorker extends Worker {
                                             for (DocumentSnapshot document11 : task1.getResult().getDocuments()) {
                                                 DishRatings newRating = document11.toObject(DishRatings.class);
                                                 newOtherUser.addRating(newRating);
+                                                Log.e("Rating", newRating.Dish_Restaurant+newRating.Rating);
                                             }
 
                                         }else {
@@ -116,8 +118,4 @@ public class OtherUsersWorker extends Worker {
                 });
         app.info.otherUsers.add(newOtherUser);
     }
-
-
-
-
 }

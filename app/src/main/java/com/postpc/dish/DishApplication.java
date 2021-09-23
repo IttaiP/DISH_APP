@@ -13,15 +13,19 @@ import android.util.Log;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
 import java.security.AlgorithmParameterGenerator;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
@@ -29,6 +33,7 @@ import io.paperdb.Paper;
 public class DishApplication extends Application {
     public UserInfoStorage info;
     public WifiScanner wifiScanner;
+    boolean calcWasRun;
 
     @Override
     public void onCreate() {
@@ -36,12 +41,18 @@ public class DishApplication extends Application {
 
         Paper.init(this);
 
+        calcWasRun = false;
+
 
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
+        //todo: should be
+        load_rated_dishes_from_sp();
 
-//        runWork(); todo: this is background work to update similar users. is supposed to run once a week
+        Log.e("DONE", "task1");
+        runWork();
+//        todo: this is background work to update similar users. is supposed to run once a week
 //         todo continuation: but need to check where the first run should be written
 
     }
@@ -61,6 +72,7 @@ public class DishApplication extends Application {
     }
 
     public void runWork(){
+        Log.e("Started", "work1");
         if(!info.otherUsersEmails.contains("shmu@gmail.com")) {// todo change to bottom
             info.otherUsersEmails.add("shmu@gmail.com");
         }
@@ -68,10 +80,12 @@ public class DishApplication extends Application {
 //            info.otherUsersEmails.add(info.getUser_Email());
 //        }
 
+        // todo: can add constraints here. probably not needed
         Constraints constraints = new Constraints.Builder() // todo: decide if we want constraints
-                .setRequiredNetworkType(NetworkType.UNMETERED)
-                .setRequiresCharging(true)
+//                .setRequiredNetworkType(NetworkType.UNMETERED)
+//                .setRequiresCharging(true)
                 .build();
+
 
         PeriodicWorkRequest periodicWorkRequestRequest =
                 new PeriodicWorkRequest.Builder(OtherUsersWorker.class, 7, TimeUnit.DAYS) // todo: decide interval
@@ -88,15 +102,40 @@ public class DishApplication extends Application {
 
     }
 
+    public void runWork2(){
+        if(calcWasRun){
+            return;
+        }
+        else{
+            calcWasRun = true;
+        }
+        Log.e("Started", "work2");
+        WorkRequest secondWorkRequest =
+                new OneTimeWorkRequest.Builder(CalcSimilaritiesWorker.class)
+                        .build();
+        WorkManager.getInstance(getApplicationContext())
+                .enqueue(secondWorkRequest);
+    }
+
     public void load_rated_dishes_from_sp(){
         Gson gson = new Gson();
         DishRatings[] ratingsArray = gson.fromJson(info.sp.getString("ratings", null), DishRatings[].class);
-        info.ratings = Arrays.asList(ratingsArray);
+        if(ratingsArray!=null){
+            info.ratings = Arrays.asList(ratingsArray);
+        }
+        String[] iRatingsArray = gson.fromJson(info.sp.getString("iRatings", null), String[].class);
+        if(iRatingsArray!=null){
+            info.indicesInRatings = Arrays.asList(iRatingsArray);
+
+        }
+        if(info.ratings==null || info.ratings.isEmpty()){
+            load_rated_dishes();
+        }
     }
 
-    public void load_rated_dishes() {
+    public void load_rated_dishes(){
         Log.e("Started", "load_rated_dishes");
-        info.database.collection("ittai-users-test").document(info.myID).collection("Ratings").get()
+        info.database.collection("users").document(info.myID).collection("Ratings").get()
                 .addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {
@@ -111,6 +150,8 @@ public class DishApplication extends Application {
                         Gson gson = new Gson();
                         String ratingsAsJson = gson.toJson(info.ratings);
                         info.sp.edit().putString("ratings", ratingsAsJson).apply();
+                        String iRatingsAsJson = gson.toJson(info.indicesInRatings);
+                        info.sp.edit().putString("iRatings", iRatingsAsJson).apply();
                     } else {
                         Log.e("ERRRORRR", "Error getting documents: ", task.getException());
                     }

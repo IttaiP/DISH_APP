@@ -32,6 +32,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import io.paperdb.Paper;
+
 @SuppressWarnings("ALL")
 public class CreateUser extends Fragment implements View.OnClickListener {
 
