@@ -15,7 +15,7 @@ import io.paperdb.Paper;
 public class CalcSimilaritiesWorker extends Worker {
     private final DishApplication app = (DishApplication) getApplicationContext();
 
-    public List<String> indicesInRatings;
+//    public List<String> indicesInRatings;
 
 
 
@@ -26,12 +26,25 @@ public class CalcSimilaritiesWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+
+//        for(OtherUser user: app.info.otherUsers){
+//            Log.e("otherUsers", user.getUser_email());
+//            for(DishRatings rating: user.getRatings()){
+//                Log.e("rating", rating.Dish_Restaurant+rating.Rating);
+//            }
+//        }
+
         calculateSimilarities();
 
         Paper.book().write("otherUsers", app.info.otherUsers);
         Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
         Paper.book().write("indicesInRatings", app.info.indicesInRatings);
         Paper.book().write("DishReccomendationScores", app.info.DishReccomendationScores);
+
+        Log.e("otherUsers", app.info.otherUsers.toString());
+        Log.e("otherUsersEmails", app.info.otherUsersEmails.toString());
+        Log.e("indicesInRatings", app.info.indicesInRatings.toString());
+        Log.e("DishReccomendationScrs", app.info.DishReccomendationScores.toString());
 
         return Result.success();
     }
@@ -43,7 +56,7 @@ public class CalcSimilaritiesWorker extends Worker {
             int both_rated = 0;
             float differece_sum = 0;
             for(DishRatings rating: otherUser.getRatings()){
-                int i = indicesInRatings.indexOf(rating.Dish_Restaurant);
+                int i = app.info.indicesInRatings.indexOf(rating.Dish_Restaurant);
                 if(i != -1){
                     differece_sum+=(Math.abs(app.info.ratings.get(i).Rating - rating.Rating));
                     both_rated++;

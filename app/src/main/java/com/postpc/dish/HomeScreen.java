@@ -24,6 +24,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
 //    private AppBarConfiguration mAppBarConfiguration;
 //    private ActivityHomeScreenBinding binding;
+    private DishApplication app;
 
     private DrawerLayout drawer;
 
@@ -31,6 +32,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_screen);
+        app = (DishApplication) getApplicationContext();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -71,11 +73,13 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
 
             case R.id.nav_search:
+                app.runWork2();
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment_container, new SearchFragment()).commit();
                 break;
 
             case R.id.nav_get_custom_menu:
+                app.runWork2();
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.fragment_container, new GetCustomMenuFragment()).commit();
                 break;
