@@ -34,7 +34,7 @@ public class RateRecommendationViewModel extends SharedViewModel {
         DishRating.put("Dish_Restaurant", Dish_Restaurant);
         DishRating.put("Rating", rating);
 
-        app.info.database.collection("ittai-users-test").document(app.info.myID).collection("Ratings")
+        app.info.database.collection("users").document(app.info.myID).collection("Ratings")
                 .document(app.info.myID+Dish_Restaurant+" user")
                 .set(DishRating)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -58,7 +58,7 @@ public class RateRecommendationViewModel extends SharedViewModel {
         Map<String, Object> DishRating = new HashMap<>();
         DishRating.put("Dish_Restaurant", Dish_Restaurant);
         DishRating.put("Rating", rating);
-        DishRating.put("User_email", User_email);
+        DishRating.put("email", User_email);
 
 
         app.info.database.collection("ittai-ratings").document(app.info.myID+Dish_Restaurant+" rating")
