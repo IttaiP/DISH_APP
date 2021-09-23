@@ -5,9 +5,8 @@ import static com.google.firebase.auth.GoogleAuthProvider.GOOGLE_SIGN_IN_METHOD;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,20 +14,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
-import com.postpc.dish.databinding.ActivityHomeScreenBinding;
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -38,11 +29,22 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     FirebaseAuth auth;
     private DrawerLayout drawer;
     private GoogleSignInClient mGoogleSignInClient;
-
+    TextView userName;
+    TextView email;
+    Intent intentCreatedMe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        userName = findViewById(R.id.header_user_name);
+        email = findViewById(R.id.header_email);
+
+        intentCreatedMe = getIntent();
+
+        userName.setText(intentCreatedMe.getStringExtra("Full Name"));
+        email.setText(intentCreatedMe.getStringExtra("Email"));
+
         setContentView(R.layout.activity_home_screen);
         app = (DishApplication) getApplicationContext();
 
@@ -119,7 +121,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 if (providerId != null) {
                     switch (providerId) {
                         case EMAIL_PASSWORD_SIGN_IN_METHOD:
-                            signOutEmailAndPassword();
+//                            signOutEmailAndPassword();
                             break;
 
                         case GOOGLE_SIGN_IN_METHOD:

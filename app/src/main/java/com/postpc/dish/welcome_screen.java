@@ -39,20 +39,20 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         return inflater.inflate(R.layout.welcome_screen_fragment, container, false);
     }
 
-    /**
-     * If the user is already logged in to the app, when the app uploads it will take it directly
-     * to the restaurant search screen
-     */
-    @Override
-    public void onStart() {
-        super.onStart();
-        FirebaseUser user = auth.getCurrentUser();
-        if (user != null){
-            Intent intent = new Intent(this.getContext(), HomeScreen.class);
-            intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
-            startActivity(intent);
-        }
-    }
+//    /**
+//     * If the user is already logged in to the app, when the app uploads it will take it directly
+//     * to the restaurant search screen
+//     */
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        FirebaseUser user = auth.getCurrentUser();
+//        if (user != null){
+//            Intent intent = new Intent(this.getContext(), HomeScreen.class);
+//            intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
+//            startActivity(intent);
+//        }
+//    }
 
     @SuppressLint("NonConstantResourceId")
     @Override
