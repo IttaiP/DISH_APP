@@ -135,7 +135,7 @@ public class DishApplication extends Application {
 
     public void load_rated_dishes(){
         Log.e("Started", "load_rated_dishes");
-        info.database.collection("ittai-users-test").document(info.myID).collection("Ratings").get()
+        info.database.collection("users").document(info.myID).collection("Ratings").get()
                 .addOnCompleteListener(task -> {
 
                     if (task.isSuccessful()) {

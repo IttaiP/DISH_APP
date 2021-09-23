@@ -40,7 +40,7 @@ public class OtherUsersWorker extends Worker {
 
 //        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) { // not sure why had first 2 conds
         if(app.info.ratings.isEmpty() ) {
-                return Result.failure(); // todo: check what i should do here
+            return Result.failure(); // todo: check what i should do here
         }
         load_similar_users();
 
@@ -69,7 +69,7 @@ public class OtherUsersWorker extends Worker {
                         if (task.isSuccessful()) {
 //                            Log.d("NEW RATING", task.getResult().getDocuments().toString());
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                if (!app.info.otherUsersEmails.contains(document.get("User_email"))) {
+                                if (!app.info.otherUsersEmails.contains(document.get("email"))) {
                                     addNewSimilarUser(document);
                                 }
                             }
@@ -86,12 +86,12 @@ public class OtherUsersWorker extends Worker {
     }
 
     public void addNewSimilarUser(DocumentSnapshot document) {
-        app.info.otherUsersEmails.add(document.get("User_email").toString());
-        String otherMail = document.get("User_email", String.class);
+        app.info.otherUsersEmails.add(document.get("email").toString());
+        String otherMail = document.get("email", String.class);
         OtherUser newOtherUser = new OtherUser(otherMail);
         Log.e("other user", document.getData().toString());
-        database.collection("ittai-users-test")
-                .whereEqualTo("User_email", document.get("User_email"))
+        database.collection("users")
+                .whereEqualTo("email", document.get("email"))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
