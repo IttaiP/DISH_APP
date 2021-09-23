@@ -1,20 +1,53 @@
 package com.postpc.dish;
 
+import androidx.core.content.ContextCompat;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class GetCustomMenuFragment extends Fragment {
 
     private GetCustomMenuViewModel mViewModel;
+    private SharedViewModel sharedViewModel;
+    private RecyclerView recycler_view;
+    private FirebaseFirestore database;
+    private DividerItemDecoration vertical_decorator;
+    private DividerItemDecoration horizontal_decorator;
+
+    private CustomDishesAdapter adapter;
+    private List<DishItem> dishes;
+
+    private String restaurant;
 
     public static GetCustomMenuFragment newInstance() {
         return new GetCustomMenuFragment();
@@ -25,6 +58,55 @@ public class GetCustomMenuFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.get_custom_menu_fragment, container, false);
     }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        GetCustomMenuViewModel customMenuViewModel = new ViewModelProvider(this).get(GetCustomMenuViewModel.class);
+        Context context = getContext();
+
+        database = FirebaseFirestore.getInstance();
+
+        recycler_view = view.findViewById(R.id.list_of_dishes);
+        vertical_decorator = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
+        vertical_decorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.decorator_for_dishes)));
+        horizontal_decorator = new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL);
+        horizontal_decorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.decorator_for_dishes)));
+
+        recycler_view.addItemDecoration(vertical_decorator);
+        recycler_view.addItemDecoration(horizontal_decorator);
+        dishes = new ArrayList<>();
+        adapter = new CustomDishesAdapter();
+//        adapter.setDishesAdapter(dishes);
+
+        recycler_view.setHasFixedSize(true);
+        recycler_view.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recycler_view.setAdapter(adapter);
+
+        Bundle arguments = getArguments();
+        String restaurant = arguments.getString("restaurant");
+
+        TextView restaurant_name = view.findViewById(R.id.restaurant_name);
+        ImageView restaurant_image = view.findViewById(R.id.image_restaurant);
+
+        restaurant_name.setText(restaurant);
+
+        Log.d("restaurant", restaurant);
+
+        customMenuViewModel.personalizeReccomendation();
+        for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishReccomendationScores.entrySet()) {
+            database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    adapter.addDishes(Objects.requireNonNull(documentSnapshot.toObject(DishItem.class)), dish_recommended.getValue());
+                }
+            });
+        }
+        adapter.notifyDataSetChanged();
+    }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {

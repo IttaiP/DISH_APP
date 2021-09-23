@@ -119,7 +119,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 if (providerId != null) {
                     switch (providerId) {
                         case EMAIL_PASSWORD_SIGN_IN_METHOD:
-                            signOutEmailAndPassword();
+//                            signOutEmailAndPassword();
                             break;
 
                         case GOOGLE_SIGN_IN_METHOD:

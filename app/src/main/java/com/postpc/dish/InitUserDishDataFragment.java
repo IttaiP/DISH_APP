@@ -164,13 +164,6 @@ public class InitUserDishDataFragment extends Fragment {
     }
 
     public void update_dish(String dish_name, float rating) {
-//        info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
-//                .addOnCompleteListener(task -> {
-//                    if (task.isSuccessful()) {
-//                        DishRatings new_rating = new DishRatings(dish_name, rating);
-////                        info.myID = task.getResult().getDocuments().get(0).getId();
-//                    }
-//                });
 
         RateRecommendationViewModel rateRecommendationViewModel = new
                 ViewModelProvider(requireActivity()).get(RateRecommendationViewModel.class);

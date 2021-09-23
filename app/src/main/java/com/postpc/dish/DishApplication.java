@@ -40,7 +40,7 @@ public class DishApplication extends Application {
         super.onCreate();
 
         Paper.init(this);
-
+        Paper.book().delete("otherUsersEmails");
         calcWasRun = false;
 
 
@@ -50,7 +50,7 @@ public class DishApplication extends Application {
         //todo: should be
         load_rated_dishes_from_sp();
 
-        Log.e("DONE", "task1");
+        Log.e("Users", "Info " + info.getUser_Email());
         runWork();
 //        todo: this is background work to update similar users. is supposed to run once a week
 //         todo continuation: but need to check where the first run should be written

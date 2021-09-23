@@ -28,6 +28,8 @@ public class UserInfoStorage {
 
     public UserInfoStorage(Context context){
         sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.clear().commit();
         ratings = Paper.book().read("ratings", new ArrayList<>());
         indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
         otherUsers = Paper.book().read("otherUsers", new ArrayList<>());

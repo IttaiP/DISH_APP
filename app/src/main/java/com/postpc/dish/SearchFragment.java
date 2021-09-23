@@ -133,30 +133,6 @@ public class SearchFragment extends Fragment {
             public void afterTextChanged(Editable editable) { }
         });
 
-        view.findViewById(R.id.button_menu).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController navController = navHostFragment.getNavController();
-//                navController.navigate(R.id.action_search_resturants2_to_resturant_menu);
-
-            }
-        });
-
-        view.findViewById(R.id.button_custom_menu).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
-                NavController navController = navHostFragment.getNavController();
-//                navController.navigate(R.id.action_search_resturants2_to_resturant_custom_menu);
-
-            }
-        });
-
 
         // ---------------ADDED BY ITTAI --------------
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.SearchViewModel.class);
@@ -169,6 +145,7 @@ public class SearchFragment extends Fragment {
                 scannedRestaurants = app.wifiScanner.scannedRestaurants;
             }
         });
+
     }
 
     private void search_in_firestore(String search) {

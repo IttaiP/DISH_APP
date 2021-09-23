@@ -9,6 +9,7 @@ public class DishItem {
     public String photo;
     public String restaurant_name;
     public String category;
+    public float match;
 
 
     public DishItem(String name, String description, String photo, String restaurant_name, String category){
@@ -17,6 +18,7 @@ public class DishItem {
         this.photo = photo;
         this.restaurant_name = restaurant_name;
         this.category = category;
+        this.match = 0;
     }
 
     DishItem() {}
@@ -32,5 +34,7 @@ public class DishItem {
     public String getRestaurantName() { return this.restaurant_name; }
 
     public String getCategory() { return this.category; }
+
+    public float getMatch() { return this.match; }
 
 }

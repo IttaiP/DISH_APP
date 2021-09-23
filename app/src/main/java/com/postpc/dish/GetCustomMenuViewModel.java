@@ -39,7 +39,7 @@ public class GetCustomMenuViewModel extends ViewModel {
     }
 
     public void personalizeReccomendation(){
-        String restaurant = "Pizza Lila";
+        String restaurant = app.info.getRestuarant();
 //        String restaurant = sharedViewModel.getRestuarant();// todo : initialize.
 
 
@@ -52,7 +52,7 @@ public class GetCustomMenuViewModel extends ViewModel {
                                     .addOnCompleteListener(task2 -> {
                                         if(task2.isSuccessful()){
                                             for(DocumentSnapshot document2 : task2.getResult().getDocuments()) {
-                                                String dish_restaurant = document2.get("name").toString()+"_"+restaurant;
+                                                String dish_restaurant = document2.getId();
                                                 app.info.DishReccomendationScores.put(dish_restaurant, calculateSingleDishRecommendation(dish_restaurant));
                                             }
                                         }
