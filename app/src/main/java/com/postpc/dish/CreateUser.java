@@ -108,7 +108,6 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     }
 
     // ==================================== REGISTER WITH GOOGLE ===================================
-
     private void createRequest() {
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

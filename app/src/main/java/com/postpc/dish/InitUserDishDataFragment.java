@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,10 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -58,6 +63,7 @@ public class InitUserDishDataFragment extends Fragment {
     private String current_category = "italian";
     private ChipGroup category;
     private Chip italian, burger, breakfast, mexican, asian;
+    private Button doneButton;
 
 
     public static InitUserDishDataFragment newInstance() {
@@ -73,6 +79,22 @@ public class InitUserDishDataFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        doneButton = view.findViewById(R.id.finish_button);
+
+        doneButton.setOnClickListener(view1 -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+            firebaseFirestore.collection("users").document(user.getUid())
+                    .get().addOnCompleteListener(task -> {
+                        DocumentSnapshot documentSnapshot = task.getResult();
+                        String name = documentSnapshot.get("name").toString();
+                        Intent intent = new Intent(getContext(), HomeScreen.class);
+                        intent.putExtra("Full Name", name);
+                        intent.putExtra("Email", user.getEmail());
+                        startActivity(intent);
+                    });
+        });
+
         category = view.findViewById(R.id.categoryChipsView);
         category.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override

@@ -24,7 +24,7 @@
         android:paddingTop="@dimen/nav_header_vertical_spacing"/>
 
     <TextView
-        android:id="@+id/user_name"
+        android:id="@+id/header_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bitter"
