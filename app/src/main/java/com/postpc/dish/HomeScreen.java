@@ -1,5 +1,9 @@
 package com.postpc.dish;
 
+import static com.google.firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD;
+import static com.google.firebase.auth.GoogleAuthProvider.GOOGLE_SIGN_IN_METHOD;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +20,14 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.postpc.dish.databinding.ActivityHomeScreenBinding;
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -25,8 +35,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 //    private AppBarConfiguration mAppBarConfiguration;
 //    private ActivityHomeScreenBinding binding;
     private DishApplication app;
-
+    FirebaseAuth auth;
     private DrawerLayout drawer;
+    private GoogleSignInClient mGoogleSignInClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +61,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().
-                    replace(R.id.fragment_container, new HomeFragment()).commit();
+                    replace(R.id.nav_fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
     }
@@ -69,37 +81,68 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         switch (item.getItemId()){
             case R.id.nav_home:
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new HomeFragment()).commit();
+                        replace(R.id.nav_fragment_container, new HomeFragment()).commit();
                 break;
 
             case R.id.nav_search:
                 app.runWork2();
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new SearchFragment()).commit();
+                        replace(R.id.nav_fragment_container, new SearchFragment()).commit();
                 break;
 
             case R.id.nav_get_custom_menu:
                 app.runWork2();
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new GetCustomMenuFragment()).commit();
+                        replace(R.id.nav_fragment_container, new GetCustomMenuFragment()).commit();
                 break;
 
             case R.id.nav_rate_recommendation:
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new RateRecommendationFragment()).commit();
+                        replace(R.id.nav_fragment_container, new RateRecommendationFragment()).commit();
                 break;
 
             case R.id.nav_swipe_dishes:
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.fragment_container, new InitUserDishDataFragment()).addToBackStack(null).commit();
+                        replace(R.id.nav_fragment_container, new InitUserDishDataFragment()).commit();
                 break;
 
             case R.id.nav_logout:
-                // todo: implement LOGOUT here
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                String providerId = null;
+                if (user != null) {
+                    for (UserInfo profile : user.getProviderData()) {
+                        // Id of the provider (ex: google.com)
+                        providerId = profile.getProviderId();
+                    }
+                }
+
+                if (providerId != null) {
+                    switch (providerId) {
+                        case EMAIL_PASSWORD_SIGN_IN_METHOD:
+                            signOutEmailAndPassword();
+                            break;
+
+                        case GOOGLE_SIGN_IN_METHOD:
+                            signOutGoogle();
+                            break;
+                    }
+                }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    // todo: signOutGoogle
+    private void signOutGoogle() {
+        // Firebase sign out
+        auth.signOut();
+
+        // Google sign out
+        mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> {
+            Intent intent = new Intent(this, MainActivity.class);
+
+        });
     }
 
 

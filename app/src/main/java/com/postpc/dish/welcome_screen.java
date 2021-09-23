@@ -79,6 +79,7 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
                                 intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
+                                intent.putExtra("Email" , email.getText().toString()); // todo: check if this works
                                 startActivity(intent);
                             }
 

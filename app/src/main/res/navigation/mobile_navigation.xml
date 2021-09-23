@@ -6,6 +6,24 @@
     app:startDestination="@+id/nav_home">
 
     <fragment
+        android:id="@+id/nav_drawer"
+        android:label="drawer"
+        tools:layout="@layout/activity_home_screen" >
+        <action
+            android:id="@+id/action_nav_drawer_to_nav_home"
+            app:destination="@id/nav_home" />
+        <action
+            android:id="@+id/action_nav_drawer_to_nav_search"
+            app:destination="@id/nav_search" />
+        <action
+            android:id="@+id/action_nav_drawer_to_nav_get_custom_menu"
+            app:destination="@id/nav_get_custom_menu" />
+        <action
+            android:id="@+id/action_nav_drawer_to_nav_rate_recommendation"
+            app:destination="@id/nav_rate_recommendation" />
+    </fragment>
+
+    <fragment
         android:id="@+id/nav_home"
         android:name="com.postpc.dish.HomeFragment"
         android:label="@string/menu_home"
