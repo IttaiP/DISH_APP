@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +52,7 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
         holder.bind(restaurants.get(position), context);
         ImageView restaurant_image = holder.get_restaurant_image();
         TextView restaurant_name = holder.get_restaurant_name();
+        AppCompatButton custom_menu_button = holder.get_custom_menu_button();
 
         restaurant_image.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,6 +73,26 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
                 activity.getSupportFragmentManager().beginTransaction().replace(R.id.rec, menu_fragment).addToBackStack(null).commit();
             }
         });
+
+        custom_menu_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                //Added by Ittai
+                app = (DishApplication) activity.getApplication();
+                app.info.setRestuarant(restaurant_name.getText().toString());
+
+
+                Bundle arguments = new Bundle();
+                Log.d("name", restaurant_name.getText().toString());
+                arguments.putString("restaurant", restaurant_name.getText().toString());
+                Fragment custom_menu_fragment = new GetCustomMenuFragment();
+                custom_menu_fragment.setArguments(arguments);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.rec, custom_menu_fragment).addToBackStack(null).commit();
+            }
+        });
+
+
     }
 
     @Override
