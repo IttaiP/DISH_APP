@@ -26,7 +26,7 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
     private FirebaseAuth auth;
     private FirebaseFirestore firebaseFirestore;
     private EditText name, email, password;
-    private Button signInButton;
+    private Button signInButton, signInWithGoogleButton;
     private TextView register;
 
     public static welcome_screen newInstance() {
@@ -89,6 +89,10 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
                             }
                         });
                 break;
+
+            case R.id.sign_in_with_google:
+                break;
+
         }
     }
 
@@ -106,6 +110,10 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         // get buttons
         signInButton = view.findViewById(R.id.welcome_screen_sign_in_button);
         signInButton.setOnClickListener(this);
+        signInButton.setEnabled(false);
+
+        signInWithGoogleButton = view.findViewById(R.id.sign_in_with_google);
+        signInWithGoogleButton.setOnClickListener(this);
 
         register = view.findViewById(R.id.welcome_screen_register);
         register.setOnClickListener(this);

@@ -149,7 +149,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                 .addOnCompleteListener(this.getActivity(), task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
-                        writeNewUserToFirestoreDatabase();
+                        writeNewUserToFirestoreDatabase(true);
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -203,7 +203,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(requireActivity(), task -> {
                     if (task.isSuccessful()){
-                        writeNewUserToFirestoreDatabase();
+                        writeNewUserToFirestoreDatabase(false);
                     } else {
                         Exception exception = task.getException();
                         Toast.makeText(requireContext(), exception.getMessage(), Toast.LENGTH_LONG).show();
@@ -211,10 +211,23 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     }});
     }
 
-    private void writeNewUserToFirestoreDatabase() {
-        User user = new User(editTextName.getText().toString().trim(),
-                editTextEmail.getText().toString().trim(),
-                editTextPassword.getText().toString().trim());
+    private void writeNewUserToFirestoreDatabase(boolean withGoogle) {
+        User user = null;
+        if (withGoogle){
+            FirebaseUser googleUser = FirebaseAuth.getInstance().getCurrentUser();
+            if (googleUser != null) {
+                String userName = googleUser.getDisplayName();
+                String userEmail = googleUser.getEmail();
+
+                user = new User(userName, userEmail, "");
+            }
+        }
+
+        else if (!withGoogle){
+            user = new User(editTextName.getText().toString().trim(),
+                    editTextEmail.getText().toString().trim(),
+                    editTextPassword.getText().toString().trim());
+        }
 
         FirebaseFirestore.getInstance().collection("users").
                 document(FirebaseAuth.getInstance().getCurrentUser().getUid())
