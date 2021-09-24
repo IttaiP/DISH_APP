@@ -69,7 +69,7 @@ public class OtherUsersWorker extends Worker {
                         if (task.isSuccessful()) {
 //                            Log.d("NEW RATING", task.getResult().getDocuments().toString());
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                if (!app.info.otherUsersEmails.contains(document.get("email"))) {
+                                if ((!app.info.otherUsersEmails.contains(document.get("email"))&& document.get("email")!=null)) {
                                     addNewSimilarUser(document);
                                 }
                             }

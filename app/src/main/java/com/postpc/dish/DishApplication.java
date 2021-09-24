@@ -19,6 +19,8 @@ import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
 import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
@@ -47,13 +49,11 @@ public class DishApplication extends Application {
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
-        //todo: should be
+
+        //todo: need to update user ID first for this to work properly.
         load_rated_dishes_from_sp();
 
-        Log.e("Users", "Info " + info.getUser_Email());
-        runWork();
-//        todo: this is background work to update similar users. is supposed to run once a week
-//         todo continuation: but need to check where the first run should be written
+
 
     }
 
@@ -66,19 +66,19 @@ public class DishApplication extends Application {
         info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        info.myID = task.getResult().getDocuments().get(0).getId();
+                        info.myID =task.getResult().getDocuments().get(0).getId();
                     }
                 });
     }
 
     public void runWork(){
         Log.e("Started", "work1");
-        if(!info.otherUsersEmails.contains("shmu@gmail.com")) {// todo change to bottom
-            info.otherUsersEmails.add("shmu@gmail.com");
-        }
-//        if(!info.otherUsersEmails.contains(info.getUser_Email())) {
-//            info.otherUsersEmails.add(info.getUser_Email());
+//        if(!info.otherUsersEmails.contains("shmu@gmail.com")) {// todo change to bottom
+//            info.otherUsersEmails.add("shmu@gmail.com");
 //        }
+        if(!info.otherUsersEmails.contains(info.getUser_Email())) {
+            info.otherUsersEmails.add(info.getUser_Email());
+        }
 
         // todo: can add constraints here. probably not needed
         Constraints constraints = new Constraints.Builder() // todo: decide if we want constraints

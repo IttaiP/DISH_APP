@@ -64,6 +64,7 @@ public class InitUserDishDataFragment extends Fragment {
     private ChipGroup category;
     private Chip italian, burger, breakfast, mexican, asian;
     private Button doneButton;
+    private DishApplication app;
 
 
     public static InitUserDishDataFragment newInstance() {
@@ -79,6 +80,7 @@ public class InitUserDishDataFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        app = (DishApplication)getActivity().getApplication();
         doneButton = view.findViewById(R.id.finish_button);
 
         doneButton.setOnClickListener(view1 -> {
@@ -90,7 +92,8 @@ public class InitUserDishDataFragment extends Fragment {
                         String name = documentSnapshot.get("name").toString();
                         Intent intent = new Intent(getContext(), HomeScreen.class);
                         intent.putExtra("Full Name", name);
-                        intent.putExtra("Email", user.getEmail());
+                intent.putExtra("Email", user.getEmail());
+                        app.runWork();
                         startActivity(intent);
                     });
         });

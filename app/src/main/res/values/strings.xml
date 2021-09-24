@@ -11,7 +11,7 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
-    <string name="dish">Dish</string>
+<!--    <string name="dish">Dish</string>-->
     <string name="logout">Logout</string>
     <string name="hello_first_name_last_name"><![CDATA[Hello, <First name> <Last name>]]></string>
     <string name="get_custom_menu">Get Custom Menu</string>
