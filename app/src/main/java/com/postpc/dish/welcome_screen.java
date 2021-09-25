@@ -112,8 +112,8 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         signInButton.setOnClickListener(this);
         signInButton.setEnabled(false);
 
-        signInWithGoogleButton = view.findViewById(R.id.sign_in_with_google);
-        signInWithGoogleButton.setOnClickListener(this);
+//        signInWithGoogleButton = view.findViewById(R.id.sign_in_with_google);
+//        signInWithGoogleButton.setOnClickListener(this);
 
         register = view.findViewById(R.id.welcome_screen_register);
         register.setOnClickListener(this);

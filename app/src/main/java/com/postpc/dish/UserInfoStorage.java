@@ -26,12 +26,13 @@ public class UserInfoStorage {
 
     SharedPreferences sp;
 
-
     public UserInfoStorage(Context context){
         FirebaseAuth auth = FirebaseAuth.getInstance();
 //        user_Email = auth.getCurrentUser().getEmail();
 //        myID = auth.getCurrentUser().getUid();
         sp = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sp.edit(); // TODO: delete later
+        editor.clear().commit(); // TODO: delete later
         ratings = Paper.book().read("ratings", new ArrayList<>());
         indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
         otherUsers = Paper.book().read("otherUsers", new ArrayList<>());
