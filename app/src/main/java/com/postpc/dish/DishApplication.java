@@ -51,7 +51,7 @@ public class DishApplication extends Application {
 
 
         //todo: need to update user ID first for this to work properly.
-        load_rated_dishes_from_sp();
+        //load_rated_dishes_from_sp();
 
 
 

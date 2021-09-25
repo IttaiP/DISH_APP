@@ -37,6 +37,7 @@ import io.paperdb.Paper;
 @SuppressWarnings("ALL")
 public class CreateUser extends Fragment implements View.OnClickListener {
 
+    private DishApplication app;
     private CreateUserViewModel mViewModel;
     private GoogleSignInClient mGoogleSignInClient;
     private final static int RC_SIGN_IN = 123;
@@ -62,7 +63,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        app = (DishApplication)getActivity().getApplication();
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -239,6 +240,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                                 "User has been registered successfully!",
                                 Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
+                        app.info.myID = mAuth.getCurrentUser().getUid();
+                        app.info.setUser_Email(mAuth.getCurrentUser().getEmail());
                         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
                                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                         assert navHostFragment != null;
