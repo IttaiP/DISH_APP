@@ -9,6 +9,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,8 +115,77 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         signInButton.setOnClickListener(this);
         signInButton.setEnabled(false);
 
-//        signInWithGoogleButton = view.findViewById(R.id.sign_in_with_google);
-//        signInWithGoogleButton.setOnClickListener(this);
+        signInWithGoogleButton = view.findViewById(R.id.sign_in_with_google);
+        signInWithGoogleButton.setOnClickListener(this);
+        signInWithGoogleButton.setEnabled(false);
+
+        name.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                // if someone wants to connect with google:
+                if (!email.getText().toString().isEmpty()){
+                    signInWithGoogleButton.setEnabled(true);
+                    signInButton.setEnabled(false);
+                }
+            }
+        });
+
+        email.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!name.getText().toString().isEmpty()) {
+                    signInWithGoogleButton.setEnabled(true);
+                    signInButton.setEnabled(false);
+                }
+            }
+        });
+
+        password.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (!name.getText().toString().isEmpty() && !email.getText().toString().isEmpty()) {
+                    signInButton.setEnabled(true);
+                    signInWithGoogleButton.setEnabled(false);
+                }
+
+                if (password.getText().toString().isEmpty()){
+                    signInButton.setEnabled(false);
+                    signInWithGoogleButton.setEnabled(true);
+                }
+            }
+        });
+
+
 
         register = view.findViewById(R.id.welcome_screen_register);
         register.setOnClickListener(this);
