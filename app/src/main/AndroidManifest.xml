@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.postpc.dish" >
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -16,11 +17,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DISH" >
-        <activity
-            android:name=".ToDeleteLater"
-            android:exported="true"
-            android:label="@string/title_activity_to_delete_later"
-            android:theme="@style/Theme.DISH.NoActionBar" />
+<!--        <activity-->
+<!--            android:name=".ToDeleteLater"-->
+<!--            android:exported="true"-->
+<!--            android:label="@string/title_activity_to_delete_later"-->
+<!--            android:theme="@style/Theme.DISH.NoActionBar" />-->
         <activity
             android:name=".HomeScreen"
             android:exported="true"
@@ -28,7 +29,8 @@
             android:theme="@style/Theme.DISH.NoActionBar" />
         <activity
             android:name=".User"
-            android:exported="true" />
+            android:exported="true"
+            tools:ignore="Instantiatable" />
         <activity
             android:name=".MainActivity"
             android:exported="true" >
