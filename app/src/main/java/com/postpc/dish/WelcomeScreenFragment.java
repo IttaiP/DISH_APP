@@ -19,21 +19,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-public class welcome_screen extends Fragment implements View.OnClickListener{
+import java.util.List;
+
+public class WelcomeScreenFragment extends Fragment implements View.OnClickListener{
 
     private WelcomeScreenViewModel mViewModel;
     private FirebaseAuth auth;
     private FirebaseFirestore firebaseFirestore;
-    private EditText name, email, password;
+    private EditText email, password;
     private Button signInButton, signInWithGoogleButton;
     private TextView register;
 
-    public static welcome_screen newInstance() {
-        return new welcome_screen();
+    public static WelcomeScreenFragment newInstance() {
+        return new WelcomeScreenFragment();
     }
 
     @Override
@@ -81,9 +84,19 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
                             // found user with provided email
                             if (task.isSuccessful()){
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
-                                intent.putExtra("Full Name" , name.getText().toString()); // todo: check if this works
-                                intent.putExtra("Email" , email.getText().toString()); // todo: check if this works
-                                startActivity(intent);
+                                List<DocumentSnapshot> documentSnapshotList = task.getResult().getDocuments();
+
+                                if (documentSnapshotList.isEmpty()){
+                                    Toast.makeText(this.getContext(), "User was not found.", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    for (DocumentSnapshot documentSnapshot:task.getResult().getDocuments()) {
+                                        String name = documentSnapshot.getString("name");
+                                        intent.putExtra("Full Name" , name);
+                                    }
+                                    intent.putExtra("Email" , email.getText().toString());
+                                    startActivity(intent);
+                                }
                             }
 
                             //user was not found
@@ -94,6 +107,33 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
                 break;
 
             case R.id.sign_in_with_google:
+                firebaseFirestore.collection("users")
+                        .whereEqualTo("email", email.getText().toString()).get()
+                        .addOnCompleteListener(task -> {
+
+                            // found user with provided email
+                            if (task.isSuccessful()){
+                                Intent intent = new Intent(this.getContext(), HomeScreen.class);
+                                List<DocumentSnapshot> documentSnapshotList = task.getResult().getDocuments();
+
+                                if (documentSnapshotList.isEmpty()){
+                                    Toast.makeText(this.getContext(), "User was not found.", Toast.LENGTH_SHORT).show();
+                                }
+                                else {
+                                    for (DocumentSnapshot documentSnapshot:task.getResult().getDocuments()) {
+                                        String name = documentSnapshot.getString("name");
+                                        intent.putExtra("Full Name" , name);
+                                    }
+                                    intent.putExtra("Email" , email.getText().toString());
+                                    startActivity(intent);
+                                }
+                            }
+
+                            //user was not found
+                            else {
+                                Toast.makeText(this.getContext(), "User was not found.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                 break;
 
         }
@@ -104,7 +144,6 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         super.onViewCreated(view, savedInstanceState);
 
         // get text views
-        name = view.findViewById(R.id.welcome_screen_name_field);
         email = view.findViewById(R.id.welcome_screen_EmailAddress_field);
         password = view.findViewById(R.id.welcome_screen_password_field);
         auth = FirebaseAuth.getInstance();
@@ -119,27 +158,6 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
         signInWithGoogleButton.setOnClickListener(this);
         signInWithGoogleButton.setEnabled(false);
 
-        name.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                // if someone wants to connect with google:
-                if (!email.getText().toString().isEmpty()){
-                    signInWithGoogleButton.setEnabled(true);
-                    signInButton.setEnabled(false);
-                }
-            }
-        });
-
         email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -153,10 +171,8 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!name.getText().toString().isEmpty()) {
-                    signInWithGoogleButton.setEnabled(true);
-                    signInButton.setEnabled(false);
-                }
+                signInWithGoogleButton.setEnabled(true);
+                signInButton.setEnabled(false);
             }
         });
 
@@ -173,7 +189,7 @@ public class welcome_screen extends Fragment implements View.OnClickListener{
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (!name.getText().toString().isEmpty() && !email.getText().toString().isEmpty()) {
+                if (!email.getText().toString().isEmpty()) {
                     signInButton.setEnabled(true);
                     signInWithGoogleButton.setEnabled(false);
                 }
