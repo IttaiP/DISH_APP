@@ -4,8 +4,11 @@ import android.app.Application;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.google.firebase.firestore.DocumentSnapshot;
+
+import java.util.HashMap;
 
 import io.paperdb.Paper;
 
@@ -13,6 +16,14 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
 
     private SharedViewModel sharedViewModel;
     DishApplication app;
+    private MutableLiveData<HashMap<String, Float>> LiveDataDishReccomendationScores;
+
+    public MutableLiveData<HashMap<String, Float>> getLiveDataDishReccomendationScores() {
+        if (LiveDataDishReccomendationScores == null) {
+            LiveDataDishReccomendationScores = new MutableLiveData<HashMap<String, Float>>();
+        }
+        return LiveDataDishReccomendationScores;
+    }
 
     public GetCustomMenuViewModel(@NonNull Application application) {
         super(application);
@@ -60,6 +71,7 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
                                             for(DocumentSnapshot document2 : task2.getResult().getDocuments()) {
                                                 String dish_restaurant = document2.getId();
                                                 app.info.DishReccomendationScores.put(dish_restaurant, calculateSingleDishRecommendation(dish_restaurant));
+                                                LiveDataDishReccomendationScores.setValue(app.info.DishReccomendationScores);
 //                                                Log.e("Reccomendation", app.info.DishReccomendationScores.toString());
                                             }
                                         }
@@ -69,6 +81,10 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
                 });
         Paper.book().write("DishReccomendationScores", app.info.DishReccomendationScores);
 
+
+    }
+
+    public void LiverDataaa(){
 
     }
 }

@@ -45,6 +45,12 @@
         android:id="@+id/nav_rate_recommendation"
         android:name="com.postpc.dish.RateRecommendationFragment"
         android:label="@string/rate_recommendation"
-        tools:layout="@layout/rate_recommendation_fragment" />
+        tools:layout="@layout/rate_recommendation_fragment" >
+        <action
+            android:id="@+id/action_nav_rate_recommendation_to_nav_home"
+            app:destination="@id/nav_home"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
 
 </navigation>

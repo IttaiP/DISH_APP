@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 public class RateRecommendationFragment extends Fragment {
 
@@ -46,7 +48,11 @@ public class RateRecommendationFragment extends Fragment {
                 int noofstars = stars.getNumStars();
                 float getrating = stars.getRating();
                 tView.setText("Rating: " + getrating + "/" + noofstars);
-//                mViewModel.rateDish(getrating, "Margarita" );
+//                mViewModel.rateDish(getrating, "Margarita");
+
+//                NavHostFragment navHostFragment =(NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_fragment_container);
+//                NavController navController = navHostFragment.getNavController();
+//                navController.navigate(R.id.action_nav_rate_recommendation_to_nav_home);
             }
         });
 

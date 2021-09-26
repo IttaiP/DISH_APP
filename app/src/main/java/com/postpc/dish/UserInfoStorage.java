@@ -43,6 +43,7 @@ public class UserInfoStorage {
 
     public void setUser_Email(String user_Email) {
         this.user_Email = user_Email;
+        sp.edit().putString("email", user_Email).apply();
     }
 
     public String getUser_Email() {
@@ -55,5 +56,11 @@ public class UserInfoStorage {
 
     public String getRestuarant() {
         return restuarant;
+    }
+
+    public void setMyID(String myID) {
+        this.myID = myID;
+        sp.edit().putString("id", myID).apply();
+
     }
 }

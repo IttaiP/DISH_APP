@@ -44,24 +44,25 @@
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.15520833333333334" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/drawable/ic_launcher_background.xml" value="0.15520833333333334" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/font/baloo.xml" value="0.16927083333333334" />
+        <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout-v23/welcome_screen_fragment.xml" value="0.1358695652173913" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/activity_main.xml" value="0.14285714285714285" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/activity_profile.xml" value="0.115625" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/choose_dishes_fragment.xml" value="0.1390625" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/create_user_fragment.xml" value="0.18857142857142858" />
+        <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/init_user_dish_data_fragment.xml" value="0.1358695652173913" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/rate_recommendation_fragment.xml" value="0.1359375" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/resturant_custom_menu_fragment.xml" value="0.22735507246376813" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/resturant_menu_fragment.xml" value="0.1" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/search_resturants_fragment.xml" value="0.22735507246376813" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/single_dish.xml" value="0.21920289855072464" />
         <entry key="..\:/Users/owner/Desktop/POSTPC/DISH/app/src/main/res/layout/welcome_screen_fragment.xml" value="0.22735507246376813" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout-v23/welcome_screen_fragment.xml" value="0.25" />
         <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/activity_home_screen.xml" value="0.2734375" />
         <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/choose_dishes_fragment.xml" value="0.21195652173913043" />
         <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/create_user_fragment.xml" value="0.10597826086956522" />
         <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/home_fragment.xml" value="0.2734375" />
         <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/init_user_dish_data_fragment.xml" value="0.335" />
         <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/nav_header_main_screen.xml" value="0.19701086956521738" />
-        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/welcome_screen_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/rosen/AndroidStudioProjects/Dish/DISH_APP/app/src/main/res/layout/welcome_screen_fragment.xml" value="0.2677083333333333" />
       </map>
     </option>
   </component>

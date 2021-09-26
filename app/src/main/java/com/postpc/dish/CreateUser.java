@@ -229,6 +229,9 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     editTextEmail.getText().toString().trim(),
                     editTextPassword.getText().toString().trim());
         }
+        app.info.setUser_Email(user.email);
+        app.info.setMyID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
 
         FirebaseFirestore.getInstance().collection("users").
                 document(FirebaseAuth.getInstance().getCurrentUser().getUid())

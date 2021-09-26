@@ -1,6 +1,7 @@
 package com.postpc.dish;
 
 import androidx.core.content.ContextCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -31,6 +32,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -94,6 +96,19 @@ public class GetCustomMenuFragment extends Fragment {
         restaurant_name.setText(restaurant);
 
         Log.d("restaurant", restaurant);
+
+
+        // Create the observer which updates the UI.
+        final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {
+            @Override
+            public void onChanged(@Nullable final HashMap<String, Float> newReccomendations) {
+                // Update the UI.
+
+            }
+        };
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        customMenuViewModel.getLiveDataDishReccomendationScores().observe(getViewLifecycleOwner(), nameObserver);
+
 
         customMenuViewModel.personalizeReccomendation(restaurant);
         for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishReccomendationScores.entrySet()) {
