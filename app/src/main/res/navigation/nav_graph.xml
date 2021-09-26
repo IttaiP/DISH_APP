@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/welcome_screen"
-        android:name="com.postpc.dish.welcome_screen"
+        android:name="com.postpc.dish.WelcomeScreenFragment"
         android:label="welcome_screen_fragment"
         tools:layout="@layout/welcome_screen_fragment" >
         <action

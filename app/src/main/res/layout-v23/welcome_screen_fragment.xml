@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".welcome_screen">
+    tools:context=".WelcomeScreenFragment">
 
     <TextView
         android:id="@+id/welcome_screen_register"
@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="15dp"
-        android:text="Register"
+        android:text="@string/register"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -23,6 +23,7 @@
         android:layout_height="520dp"
         android:layout_marginBottom="228dp"
         android:src="@drawable/welcome_screen_photo2"
+        android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -32,28 +33,13 @@
         android:id="@+id/welcome_screen_EmailAddress_field"
         android:layout_width="330dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:fontFamily="@font/bitter"
-        android:hint="Email Address"
+        android:hint="@string/email_address"
         android:inputType="textEmailAddress"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_name_field" />
-
-    <EditText
-        android:id="@+id/welcome_screen_name_field"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:fontFamily="@font/bitter"
-        android:hint="Full Name"
-        android:inputType="textPersonName"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.487"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/welcome_photo" />
 
@@ -64,21 +50,23 @@
         android:layout_marginStart="100dp"
         android:layout_marginBottom="15dp"
         android:fontFamily="@font/actor"
-        android:text="First time here?"
+        android:text="@string/first_time_here"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/welcome_screen_sign_in_button"
-        android:layout_width="330dp"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="152dp"
-        android:layout_marginEnd="152dp"
-        android:text="Sign in"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
+        android:layout_marginStart="42dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="25dp"
+        android:text="@string/sign_in"
+        app:layout_constraintBottom_toTopOf="@+id/first_time_here"
+        app:layout_constraintEnd_toStartOf="@+id/sign_in_with_google"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword2"
+        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_password_field"
         tools:ignore="UsingOnClickInXml" />
 
     <ProgressBar
@@ -97,29 +85,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/bitter"
-        android:text="Dish"
+        android:text="@string/dish"
         android:textColor="@color/white"
         android:textSize="96sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/welcome_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.079"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.843" />
-
-    <EditText
-        android:id="@+id/editTextTextPassword2"
-        android:layout_width="330dp"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:fontFamily="@font/bitter"
-        android:hint="Password"
-        android:inputType="textPassword"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_EmailAddress_field" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/welcome_screen_password_field"
@@ -132,14 +105,14 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_EmailAddress_field"
-        android:autofillHints="" />
+        app:layout_constraintTop_toBottomOf="@+id/welcome_screen_EmailAddress_field" />
 
     <Button
         android:id="@+id/sign_in_with_google"
         android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="23dp"
         android:text="@string/sign_in_with_google"
