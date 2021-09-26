@@ -13,7 +13,6 @@
         android:name=".DishApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DISH" >
@@ -25,7 +24,6 @@
         <activity
             android:name=".HomeScreen"
             android:exported="true"
-            android:label="@string/title_activity_main_screen"
             android:theme="@style/Theme.DISH.NoActionBar" />
         <activity
             android:name=".User"

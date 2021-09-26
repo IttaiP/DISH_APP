@@ -17,20 +17,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tell_us_how_it_was" />
 
-    <Button
-        android:id="@+id/btnRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Get Rating"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ratingBar" />
-
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/dish_image"
         android:layout_width="match_parent"
         android:layout_height="231dp"
-        android:src="@drawable/america_burgers"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
@@ -40,13 +30,12 @@
         android:fontFamily="@font/bitter"
         android:text="Tell us how it was:"
         android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:textSize="28sp"
+        app:layout_constraintBottom_toTopOf="@id/explanation"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/imageView"
-        app:layout_constraintVertical_bias="0.392" />
+        app:layout_constraintTop_toBottomOf="@id/rate_restaurant_name"
+        app:layout_constraintVertical_bias="0.376" />
 
     <TextView
         android:id="@+id/you_ordered"
@@ -59,7 +48,7 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@id/dish_name"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/dish_image" />
 
     <TextView
         android:id="@+id/dish_name"
@@ -72,7 +61,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/you_ordered"
-        app:layout_constraintTop_toBottomOf="@id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/dish_image" />
 
     <TextView
         android:id="@+id/from"
@@ -101,7 +90,7 @@
         app:layout_constraintTop_toBottomOf="@id/dish_name" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/add_photo_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -112,15 +101,16 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/arrow"
         android:layout_width="131dp"
         android:layout_height="122dp"
-        android:layout_marginTop="135dp"
+        android:layout_marginTop="108dp"
         android:src="@drawable/arrow"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/ratingBar"
-        app:layout_constraintEnd_toStartOf="@id/floatingActionButton"
-        tools:layout_editor_absoluteY="641dp"
-        tools:srcCompat="@drawable/arrow3" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="60dp"
+        tools:srcCompat="@drawable/arrow" />
 
     <TextView
         android:id="@+id/explanation"
@@ -133,10 +123,22 @@
         android:textColor="@color/black"
         android:textSize="15sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="@id/imageView2"
+        app:layout_constraintTop_toTopOf="@id/arrow"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/arrow"
         android:layout_marginLeft="70dp"
         tools:layout_editor_absoluteX="73dp" />
+
+    <Button
+        android:id="@+id/submit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="submit"
+        app:layout_constraintTop_toBottomOf="@id/ratingBar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="154dp"
+        tools:layout_editor_absoluteY="570dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
