@@ -102,7 +102,7 @@ public class GetCustomMenuFragment extends Fragment {
         final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {
             @Override
             public void onChanged(@Nullable final HashMap<String, Float> newReccomendations) {
-                for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishReccomendationScores.entrySet()) {
+                for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishRecommendationScores.entrySet()) {
 //                    Log.e("IM IN ", customMenuViewModel.app.info.DishReccomendationScores.toString());
                     database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override

@@ -39,7 +39,6 @@ class DishesAdapter: ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
         var dish = holder._dish
         dish.setOnClickListener() {
             var name_dish = holder._dish_name
-            dish.setBackgroundResource(R.drawable.background_description_pressed)
         }
         database.collection("user").document("NcTJ0OWlGiXOGGxNVmtpCGknhxn1").get().addOnSuccessListener { result:DocumentSnapshot? ->
             if(result != null) {
