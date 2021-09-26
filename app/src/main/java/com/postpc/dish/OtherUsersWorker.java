@@ -63,13 +63,13 @@ public class OtherUsersWorker extends Worker {
         for (DishRatings rating : app.info.ratings) {
 
             database.collection("ittai-ratings")
-                    .whereEqualTo("Dish_Restaurant", rating.Dish_Restaurant)
+                    .whereEqualTo("Dish_Id", rating.Dish_Id)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
 //                            Log.d("NEW RATING", task.getResult().getDocuments().toString());
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                if ((!app.info.otherUsersEmails.contains(document.get("email"))&& document.get("email")!=null)) {
+                                if ((!app.info.otherUsersEmails.contains(document.getString("email"))&& document.getString("email")!=null)) {
                                     addNewSimilarUser(document);
                                 }
                             }
@@ -101,9 +101,9 @@ public class OtherUsersWorker extends Worker {
                                     .addOnCompleteListener(task1 -> {
                                         if(task1.isSuccessful()){
                                             for (DocumentSnapshot document11 : task1.getResult().getDocuments()) {
-                                                DishRatings newRating = document11.toObject(DishRatings.class);
+                                                DishRatings newRating = new DishRatings(document11.getId(), document11.getString("Dish_Name"), (document11.getDouble("Rating")).floatValue());
                                                 newOtherUser.addRating(newRating);
-                                                Log.e("Rating", newRating.Dish_Restaurant+newRating.Rating);
+                                                Log.e("Rating", newRating.Dish_Name+newRating.Rating);
                                             }
 
                                         }else {

@@ -15,7 +15,7 @@ import io.paperdb.Paper;
 
 public class UserInfoStorage {
     private String restuarant;
-    private String user_Email;
+    public String user_Email;
     public String myID = "";
     public FirebaseFirestore database = FirebaseFirestore.getInstance();
     public List<DishRatings> ratings;
@@ -33,6 +33,7 @@ public class UserInfoStorage {
         sp = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sp.edit(); // TODO: delete later
         editor.clear().commit(); // TODO: delete later
+        Paper.book().destroy();
         ratings = Paper.book().read("ratings", new ArrayList<>());
         indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
         otherUsers = Paper.book().read("otherUsers", new ArrayList<>());

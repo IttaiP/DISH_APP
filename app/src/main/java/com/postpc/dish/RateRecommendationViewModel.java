@@ -29,13 +29,13 @@ public class RateRecommendationViewModel extends SharedViewModel {
         super(application);
     }
 
-    private void addToUser(String Dish_Restaurant, float rating){
+    private void addToUser(String dish, String dish_id, float rating){
         Map<String, Object> DishRating = new HashMap<>();
-        DishRating.put("Dish_Restaurant", Dish_Restaurant);
+        DishRating.put("Dish_Name", dish);
         DishRating.put("Rating", rating);
 
         app.info.database.collection("users").document(app.info.myID).collection("Ratings")
-                .document(app.info.myID+Dish_Restaurant+" user")
+                .document(dish_id)
                 .set(DishRating)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -54,14 +54,15 @@ public class RateRecommendationViewModel extends SharedViewModel {
 
     }
 
-    private void addToRatings(String Dish_Restaurant, float rating, String User_email){
+    private void addToRatings(String Dish_Name, String Dish_Id, float rating, String User_email){
         Map<String, Object> DishRating = new HashMap<>();
-        DishRating.put("Dish_Restaurant", Dish_Restaurant);
+        DishRating.put("Dish_Name", Dish_Name);
+        DishRating.put("Dish_Id", Dish_Id);
         DishRating.put("Rating", rating);
         DishRating.put("email", User_email);
 
 
-        app.info.database.collection("ittai-ratings").document(app.info.myID+Dish_Restaurant+" rating")
+        app.info.database.collection("ittai-ratings").document(app.info.myID+Dish_Name+" rating")
                 .set(DishRating)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -79,18 +80,20 @@ public class RateRecommendationViewModel extends SharedViewModel {
                 });
     }
 
-    public void rateDish(float rating, String dish){
-        String Dish_Restaurant = dish+"_"+app.info.getRestuarant();
-        addToUser(Dish_Restaurant, rating);
-        addToRatings(Dish_Restaurant, rating, app.info.getUser_Email());
+    public void rateDish(float rating, String dish, String dish_id){
+//        String Dish_Restaurant = dish+"_"+app.info.getRestuarant();
+        addToUser(dish, dish_id, rating);
+        addToRatings(dish, dish_id, rating, app.info.getUser_Email());
 
-        DishRatings newRating = new DishRatings();
-        newRating.Dish_Restaurant = Dish_Restaurant;
-        newRating.Rating = rating;
+        DishRatings newRating = new DishRatings(dish_id, dish, rating);
         app.info.ratings.add(newRating);
+        app.info.indicesInRatings.add(dish_id);
         Gson gson = new Gson();
         String ratingsAsJson = gson.toJson(app.info.ratings);
+        String iRatingsAsJson = gson.toJson(app.info.indicesInRatings);
         SharedPreferences sp = ((DishApplication)getApplication()).info.sp;
         sp.edit().putString("ratings", ratingsAsJson).apply();
+        sp.edit().putString("iRatings", iRatingsAsJson).apply();
+
     }
 }

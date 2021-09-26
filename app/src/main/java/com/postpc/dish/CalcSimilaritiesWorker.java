@@ -34,6 +34,9 @@ public class CalcSimilaritiesWorker extends Worker {
 //            }
 //        }
 
+        Log.e("indicesInRatings", app.info.indicesInRatings.toString());
+        Log.e("ratings", app.info.ratings.toString());
+
         calculateSimilarities();
 
         Paper.book().write("otherUsers", app.info.otherUsers);
@@ -44,6 +47,7 @@ public class CalcSimilaritiesWorker extends Worker {
         Log.e("otherUsers", app.info.otherUsers.toString());
         Log.e("otherUsersEmails", app.info.otherUsersEmails.toString());
         Log.e("indicesInRatings", app.info.indicesInRatings.toString());
+        Log.e("ratings", app.info.ratings.toString());
         Log.e("DishReccomendationScrs", app.info.DishReccomendationScores.toString());
 
         return Result.success();
@@ -56,12 +60,18 @@ public class CalcSimilaritiesWorker extends Worker {
             int both_rated = 0;
             float differece_sum = 0;
             for(DishRatings rating: otherUser.getRatings()){
-                int i = app.info.indicesInRatings.indexOf(rating.Dish_Restaurant);
+                Log.d("dish is", "dish name" + rating.Dish_Name);
+                int i = app.info.indicesInRatings.indexOf(rating.Dish_Id);
+                Log.d("i is", "value " + i);
                 if(i != -1){
+                    Log.d("rating for dish ", rating.Dish_Id);
                     differece_sum+=(Math.abs(app.info.ratings.get(i).Rating - rating.Rating));
                     both_rated++;
                 }
             }
+            Log.d("DIFFERENCE IS ", String.valueOf(differece_sum));
+            Log.d("BOTH IS ", String.valueOf(both_rated));
+
             otherUser.setSimilarity((float) (2.5 - differece_sum/both_rated));
 //            otherUser.setBoth_rated(both_rated);
             Log.e(" SIMILARITY",otherUser.getUser_email() +  otherUser.getSimilarity().toString());

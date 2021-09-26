@@ -41,6 +41,8 @@ import com.yuyakaido.android.cardstackview.Direction;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeableMethod;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -60,6 +62,7 @@ public class InitUserDishDataFragment extends Fragment {
     private List<DishItem> dishes;
     private Context context;
     private String current_dish;
+    private String current_restaurant;
     private String current_category = "italian";
     private ChipGroup category;
     private Chip italian, burger, breakfast, mexican, asian;
@@ -84,6 +87,7 @@ public class InitUserDishDataFragment extends Fragment {
         doneButton = view.findViewById(R.id.finish_button);
 
         doneButton.setOnClickListener(view1 -> {
+//            app.load_rated_dishes_from_sp();
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             firebaseFirestore.collection("users").document(user.getUid())
@@ -122,22 +126,21 @@ public class InitUserDishDataFragment extends Fragment {
             public void onCardSwiped(Direction direction) {
                 Log.d("MESSAGE", "onCardSwiped: p=" + layoutManager.getTopPosition() + " d=" + direction);
                 if (direction == Direction.Right){
-                    update_dish(current_dish, FABULOUS);
+                    update_dish(current_dish, current_restaurant, FABULOUS);
                     Toast.makeText(context, "Fabulous!", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Left){
-                    update_dish(current_dish, NEVER_AGAIN);
+                    update_dish(current_dish, current_restaurant, NEVER_AGAIN);
                     Toast.makeText(context, "Never Again!", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Top){
-                    update_dish(current_dish, SATISFYING);
+                    update_dish(current_dish, current_restaurant, SATISFYING);
                     Toast.makeText(context, "Satisfying", Toast.LENGTH_SHORT).show();
                 }
                 if (direction == Direction.Bottom){
-                    update_dish(current_dish, FINE);
+                    update_dish(current_dish, current_restaurant, FINE);
                     Toast.makeText(context, "Fine", Toast.LENGTH_SHORT).show();
                 }
-
 
                 // Paginating
                 if (layoutManager.getTopPosition() == adapter.getItemCount()){
@@ -158,7 +161,9 @@ public class InitUserDishDataFragment extends Fragment {
             @Override
             public void onCardAppeared(View view, int position) {
                 TextView dish_name = view.findViewById(R.id.dish_name);
+                TextView dish_restaurant_name = view.findViewById(R.id.dish_restaurant_name);
                 current_dish = dish_name.getText().toString();
+                current_restaurant = dish_restaurant_name.getText().toString();
                 Log.d("MESSAGE", "onCardAppeared: " + position + ", name: " + dish_name.getText());
             }
 
@@ -188,12 +193,18 @@ public class InitUserDishDataFragment extends Fragment {
         database = FirebaseFirestore.getInstance();
     }
 
-    public void update_dish(String dish_name, float rating) {
+    public void update_dish(String dish_name, String dish_restaurant, float rating) {
 
         RateRecommendationViewModel rateRecommendationViewModel = new
                 ViewModelProvider(requireActivity()).get(RateRecommendationViewModel.class);
-
-        rateRecommendationViewModel.rateDish(rating, dish_name);
+        database.collection("all-dishes").whereEqualTo("name", dish_name).whereEqualTo("restaurant_name", dish_restaurant).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (DocumentSnapshot document: task.getResult()) {
+                    rateRecommendationViewModel.rateDish(rating, dish_name, document.getId());
+                }
+            }
+        });
 
     }
 

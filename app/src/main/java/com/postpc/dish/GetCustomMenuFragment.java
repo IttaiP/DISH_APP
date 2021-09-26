@@ -95,8 +95,9 @@ public class GetCustomMenuFragment extends Fragment {
 
         Log.d("restaurant", restaurant);
 
-        customMenuViewModel.personalizeReccomendation();
+        customMenuViewModel.personalizeReccomendation(restaurant);
         for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishReccomendationScores.entrySet()) {
+            Log.e("IM IN ", "loop");
             database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {

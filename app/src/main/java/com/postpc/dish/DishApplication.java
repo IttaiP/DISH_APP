@@ -49,12 +49,12 @@ public class DishApplication extends Application {
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
-
+        info.user_Email = info.sp.getString("email", null);
+        info.myID = info.sp.getString("id", null);
         //todo: need to update user ID first for this to work properly.
-        //load_rated_dishes_from_sp();
-
-
-
+        if(info.myID!=null) {
+            load_rated_dishes_from_sp();
+        }
     }
 
 
@@ -142,9 +142,11 @@ public class DishApplication extends Application {
 
                         for (DocumentSnapshot document : task.getResult().getDocuments()) {
                             Log.e("DOCUMENTTT", document.getId() + " => " + document.getData());
-                            DishRatings newRating = document.toObject(DishRatings.class);
+                            DishRatings newRating = new DishRatings(document.getId(), document.getString("Dish_Name"), document.getDouble("Rating").floatValue());
                             info.ratings.add(newRating);
-                            info.indicesInRatings.add(newRating.Dish_Restaurant);
+                            Log.d("ID IS ", newRating.Dish_Id);
+                            Log.d("NAME IS ", newRating.Dish_Name);
+                            info.indicesInRatings.add(newRating.Dish_Id);
 
                         }
                         Gson gson = new Gson();

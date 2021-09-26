@@ -44,6 +44,16 @@
             android:textColor="@android:color/white"
             android:textSize="18sp"/>
 
+        <TextView
+            android:id="@+id/dish_restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="restaurant"
+            android:layout_gravity="end"
+            android:fontFamily="@font/bitter"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+
 
     </LinearLayout>
 

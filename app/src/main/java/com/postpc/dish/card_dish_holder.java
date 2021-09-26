@@ -15,12 +15,14 @@ public class card_dish_holder extends RecyclerView.ViewHolder {
     private final TextView dish_name;
     private final TextView dish_description;
     private final ImageView dish_photo;
+    private final TextView dish_restaurant_name;
 
     public card_dish_holder(@NonNull View itemView) {
         super(itemView);
         dish_name = itemView.findViewById(R.id.dish_name);
         dish_description = itemView.findViewById(R.id.dish_description);
         dish_photo = itemView.findViewById(R.id.dish_photo);
+        dish_restaurant_name = itemView.findViewById(R.id.dish_restaurant_name);
     }
 
     public void bind(DishItem dish_item, Context context) {
@@ -29,5 +31,6 @@ public class card_dish_holder extends RecyclerView.ViewHolder {
         int resourceId = context.getResources().getIdentifier(dish_item.photo, "drawable",
                 context.getPackageName());
         dish_photo.setImageResource(resourceId);
+        dish_restaurant_name.setText(dish_item.getRestaurantName());
     }
 }
