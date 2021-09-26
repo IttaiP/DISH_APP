@@ -4,5 +4,8 @@
         <item>@font/actor</item>
         <item>@font/baloo</item>
         <item>@font/bitter</item>
+        <item>@font/cantarell</item>
+        <item>@font/catamaran_light</item>
+        <item>@font/galdeano</item>
     </array>
 </resources>

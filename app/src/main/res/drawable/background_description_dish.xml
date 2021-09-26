@@ -3,7 +3,8 @@
     <solid
         android:color="@color/browser_actions_bg_grey"
         android:layout_width="130dp"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
     </solid>
 
     <!-- View border color and width -->

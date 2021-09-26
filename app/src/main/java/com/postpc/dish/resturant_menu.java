@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -118,6 +119,14 @@ public class resturant_menu extends Fragment {
                 else {
                     Log.d("Error", "Error trying to receive");
                 }
+            }
+        });
+
+        Button get_custom_menu = view.findViewById(R.id.custom_menu_button);
+        get_custom_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }

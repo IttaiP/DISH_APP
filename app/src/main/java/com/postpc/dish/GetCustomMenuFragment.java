@@ -102,25 +102,26 @@ public class GetCustomMenuFragment extends Fragment {
         final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {
             @Override
             public void onChanged(@Nullable final HashMap<String, Float> newReccomendations) {
-                // Update the UI.
-
+                for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishReccomendationScores.entrySet()) {
+//                    Log.e("IM IN ", customMenuViewModel.app.info.DishReccomendationScores.toString());
+                    database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(dish_recommended.getValue() != null) {
+                                adapter.addDishes(Objects.requireNonNull(documentSnapshot.toObject(DishItem.class)), dish_recommended.getValue());
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
+//                Log.e("DISHES ARE ", adapter.getDishesAdapter().toString());
             }
         };
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         customMenuViewModel.getLiveDataDishReccomendationScores().observe(getViewLifecycleOwner(), nameObserver);
 
-
         customMenuViewModel.personalizeReccomendation(restaurant);
-        for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishReccomendationScores.entrySet()) {
-            Log.e("IM IN ", "loop");
-            database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    adapter.addDishes(Objects.requireNonNull(documentSnapshot.toObject(DishItem.class)), dish_recommended.getValue());
-                }
-            });
-        }
-        adapter.notifyDataSetChanged();
+
     }
 
 

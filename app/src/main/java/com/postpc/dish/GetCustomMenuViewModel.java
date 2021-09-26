@@ -53,6 +53,7 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
         if(otherUsercount == 0){
             return null;
         }
+        Log.e("final score is ", "Score " + recommendation/otherUsercount);
         return recommendation/otherUsercount;
     }
 
