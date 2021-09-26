@@ -26,6 +26,7 @@
     <string name="full_name">Full Name</string>
     <string name="email_address">Email Address</string>
     <string name="register">Register</string>
+    <string name="wifi_btn">Show Restaurants in WIFI range</string>
     <!--    <string name="default_web_client_id" />-->
     <!--    <string name="default_web_client_id" />-->
     \

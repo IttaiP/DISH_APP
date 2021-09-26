@@ -4,6 +4,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
@@ -30,6 +31,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.android.gms.common.api.ApiException;
@@ -56,10 +58,14 @@ public class SearchFragment extends Fragment {
     private FirebaseFirestore database;
 
     private ArrayList<Restaurant> restaurants;
+    private ArrayList<Restaurant> wifiRangerestaurants;
+
     private restaurnats_adapter adapter;
 
     private SearchViewModel mViewModel;
     private SharedViewModel sharedViewModel;
+    private Button wifiButton;
+    private boolean buttonPressed;
 
     // ---------------ADDED BY ITTAI --------------
     Activity activity;
@@ -84,6 +90,8 @@ public class SearchFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        buttonPressed = false;
+        wifiButton = view.findViewById(R.id.WifiScanbutton);
         search = view.findViewById(R.id.search_bar);
         recycler_view = view.findViewById(R.id.recycler_view);
         database = FirebaseFirestore.getInstance();
@@ -93,6 +101,8 @@ public class SearchFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
         restaurants = new ArrayList<>();
+        wifiRangerestaurants = new ArrayList<>();
+
         adapter = new restaurnats_adapter(restaurants);
 
         //Set up recycler view
@@ -138,14 +148,43 @@ public class SearchFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.SearchViewModel.class);
         mViewModel.activity = activity;
 
-        view.findViewById(R.id.WifiScanbutton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                beginWifiScan();
-                scannedRestaurants = app.wifiScanner.scannedRestaurants;
-            }
-        });
+        // Create the observer which updates the UI.
+        final Observer<List<String>> restsObserver = wifiRestaurants -> {
+            // Update the UI, in this case, a TextView.
+//                scannedRestaurants = app.wifiScanner.scannedRestaurants;
+            Log.e("wifiRestaurants",wifiRestaurants.toString());
+            wifiRangerestaurants.clear();
 
+            for(String restaurantWifi: wifiRestaurants){
+                for(Restaurant rest: restaurants){
+                    Log.e("RestuarantName", rest.Wifi);
+                    if(rest.Wifi.equals(restaurantWifi)){
+                        // todo: change button
+                        wifiButton.setText("Show All Restaurants");
+                        wifiRangerestaurants.add(rest);
+                    }
+                }
+            }
+            adapter.setAdapter(wifiRangerestaurants);
+            adapter.notifyDataSetChanged();
+            Log.e("itemCount",""+adapter.getItemCount());
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        app.wifiScanner.getRestaurants().observe(getViewLifecycleOwner(), restsObserver);
+
+        wifiButton.setOnClickListener(view1 -> {
+            buttonPressed = !buttonPressed;
+            if(!buttonPressed){
+                wifiButton.setText(getString(R.string.wifi_btn));
+                adapter.setAdapter(restaurants);
+                adapter.notifyDataSetChanged();
+            }
+            else{
+                beginWifiScan();
+            }
+
+        });
     }
 
     private void search_in_firestore(String search) {
