@@ -16,26 +16,28 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="5dp"
-        tools:text="Dish name"
+        android:fontFamily="@font/catamaran_light"
         android:gravity="center"
-        android:textSize="16sp"
+        android:padding="2dp"
         android:textColor="@color/black"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/dish_description"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        tools:text="Dish name" />
 
     <TextView
         android:id="@+id/dish_description"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
-        android:layout_marginBottom="5dp"
         android:layout_marginEnd="5dp"
-        tools:text="beef with vegetables and other things blas blaad kskjgsrhgsg "
+        android:fontFamily="@font/catamaran_light"
+        android:padding="2dp"
         android:textSize="12sp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/dish_name"
+        tools:text="beef with vegetables and other things blas blaad kskjgsrhgsg " />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
+import com.google.common.base.Predicates.not
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -16,6 +17,7 @@ import com.postpc.dish.R
 
 class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallBack2()) {
 
+    private var setDishes = mutableSetOf<String>()
     private var dishes = mutableListOf<DishItem>()
     private var context: Context? = null
 
@@ -23,15 +25,23 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
         this.dishes = dishes as MutableList<DishItem>
     }
 
+    fun getDishesAdapter(): MutableList<DishItem> {
+        return this.dishes
+    }
+
     fun addDishes(dish: DishItem, rating: Float) {
-        dish.match = rating
-        this.dishes.add(dish)
+//        dish.match = rating
+        if (dish.photo !in setDishes) {
+            dish.match = rating
+            this.dishes.add(dish)
+            this.setDishes.add(dish.photo);
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomDishHolder {
         context = parent.context
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.single_dish, parent, false)
+            .inflate(R.layout.custom_single_dish, parent, false)
         return CustomDishHolder(view)
     }
 

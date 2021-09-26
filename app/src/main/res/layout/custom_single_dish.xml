@@ -20,6 +20,7 @@
         android:gravity="center"
         android:textSize="16sp"
         android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/dish_description"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -33,23 +34,9 @@
         android:layout_marginEnd="5dp"
         tools:text="beef with vegetables and other things blas blaad kskjgsrhgsg "
         android:textSize="12sp"
-        android:gravity="center"
         app:layout_constraintTop_toBottomOf="@+id/dish_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
-
-    <TextView
-        android:id="@+id/dish_match"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="27dp"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dish_description"
-        tools:text="Matching score" />
 
     <TextView
         android:id="@+id/dish_score"
@@ -62,8 +49,10 @@
         android:textSize="16sp"
         android:gravity="center"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/dish_description"
-        app:layout_constraintStart_toEndOf="@id/dish_match"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/dish_description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

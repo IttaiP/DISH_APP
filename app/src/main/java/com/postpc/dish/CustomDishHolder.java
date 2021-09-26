@@ -1,5 +1,6 @@
 package com.postpc.dish;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
@@ -8,6 +9,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.text.DecimalFormat;
 
 public class CustomDishHolder extends RecyclerView.ViewHolder {
 
@@ -46,9 +49,11 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
     }
 
 
+    @SuppressLint("DefaultLocale")
     public void bind(DishItem dish) {
         dish_name.setText(dish.getName());
         dish_description.setText(dish.getDescription());
-        dish_score.setText(String.valueOf(dish.getMatch()));
+        String num = String.format("%.2f", dish.getMatch());
+        dish_score.setText("Matching is " + num);
     }
 }

@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -118,6 +120,20 @@ public class resturant_menu extends Fragment {
                 else {
                     Log.d("Error", "Error trying to receive");
                 }
+            }
+        });
+
+        Button get_custom_menu = view.findViewById(R.id.custom_menu_button);
+        get_custom_menu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                Bundle arguments = new Bundle();
+//                Log.d("name", restaurant_name.getText().toString());
+                arguments.putString("restaurant", restaurant);
+                Fragment custom_menu_fragment = new GetCustomMenuFragment();
+                custom_menu_fragment.setArguments(arguments);
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.restaurant_menu, custom_menu_fragment).addToBackStack(null).commit();
             }
         });
     }
