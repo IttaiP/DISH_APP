@@ -6,37 +6,29 @@
     android:layout_height="match_parent"
     tools:context=".resturant_menu">
 
-
-    <TextView
-        android:id="@+id/rate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="Rate Recommendation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent" android:layout_height="match_parent">
 
         <RatingBar
             android:id="@+id/ratingBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_marginLeft="80dp"
-            android:layout_marginTop="200dp"
+            android:layout_marginTop="483dp"
             android:numStars="5"
             android:rating="0" />
+
         <Button
             android:id="@+id/btnRate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/ratingBar"
             android:layout_below="@+id/ratingBar"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="60dp"
-            android:text="Get Rating"/>
+            android:layout_alignLeft="@+id/ratingBar"
+            android:layout_marginLeft="64dp"
+            android:layout_marginTop="20dp"
+            android:text="Get Rating" />
+
         <TextView
             android:id="@+id/ratingText"
             android:layout_width="wrap_content"
@@ -46,6 +38,77 @@
             android:layout_marginTop="20dp"
             android:textSize="20dp"
             android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="231dp"
+            android:src="@drawable/america_burgers" />
+
+        <TextView
+            android:id="@+id/tell_us_how_it_was"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="109dp"
+            android:layout_marginBottom="267dp"
+            android:fontFamily="@font/bitter"
+            android:text="Tell us how it was"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/you_ordered"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="218dp"
+            android:layout_marginBottom="416dp"
+            android:fontFamily="@font/bitter"
+            android:text="You ordered"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/dish_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="45dp"
+            android:layout_marginBottom="413dp"
+            android:fontFamily="@font/bitter"
+            android:text="--dish name--"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/from"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="299dp"
+            android:layout_marginBottom="352dp"
+            android:fontFamily="@font/bitter"
+            android:text="from"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/rate_restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="42dp"
+            android:layout_marginBottom="348dp"
+            android:fontFamily="@font/bitter"
+            android:text="--restaurant name--"
+            android:textColor="@color/black"
+            android:textSize="24sp" />
     </RelativeLayout>
 
 

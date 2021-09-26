@@ -5,7 +5,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
+
 import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
@@ -71,8 +71,8 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
                                         if(task2.isSuccessful()){
                                             for(DocumentSnapshot document2 : task2.getResult().getDocuments()) {
                                                 String dish_restaurant = document2.getId();
-                                                app.info.DishReccomendationScores.put(dish_restaurant, calculateSingleDishRecommendation(dish_restaurant));
-                                                LiveDataDishReccomendationScores.setValue(app.info.DishReccomendationScores);
+                                                app.info.DishRecommendationScores.put(dish_restaurant, calculateSingleDishRecommendation(dish_restaurant));
+                                                LiveDataDishReccomendationScores.setValue(app.info.DishRecommendationScores);
 //                                                Log.e("Reccomendation", app.info.DishReccomendationScores.toString());
                                             }
                                         }
@@ -80,7 +80,7 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
                         }
                     }
                 });
-        Paper.book().write("DishReccomendationScores", app.info.DishReccomendationScores);
+        Paper.book().write("DishReccomendationScores", app.info.DishRecommendationScores);
 
 
     }

@@ -20,6 +20,7 @@ public class RateRecommendationFragment extends Fragment {
     private RatingBar stars;
     private TextView tView;
     private Button rateBtn;
+    private String dishToRate = null;
 
     public static RateRecommendationFragment newInstance() {
         return new RateRecommendationFragment();
@@ -34,30 +35,23 @@ public class RateRecommendationFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel =new ViewModelProvider(this).get(com.postpc.dish.RateRecommendationViewModel.class);
-//        mViewModel.setUser_Email("shmu@gmail.com");
-//        mViewModel.setRestuarant("Pizza Lila");
-        // todo: add user email , and restaurant and dish (after chosed dish) to shared preferences
+        mViewModel = new ViewModelProvider(this).get(com.postpc.dish.RateRecommendationViewModel.class);
+
+        // get dish to rate from bundle:
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            dishToRate = bundle.getString("dish ID to rate", null);
+        }
 
         stars = (RatingBar) view.findViewById(R.id.ratingBar);
         tView = (TextView) view.findViewById(R.id.ratingText);
-        rateBtn = (Button)view.findViewById(R.id.btnRate);
-        rateBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int noofstars = stars.getNumStars();
-                float getrating = stars.getRating();
-                tView.setText("Rating: " + getrating + "/" + noofstars);
-//                mViewModel.rateDish(getrating, "Margarita");
+        rateBtn = (Button) view.findViewById(R.id.btnRate);
+        rateBtn.setOnClickListener(v -> {
+            int numStars = stars.getNumStars();
+            float rating = stars.getRating();
+            tView.setText("Rating: " + rating + "/" + numStars);
 
-//                NavHostFragment navHostFragment =(NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_fragment_container);
-//                NavController navController = navHostFragment.getNavController();
-//                navController.navigate(R.id.action_nav_rate_recommendation_to_nav_home);
-            }
         });
-
-
-
     }
 
     @Override
@@ -66,5 +60,4 @@ public class RateRecommendationFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(RateRecommendationViewModel.class);
         // TODO: Use the ViewModel
     }
-
 }

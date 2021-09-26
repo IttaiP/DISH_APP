@@ -7,9 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.paperdb.Paper;
 
 public class CalcSimilaritiesWorker extends Worker {
@@ -42,13 +39,13 @@ public class CalcSimilaritiesWorker extends Worker {
         Paper.book().write("otherUsers", app.info.otherUsers);
         Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
         Paper.book().write("indicesInRatings", app.info.indicesInRatings);
-        Paper.book().write("DishReccomendationScores", app.info.DishReccomendationScores);
+        Paper.book().write("DishReccomendationScores", app.info.DishRecommendationScores);
 
         Log.e("otherUsers", app.info.otherUsers.toString());
         Log.e("otherUsersEmails", app.info.otherUsersEmails.toString());
         Log.e("indicesInRatings", app.info.indicesInRatings.toString());
         Log.e("ratings", app.info.ratings.toString());
-        Log.e("DishReccomendationScrs", app.info.DishReccomendationScores.toString());
+        Log.e("DishReccomendationScrs", app.info.DishRecommendationScores.toString());
 
         return Result.success();
     }

@@ -171,6 +171,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
 
             @Override
             public void afterTextChanged(Editable editable) {
+                email.setText(email.getText().toString().trim());
                 signInWithGoogleButton.setEnabled(true);
                 signInButton.setEnabled(false);
             }

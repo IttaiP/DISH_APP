@@ -1,8 +1,6 @@
 package com.postpc.dish;
 
-import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,14 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.postpc.dish.R;
-import com.postpc.dish.Restaurant;
-import com.postpc.dish.SharedViewModel;
-import com.postpc.dish.restaurant_view;
-import com.postpc.dish.resturant_menu;
 
 import java.util.List;
 
@@ -62,7 +53,7 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 //Added by Ittai
                 app = (DishApplication) activity.getApplication();
-                app.info.setRestuarant(restaurant_name.getText().toString());
+                app.info.setRestaurant(restaurant_name.getText().toString());
 
 
                 Bundle arguments = new Bundle();
@@ -80,7 +71,7 @@ public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
                 AppCompatActivity activity = (AppCompatActivity) view.getContext();
                 //Added by Ittai
                 app = (DishApplication) activity.getApplication();
-                app.info.setRestuarant(restaurant_name.getText().toString());
+                app.info.setRestaurant(restaurant_name.getText().toString());
 
 
                 Bundle arguments = new Bundle();
