@@ -1,33 +1,19 @@
 package com.postpc.dish;
 
 import android.app.Application;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.wifi.ScanResult;
-import android.net.wifi.WifiManager;
-import android.os.Bundle;
 import android.util.Log;
 
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.NetworkType;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
-import java.security.AlgorithmParameterGenerator;
 import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
@@ -49,7 +35,7 @@ public class DishApplication extends Application {
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
-        info.user_Email = info.sp.getString("email", null);
+        info.userEmail = info.sp.getString("email", null);
         info.myID = info.sp.getString("id", null);
         //todo: need to update user ID first for this to work properly.
         if(info.myID!=null) {
@@ -63,7 +49,7 @@ public class DishApplication extends Application {
 
 
     public void findUserID(){
-        info.database.collection("users").whereEqualTo("email", info.getUser_Email()).get()
+        info.database.collection("users").whereEqualTo("email", info.getUserEmail()).get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         info.myID =task.getResult().getDocuments().get(0).getId();
@@ -76,8 +62,8 @@ public class DishApplication extends Application {
 //        if(!info.otherUsersEmails.contains("shmu@gmail.com")) {// todo change to bottom
 //            info.otherUsersEmails.add("shmu@gmail.com");
 //        }
-        if(!info.otherUsersEmails.contains(info.getUser_Email())) {
-            info.otherUsersEmails.add(info.getUser_Email());
+        if(!info.otherUsersEmails.contains(info.getUserEmail())) {
+            info.otherUsersEmails.add(info.getUserEmail());
         }
 
         // todo: can add constraints here. probably not needed

@@ -14,16 +14,16 @@ import java.util.List;
 import io.paperdb.Paper;
 
 public class UserInfoStorage {
-    private String restuarant;
-    public String user_Email;
+    private String restaurant;
+    private String dishToRate;
+    public String userEmail;
     public String myID = "";
     public FirebaseFirestore database = FirebaseFirestore.getInstance();
     public List<DishRatings> ratings;
     public List<String> indicesInRatings;
     public List<OtherUser> otherUsers;
     public List<String> otherUsersEmails;
-    public HashMap<String, Float> DishReccomendationScores;
-
+    public HashMap<String, Float> DishRecommendationScores;
     SharedPreferences sp;
 
     public UserInfoStorage(Context context){
@@ -31,36 +31,41 @@ public class UserInfoStorage {
 //        user_Email = auth.getCurrentUser().getEmail();
 //        myID = auth.getCurrentUser().getUid();
         sp = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = sp.edit(); // TODO: delete later
-        editor.clear().commit(); // TODO: delete later
         Paper.book().destroy();
         ratings = Paper.book().read("ratings", new ArrayList<>());
         indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
         otherUsers = Paper.book().read("otherUsers", new ArrayList<>());
         otherUsersEmails = Paper.book().read("otherUsersEmails", new ArrayList<>());
-        DishReccomendationScores = Paper.book().read("DishReccomendationScores", new HashMap<>());
+        DishRecommendationScores = Paper.book().read("DishReccomendationScores", new HashMap<>());
     }
 
-    public void setUser_Email(String user_Email) {
-        this.user_Email = user_Email;
-        sp.edit().putString("email", user_Email).apply();
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+        sp.edit().putString("email", userEmail).apply();
     }
 
-    public String getUser_Email() {
-        return user_Email;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setRestuarant(String restuarant) {
-        this.restuarant = restuarant;
+    public void setRestaurant(String restaurant) {
+        this.restaurant = restaurant;
     }
 
-    public String getRestuarant() {
-        return restuarant;
+    public String getRestaurant() {
+        return restaurant;
     }
 
     public void setMyID(String myID) {
         this.myID = myID;
         sp.edit().putString("id", myID).apply();
+    }
 
+    public void setDishToRate(String dishToRate) {
+        this.dishToRate = dishToRate;
+    }
+
+    public String getDishToRate() {
+        return dishToRate;
     }
 }

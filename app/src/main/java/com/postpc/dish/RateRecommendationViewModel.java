@@ -4,20 +4,11 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
-import com.postpc.dish.DishApplication;
-import com.postpc.dish.DishRatings;
-import com.postpc.dish.SharedViewModel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -83,7 +74,7 @@ public class RateRecommendationViewModel extends SharedViewModel {
     public void rateDish(float rating, String dish, String dish_id){
 //        String Dish_Restaurant = dish+"_"+app.info.getRestuarant();
         addToUser(dish, dish_id, rating);
-        addToRatings(dish, dish_id, rating, app.info.getUser_Email());
+        addToRatings(dish, dish_id, rating, app.info.getUserEmail());
 
         DishRatings newRating = new DishRatings(dish_id, dish, rating);
         app.info.ratings.add(newRating);

@@ -32,8 +32,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import io.paperdb.Paper;
-
 @SuppressWarnings("ALL")
 public class CreateUser extends Fragment implements View.OnClickListener {
 
@@ -229,7 +227,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     editTextEmail.getText().toString().trim(),
                     editTextPassword.getText().toString().trim());
         }
-        app.info.setUser_Email(user.email);
+        app.info.setUserEmail(user.email);
         app.info.setMyID(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
@@ -244,7 +242,7 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                                 Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                         app.info.myID = mAuth.getCurrentUser().getUid();
-                        app.info.setUser_Email(mAuth.getCurrentUser().getEmail());
+                        app.info.setUserEmail(mAuth.getCurrentUser().getEmail());
                         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
                                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
                         assert navHostFragment != null;
