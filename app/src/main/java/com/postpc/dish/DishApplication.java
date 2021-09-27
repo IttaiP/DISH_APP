@@ -29,7 +29,7 @@ public class DishApplication extends Application {
         super.onCreate();
 
         Paper.init(this);
-        Paper.book().delete("otherUsersEmails");
+//        Paper.book().delete("otherUsersEmails");
         calcWasRun = false;
 
 

@@ -73,6 +73,7 @@ public class OtherUsersWorker extends Worker {
                                     Log.e("Adding a new user ", document.getString("email"));
                                     addNewSimilarUser(document);
                                 }
+                                // todo : add update to user if already exists
                             }
                         } else {
                             Log.d("ERRRORRR", "Error getting documents in load_similar_users: ", task.getException());

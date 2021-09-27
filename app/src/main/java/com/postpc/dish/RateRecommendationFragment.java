@@ -44,12 +44,12 @@ public class RateRecommendationFragment extends Fragment {
         }
 
         stars = (RatingBar) view.findViewById(R.id.ratingBar);
-        tView = (TextView) view.findViewById(R.id.ratingText);
-        rateBtn = (Button) view.findViewById(R.id.btnRate);
+//        tView = (TextView) view.findViewById(R.id.ratingText);
+        rateBtn = (Button) view.findViewById(R.id.submit_button);
         rateBtn.setOnClickListener(v -> {
             int numStars = stars.getNumStars();
             float rating = stars.getRating();
-            tView.setText("Rating: " + rating + "/" + numStars);
+//            tView.setText("Rating: " + rating + "/" + numStars);
 
         });
     }

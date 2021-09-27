@@ -44,7 +44,7 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
         for(OtherUser user: app.info.otherUsers){
             for(DishRatings dishRating: user.getRatings()){
                 if(dishRating.Dish_Id.equals(dish_restaurant)){
-                    recommendation += (((dishRating.Rating-2.5)* user.getSimilarity()))*10/6.25;
+                    recommendation += (((dishRating.Rating-2.5)* user.getSimilarity()))*50/6.25;
                     Log.e("FOUND ", String.valueOf(recommendation));
                     otherUsercount++;
                 }
@@ -54,7 +54,7 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
             return null;
         }
         Log.e("final score is ", "Score " + recommendation/otherUsercount);
-        return recommendation/otherUsercount;
+        return (recommendation/otherUsercount)+50;
     }
 
     public void personalizeReccomendation(String restaurant){
