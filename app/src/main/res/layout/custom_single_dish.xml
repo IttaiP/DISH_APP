@@ -20,6 +20,7 @@
         android:gravity="center"
         android:textSize="16sp"
         android:textColor="@color/black"
+        android:fontFamily="@font/catamaran_light"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/dish_description"
         app:layout_constraintStart_toStartOf="parent"
@@ -34,6 +35,7 @@
         android:layout_marginEnd="5dp"
         tools:text="beef with vegetables and other things blas blaad kskjgsrhgsg "
         android:textSize="12sp"
+        android:fontFamily="@font/catamaran_light"
         app:layout_constraintTop_toBottomOf="@+id/dish_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
@@ -49,6 +51,7 @@
         android:textSize="16sp"
         android:gravity="center"
         android:textColor="@color/black"
+        android:fontFamily="@font/catamaran_light"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/dish_description"
         app:layout_constraintStart_toStartOf="parent"

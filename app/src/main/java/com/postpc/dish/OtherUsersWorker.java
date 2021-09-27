@@ -69,7 +69,8 @@ public class OtherUsersWorker extends Worker {
                         if (task.isSuccessful()) {
 //                            Log.d("NEW RATING", task.getResult().getDocuments().toString());
                             for (DocumentSnapshot document : task.getResult().getDocuments()) {
-                                if ((!app.info.otherUsersEmails.contains(document.getString("email"))&& document.getString("email")!=null)) {
+                                if ((!app.info.otherUsersEmails.contains(document.getString("email"))&&document.getString("email")!=null)) {
+                                    Log.e("Adding a new user ", document.getString("email"));
                                     addNewSimilarUser(document);
                                 }
                             }
@@ -86,12 +87,12 @@ public class OtherUsersWorker extends Worker {
     }
 
     public void addNewSimilarUser(DocumentSnapshot document) {
-        app.info.otherUsersEmails.add(document.get("email").toString());
-        String otherMail = document.get("email", String.class);
+        app.info.otherUsersEmails.add(document.getString("email"));
+        String otherMail = document.getString("email");
         OtherUser newOtherUser = new OtherUser(otherMail);
         Log.e("other user", document.getData().toString());
         database.collection("users")
-                .whereEqualTo("email", document.get("email"))
+                .whereEqualTo("email", document.getString("email"))
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

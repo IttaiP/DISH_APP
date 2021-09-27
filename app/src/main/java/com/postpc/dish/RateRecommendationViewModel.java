@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,6 +78,9 @@ public class RateRecommendationViewModel extends SharedViewModel {
         addToRatings(dish, dish_id, rating, app.info.getUserEmail());
 
         DishRatings newRating = new DishRatings(dish_id, dish, rating);
+        if(app.info.ratings.isEmpty()) {
+            app.info.ratings = new ArrayList<>();
+        }
         app.info.ratings.add(newRating);
         app.info.indicesInRatings.add(dish_id);
         Gson gson = new Gson();
