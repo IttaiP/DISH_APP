@@ -164,11 +164,11 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 // todo: check if the bundle works
                 Bundle bundle = new Bundle();
                 bundle.putString("dish ID to rate", app.info.getDishToRate());
-                Fragment fragment = RateRecommendationFragment.newInstance();
+                Fragment fragment = new RateRecommendationFragment();
                 fragment.setArguments(bundle);
 
                 getSupportFragmentManager().beginTransaction().
-                        replace(R.id.nav_fragment_container, new RateRecommendationFragment()).commit();
+                        replace(R.id.nav_fragment_container, fragment).commit();
                 break;
 
             case R.id.nav_swipe_dishes:
