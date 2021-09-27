@@ -34,6 +34,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
@@ -59,7 +60,7 @@
         android:id="@+id/WifiScanbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scan WIFI for restaurants"
+        android:text="@string/wifi_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recycler_view"

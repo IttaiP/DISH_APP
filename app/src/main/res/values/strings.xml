@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">DISH</string>
-    <string name="title_activity_main_screen">MainScreen</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -27,6 +26,7 @@
     <string name="full_name">Full Name</string>
     <string name="email_address">Email Address</string>
     <string name="register">Register</string>
+    <string name="wifi_btn">Show Restaurants in WIFI range</string>
     <!--    <string name="default_web_client_id" />-->
     <!--    <string name="default_web_client_id" />-->
     \

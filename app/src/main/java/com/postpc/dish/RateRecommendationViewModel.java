@@ -43,7 +43,6 @@ public class RateRecommendationViewModel extends SharedViewModel {
 
                     }
                 });
-
     }
 
     private void addToRatings(String Dish_Name, String Dish_Id, float rating, String User_email){

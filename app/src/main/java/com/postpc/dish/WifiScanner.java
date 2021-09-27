@@ -18,6 +18,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -29,6 +30,8 @@ public class WifiScanner {
     BroadcastReceiver wifiScanReceiver;
     DishApplication app;
     List<String> scannedRestaurants;
+    List<String> wifiRestaurants;
+    public MutableLiveData<List<String>> foundRestaurantsLiveData;
 
 
     WifiScanner(DishApplication app) {
@@ -36,8 +39,15 @@ public class WifiScanner {
         initWifi();
     }
 
+    public MutableLiveData<List<String>> getRestaurants() {
+        if (foundRestaurantsLiveData == null) {
+            foundRestaurantsLiveData = new MutableLiveData<List<String>>();
+        }
+        return foundRestaurantsLiveData;
+    }
 
-    public void initWifi(){
+
+    public void initWifi() {
         wifiManager = (WifiManager)
                 app.getSystemService(Context.WIFI_SERVICE);
 
@@ -64,18 +74,20 @@ public class WifiScanner {
     public void scanSuccess() {
         List<ScanResult> results = wifiManager.getScanResults();
         scannedRestaurants = new ArrayList<>();
+        wifiRestaurants = new ArrayList<>();
 
         for (ScanResult result : results) {
-            app.info.database.collection("restaurants").whereEqualTo("Wifi",result.SSID)
+            app.info.database.collection("restaurants").whereEqualTo("Wifi", result.SSID)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            if(task.getResult().getDocuments().size()>0){
-                                if(!scannedRestaurants.contains(task.getResult().getDocuments().get(0).get("name").toString())){
+                            if (task.getResult().getDocuments().size() > 0) {
+                                if (!scannedRestaurants.contains(task.getResult().getDocuments().get(0).get("name").toString())) {
                                     scannedRestaurants.add(task.getResult().getDocuments().get(0).get("name").toString());
-                                    Log.e("SCANNED REST",scannedRestaurants.toString());
+                                    wifiRestaurants.add(task.getResult().getDocuments().get(0).get("Wifi").toString());
+                                    this.getRestaurants().setValue(wifiRestaurants);
+                                    Log.e("SCANNED REST", scannedRestaurants.toString());
                                 }
-
                             }
                         }
                     });
@@ -83,14 +95,12 @@ public class WifiScanner {
     }
 
 
-
-
-
     public void scanFailure() {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
         List<ScanResult> results = wifiManager.getScanResults();
         scannedRestaurants.clear(); // todo : decide whether we want to show old ones or not
+        wifiRestaurants.clear();
         Log.d("FAILURE", "!!!!!!");
 
     }

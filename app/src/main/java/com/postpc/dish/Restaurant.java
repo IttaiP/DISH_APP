@@ -6,13 +6,15 @@ public class Restaurant {
     public String city;
     public String category;
     public String code;
+    public String Wifi;
 
-    Restaurant(String name, String city, String category, String code) {
+    Restaurant(String name, String city, String category, String code ,String Wifi) {
         this.name = name;
         this.city = city;
         this.category = category;
         this.code = code;
         this.id = "";
+        this.Wifi = Wifi;
     }
 
     Restaurant() { }

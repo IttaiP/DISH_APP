@@ -3,6 +3,7 @@ package com.postpc.dish;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.lifecycle.MutableLiveData;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
@@ -114,7 +115,7 @@ public class DishApplication extends Application {
             info.indicesInRatings = Arrays.asList(iRatingsArray);
 
         }
-        if(info.ratings==null || info.ratings.isEmpty()){
+        if(info.ratings==null){
             load_rated_dishes();
         }
     }
