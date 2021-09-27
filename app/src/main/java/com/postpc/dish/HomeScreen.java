@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -16,6 +17,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDeepLinkRequest;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -25,6 +28,8 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+
+import java.util.List;
 
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +43,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     TextView userName;
     TextView email;
     Intent intentCreatedMe;
+    InitUserDishDataViewModel initUserDishDataViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,11 +77,57 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
+        initLiveDataListeners();
+
         if (savedInstanceState == null){
             getSupportFragmentManager().beginTransaction().
                     replace(R.id.nav_fragment_container, new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+    }
+
+    public void initLiveDataListeners(){
+        initUserDishDataViewModel = new ViewModelProvider(this).get(InitUserDishDataViewModel.class);
+        // Create the observer which updates the UI.
+        final Observer<List<OtherUser>> otherUserLiveDataObserver = new Observer<List<OtherUser>>() {
+            @Override
+            public void onChanged(@Nullable final List<OtherUser> newOtherUserLiveData) {
+                // todo: store other users
+            }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        initUserDishDataViewModel.getotherUserLiveData().observe(this, otherUserLiveDataObserver);
+
+        final Observer<List<OtherUser>> otherUserCalcLiveDataObserver = new Observer<List<OtherUser>>() {
+            @Override
+            public void onChanged(@Nullable final List<OtherUser> newOtherUserCalcLiveData) {
+                // todo: store other users
+            }
+        };
+
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        initUserDishDataViewModel.getotherUserCalcSimLiveData().observe(this, otherUserCalcLiveDataObserver);
+
+        // Create the observer which updates the UI.
+        final Observer<List<String>> emailOtherUserLiveDataObserver = new Observer<List<String>>() {
+            @Override
+            public void onChanged(@Nullable final List<String> newemailOtherUserLiveData) {
+                // todo: store other users
+            }
+        };
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        initUserDishDataViewModel.getemailOtherUserLiveData().observe(this, emailOtherUserLiveDataObserver);
+
+        // Create the observer which updates the UI.
+        final Observer<List<String>> emailOtherUserCalcLiveDataObserver = new Observer<List<String>>() {
+            @Override
+            public void onChanged(@Nullable final List<String> newemailOtherUserCalcLiveData) {
+                // todo: store other users
+            }
+        };
+        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
+        initUserDishDataViewModel.getemailOtherUserCalcSimLiveData().observe(this, emailOtherUserCalcLiveDataObserver);
     }
 
     @Override
@@ -103,9 +155,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
 
             case R.id.nav_get_custom_menu:
-                app.runWork2();
-                getSupportFragmentManager().beginTransaction().
-                        replace(R.id.nav_fragment_container, new GetCustomMenuFragment()).commit();
+//                app.runWork2();
+//                getSupportFragmentManager().beginTransaction().
+//                        replace(R.id.nav_fragment_container, new GetCustomMenuFragment()).commit();
                 break;
 
             case R.id.nav_rate_recommendation:
@@ -126,26 +178,26 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
             // todo: finish logout
             case R.id.nav_logout:
-                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                String providerId = null;
-                if (user != null) {
-                    for (UserInfo profile : user.getProviderData()) {
-                        // Id of the provider (ex: google.com)
-                        providerId = profile.getProviderId();
-                    }
-                }
-
-                if (providerId != null) {
-                    switch (providerId) {
-                        case EMAIL_PASSWORD_SIGN_IN_METHOD:
-                            signOutEmailAndPassword();
-                            break;
-
-                        case GOOGLE_SIGN_IN_METHOD:
-                            signOutGoogle();
-                            break;
-                    }
-                }
+//                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//                String providerId = null;
+//                if (user != null) {
+//                    for (UserInfo profile : user.getProviderData()) {
+//                        // Id of the provider (ex: google.com)
+//                        providerId = profile.getProviderId();
+//                    }
+//                }
+//
+//                if (providerId != null) {
+//                    switch (providerId) {
+//                        case EMAIL_PASSWORD_SIGN_IN_METHOD:
+//                            signOutEmailAndPassword();
+//                            break;
+//
+//                        case GOOGLE_SIGN_IN_METHOD:
+//                            signOutGoogle();
+//                            break;
+//                    }
+//                }
                 break;
         }
         drawer.closeDrawer(GravityCompat.START);

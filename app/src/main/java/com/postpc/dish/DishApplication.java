@@ -1,28 +1,47 @@
 package com.postpc.dish;
 
+import android.app.Activity;
 import android.app.Application;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
+import androidx.work.Operation;
 import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkInfo;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import com.google.common.util.concurrent.FutureCallback;
+import com.google.common.util.concurrent.Futures;
+import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.paperdb.Paper;
 
-public class DishApplication extends Application {
+public class DishApplication extends Application implements LifecycleOwner {
     public UserInfoStorage info;
     public WifiScanner wifiScanner;
     boolean calcWasRun;
+    private Activity mCurrentActivity = null;
+    ListenableFuture<WorkInfo> workInfo;
+
+
 
     @Override
     public void onCreate() {
@@ -42,7 +61,11 @@ public class DishApplication extends Application {
         if(info.myID!=null) {
             load_rated_dishes_from_sp();
         }
+
     }
+
+
+
 
 
 
@@ -58,6 +81,7 @@ public class DishApplication extends Application {
                 });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     public void runWork(){
         Log.e("Started", "work1");
 //        if(!info.otherUsersEmails.contains("shmu@gmail.com")) {// todo change to bottom
@@ -81,10 +105,28 @@ public class DishApplication extends Application {
                         .build();
 
 
-        WorkManager.getInstance(this)
-                .enqueueUniquePeriodicWork("load similar users",
+        WorkManager workManager = WorkManager.getInstance(this);
+                workManager.enqueueUniquePeriodicWork("load similar users",
                         ExistingPeriodicWorkPolicy.REPLACE,
                         periodicWorkRequestRequest);
+        workInfo = workManager.getWorkInfoById(periodicWorkRequestRequest.getId());
+        MainActivity temp = (MainActivity) mCurrentActivity;
+//        temp.initWorkListener();
+        Futures.addCallback(workInfo,
+                new FutureCallback<WorkInfo>() {
+                    public void onSuccess(WorkInfo result) {
+                        Log.e("HERE!!", info.otherUsers.toString());
+
+                        Paper.book().write("otherUsers", info.otherUsers);
+                        Paper.book().write("otherUsersEmails", info.otherUsersEmails);
+                        Log.e("Wrote", "otherUsers:" + info.otherUsers.toString());
+                        Log.e("Wrote", "otherUsersEmails:" + info.otherUsersEmails.toString());
+                    }
+
+                    public void onFailure(Throwable t) {
+                        t.printStackTrace();
+                    }
+                }, getMainExecutor());
 
 
     }
@@ -147,4 +189,18 @@ public class DishApplication extends Application {
                 });
 
     }
+
+    @NonNull
+    @Override
+    public Lifecycle getLifecycle() {
+        return null;
+    }
+
+    public Activity getCurrentActivity(){
+        return mCurrentActivity;
+    }
+    public void setCurrentActivity(Activity mCurrentActivity){
+        this.mCurrentActivity = mCurrentActivity;
+    }
+
 }
