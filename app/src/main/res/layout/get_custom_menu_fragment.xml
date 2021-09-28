@@ -42,14 +42,13 @@
         android:id="@+id/list_of_dishes"
         android:layout_width="wrap_content"
         android:layout_height="400dp"
-        android:layout_marginStart="1dp"
+        android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="5dp"
-        app:layout_constraintTop_toBottomOf="@id/image_restaurant"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintTop_toBottomOf="@id/image_restaurant"
         app:spanCount="3" />
 
 
@@ -64,7 +63,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

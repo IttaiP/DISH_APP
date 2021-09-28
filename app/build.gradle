@@ -121,4 +121,5 @@ dependencies {
     def room_version = "2.3.0"
 
     implementation 'io.github.pilgr:paperdb:2.7.1'
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 }

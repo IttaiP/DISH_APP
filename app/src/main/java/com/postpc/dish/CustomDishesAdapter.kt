@@ -7,8 +7,10 @@ import com.postpc.dish.DishItem
 import com.postpc.dish.DishHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
+import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
+import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.google.common.base.Predicates.not
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -20,6 +22,8 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
     private var setDishes = mutableSetOf<String>()
     private var dishes = mutableListOf<DishItem>()
     private var context: Context? = null
+    private var viewBinderHelper = ViewBinderHelper()
+    private lateinit var order: TextView
 
     fun setDishesAdapter(dishes: List<DishItem>) {
         this.dishes = dishes as MutableList<DishItem>
@@ -46,20 +50,12 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
     }
 
     override fun onBindViewHolder(holder: CustomDishHolder, position: Int) {
+        viewBinderHelper.setOpenOnlyOne(true)
+        viewBinderHelper.bind(holder.swipeRevealLayout, dishes[position].name)
+        viewBinderHelper.closeLayout(dishes[position].name)
         holder.bind(dishes[position])
-        var mAuth = FirebaseAuth.getInstance()
-        var database = FirebaseFirestore.getInstance()
-        // need to get uid from mAuth and then gets its User from firebase
+        order.setOnClickListener() {
 
-        var dish = holder._dish
-        dish.setOnClickListener() {
-            var name_dish = holder._dish_name
-            dish.setBackgroundResource(R.drawable.background_description_pressed)
-        }
-        database.collection("user").document("NcTJ0OWlGiXOGGxNVmtpCGknhxn1").get().addOnSuccessListener { result:DocumentSnapshot? ->
-            if(result != null) {
-                // do something
-            }
         }
 
 

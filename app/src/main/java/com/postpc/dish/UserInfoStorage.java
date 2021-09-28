@@ -37,7 +37,7 @@ public class UserInfoStorage {
         indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
         otherUsers = Paper.book().read("otherUsers", new ArrayList<>());
         otherUsersEmails = Paper.book().read("otherUsersEmails", new ArrayList<>());
-        DishRecommendationScores = Paper.book().read("DishReccomendationScores", new HashMap<>());
+        DishRecommendationScores = Paper.book().read("DishRecommendationScores", new HashMap<>());
     }
 
     public void setUserEmail(String userEmail) {

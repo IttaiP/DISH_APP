@@ -2,7 +2,6 @@ package com.postpc.dish;
 
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
@@ -23,13 +22,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +36,7 @@ public class GetCustomMenuFragment extends Fragment {
 
     private GetCustomMenuViewModel mViewModel;
     private SharedViewModel sharedViewModel;
-    private RecyclerView recycler_view;
+    private RecyclerView recyclerView;
     private FirebaseFirestore database;
     private DividerItemDecoration vertical_decorator;
     private DividerItemDecoration horizontal_decorator;
@@ -71,21 +66,21 @@ public class GetCustomMenuFragment extends Fragment {
 
         database = FirebaseFirestore.getInstance();
 
-        recycler_view = view.findViewById(R.id.list_of_dishes);
+        recyclerView = view.findViewById(R.id.list_of_dishes);
         vertical_decorator = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         vertical_decorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.decorator_for_dishes)));
         horizontal_decorator = new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL);
         horizontal_decorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.decorator_for_dishes)));
 
-        recycler_view.addItemDecoration(vertical_decorator);
-        recycler_view.addItemDecoration(horizontal_decorator);
+        recyclerView.addItemDecoration(vertical_decorator);
+        recyclerView.addItemDecoration(horizontal_decorator);
         dishes = new ArrayList<>();
         adapter = new CustomDishesAdapter();
 //        adapter.setDishesAdapter(dishes);
 
-        recycler_view.setHasFixedSize(true);
-        recycler_view.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        recycler_view.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        recyclerView.setAdapter(adapter);
 
         Bundle arguments = getArguments();
         String restaurant = arguments.getString("restaurant");
