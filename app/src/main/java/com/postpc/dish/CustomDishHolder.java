@@ -18,7 +18,7 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
 
     private final TextView dish_name, dish_description, dish_score, order;
     private TextView restaurant_name;
-    private SwipeRevealLayout swipeRevealLayout;
+    private final SwipeRevealLayout swipeRevealLayout;
 
     public CustomDishHolder(@NonNull View itemView) {
         super(itemView);

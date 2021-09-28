@@ -18,7 +18,7 @@
         <TextView
             android:id="@+id/order"
             android:layout_width="100dp"
-            android:layout_height="match_parent"
+            android:layout_height="137dp"
             android:background="@color/light_grey"
             android:textColor="@color/white"
             android:gravity="center"

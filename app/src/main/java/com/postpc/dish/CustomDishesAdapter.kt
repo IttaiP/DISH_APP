@@ -8,11 +8,13 @@ import com.postpc.dish.DishHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.google.common.base.Predicates.not
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.postpc.dish.R
@@ -24,6 +26,8 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
     private var context: Context? = null
     private var viewBinderHelper = ViewBinderHelper()
     private lateinit var order: TextView
+    private lateinit var app: DishApplication
+    private lateinit var firestore: FirebaseFirestore
 
     fun setDishesAdapter(dishes: List<DishItem>) {
         this.dishes = dishes as MutableList<DishItem>
@@ -54,8 +58,24 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
         viewBinderHelper.bind(holder.swipeRevealLayout, dishes[position].name)
         viewBinderHelper.closeLayout(dishes[position].name)
         holder.bind(dishes[position])
-        order.setOnClickListener() {
-
+        firestore = FirebaseFirestore.getInstance()
+        order = holder.order
+        order.setOnClickListener { it ->
+            app = it.context.applicationContext as DishApplication
+            firestore.collection("all-dishes")
+                .whereEqualTo("name", holder._dish_name.toString()).get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        for (documentSnapshot in it.result.documents){
+                            app.info.dishToRate = documentSnapshot.id
+                            Log.e("ORDERED DISH ID:", documentSnapshot.id) // todo: to delete
+                            Toast.makeText(context, "Ordered dish successfully!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    else{
+                        Toast.makeText(context, "Dish was not found in database", Toast.LENGTH_SHORT).show()
+                    }
+                }
         }
 
 
