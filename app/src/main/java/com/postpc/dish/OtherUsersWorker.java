@@ -104,6 +104,13 @@ public class OtherUsersWorker extends ListenableWorker {
                                     Log.e("Adding a new user ", document.getString("email"));
                                     addNewSimilarUser(document);
                                 }
+                                else{
+                                    if(document.getString("email")!=null){
+                                        if(!document.getString("email").equals(app.info.userEmail)){// todo: make sure email is save in info by this point
+                                            updateSimilarUser(document);
+                                        }
+                                    }
+                                }
                                 // todo : add update to user if already exists
                             }
                             if(updatedUserCount==0){
@@ -127,6 +134,7 @@ public class OtherUsersWorker extends ListenableWorker {
         app.info.otherUsersEmails.add(document.getString("email"));
         String otherMail = document.getString("email");
         OtherUser newOtherUser = new OtherUser(otherMail);
+        app.info.otherUsers.add(newOtherUser);
         Log.e("other user", document.getData().toString());
         database.collection("users")
                 .whereEqualTo("email", document.getString("email"))
@@ -141,7 +149,6 @@ public class OtherUsersWorker extends ListenableWorker {
                                             for (DocumentSnapshot document11 : task1.getResult().getDocuments()) {
                                                 DishRatings newRating = new DishRatings(document11.getId(), document11.getString("Dish_Name"), (document11.getDouble("Rating")).floatValue());
                                                 newOtherUser.addRating(newRating);
-                                                app.info.otherUsers.add(newOtherUser);
                                                 Log.e("Rating", newRating.Dish_Name+newRating.Rating);
                                             }
                                             Paper.book().write("otherUsers", app.info.otherUsers);
@@ -169,5 +176,60 @@ public class OtherUsersWorker extends ListenableWorker {
                     }
                 });
 
+    }
+
+    private OtherUser findOtherUser(String email){
+        for(OtherUser otherUser: app.info.otherUsers){
+            if(email.equals(otherUser.getUser_email())){
+                return otherUser;
+            }
+        }
+        return null;
+    }
+
+    public void updateSimilarUser(DocumentSnapshot document){
+        String otherMail = document.getString("email");
+        OtherUser newOtherUser = findOtherUser(otherMail);
+        Log.e("updated other user", document.getData().toString());
+        database.collection("users")
+                .whereEqualTo("email", document.getString("email"))
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document1 : task.getResult().getDocuments()) {
+
+                            document1.getReference().collection("Ratings").get()
+                                    .addOnCompleteListener(task1 -> {
+                                        if(task1.isSuccessful()){
+                                            for (DocumentSnapshot document11 : task1.getResult().getDocuments()) {
+                                                DishRatings newRating = new DishRatings(document11.getId(), document11.getString("Dish_Name"), (document11.getDouble("Rating")).floatValue());
+                                                newOtherUser.addRating(newRating);
+//                                                app.info.otherUsers.add(newOtherUser);
+                                                Log.e("Rating", newRating.Dish_Name+newRating.Rating);
+                                            }
+                                            Paper.book().write("otherUsers", app.info.otherUsers);
+                                            Log.e("otherUsersWrote", ""+app.info.otherUsers);
+
+//                                            Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
+//                                            updatedUserCount--;
+//                                            Log.e("updatedUserCount", ""+updatedUserCount);
+//                                            if(updatedUserCount==0){
+//                                                Log.e("SuccesFromHere", "155");
+//                                                Paper.book().write("otherUsers", app.info.otherUsers);
+////                                                Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
+//                                                mFuture.set(Result.success());
+//                                            }
+
+                                        }else {
+                                            Log.d("ERRRORRR", "Error getting documents in addNewSimilarUser layer 2: ", task.getException());
+                                        }
+                                    });
+
+                        }
+
+                    } else {
+                        Log.d("ERRRORRR", "Error getting documents in addNewSimilarUser layer 1: ", task.getException());
+                    }
+                });
     }
 }

@@ -107,7 +107,7 @@ public class DishApplication extends Application implements LifecycleOwner {
 
         WorkManager workManager = WorkManager.getInstance(this);
                 workManager.enqueueUniquePeriodicWork("load similar users",
-                        ExistingPeriodicWorkPolicy.REPLACE,
+                        ExistingPeriodicWorkPolicy.KEEP,
                         periodicWorkRequestRequest);
         workInfo = workManager.getWorkInfoById(periodicWorkRequestRequest.getId());
         MainActivity temp = (MainActivity) mCurrentActivity;
