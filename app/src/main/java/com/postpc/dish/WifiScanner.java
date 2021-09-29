@@ -1,29 +1,18 @@
 package com.postpc.dish;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiManager;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.MutableLiveData;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class WifiScanner {
     WifiManager wifiManager;
@@ -31,11 +20,13 @@ public class WifiScanner {
     DishApplication app;
     List<String> scannedRestaurants;
     List<String> wifiRestaurants;
+    int notFoundCount;
     public MutableLiveData<List<String>> foundRestaurantsLiveData;
 
 
     WifiScanner(DishApplication app) {
         this.app = app;
+        notFoundCount = 0;
         initWifi();
     }
 
@@ -72,22 +63,32 @@ public class WifiScanner {
     }
 
     public void scanSuccess() {
+        AtomicBoolean found = new AtomicBoolean(false);
         List<ScanResult> results = wifiManager.getScanResults();
         scannedRestaurants = new ArrayList<>();
         wifiRestaurants = new ArrayList<>();
-
+        int resultsLength = results.size();
         for (ScanResult result : results) {
             app.info.database.collection("restaurants").whereEqualTo("Wifi", result.SSID)
                     .get()
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             if (task.getResult().getDocuments().size() > 0) {
+                                found.set(true);
                                 if (!scannedRestaurants.contains(task.getResult().getDocuments().get(0).get("name").toString())) {
                                     scannedRestaurants.add(task.getResult().getDocuments().get(0).get("name").toString());
                                     wifiRestaurants.add(task.getResult().getDocuments().get(0).get("Wifi").toString());
                                     this.getRestaurants().setValue(wifiRestaurants);
                                     Log.e("SCANNED REST", scannedRestaurants.toString());
                                 }
+
+                            }
+                            else{
+                                if(found.compareAndSet(true, true)){return;}
+                                Log.e("CHECK", "not found count:"+notFoundCount+". results length:"+resultsLength);
+                                wifiRestaurants.add("NONE FOUND!");
+                                wifiRestaurants.clear();
+                                this.getRestaurants().setValue(wifiRestaurants);
                             }
                         }
                     });
@@ -99,13 +100,8 @@ public class WifiScanner {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
         List<ScanResult> results = wifiManager.getScanResults();
-        if(scannedRestaurants != null) {
-            scannedRestaurants.clear(); // todo : decide whether we want to show old ones or not
-        }
-        if(wifiRestaurants != null) {
-            wifiRestaurants.clear();
-        }
-        Log.d("FAILURE", "!!!!!!");
+        scanSuccess();
+        Log.d("Scan Failed", "showing old results");
 
     }
 

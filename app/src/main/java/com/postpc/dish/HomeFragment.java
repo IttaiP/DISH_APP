@@ -63,6 +63,9 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     private ArrayList<Restaurant> wifiRestaurantsList;
     private ArrayList<DishItem> dishesToRate;
     private boolean buttonPressed;
+    private boolean readyToObserve;
+
+    private Observer<List<String>> restsObserver;
 
 //    public static HomeFragment newInstance() {
 //        return new HomeFragment();
@@ -71,6 +74,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        readyToObserve = false;
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
@@ -81,13 +85,15 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         app = (DishApplication)activity.getApplication().getApplicationContext();
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.HomeViewModel.class);
         mViewModel.activity = activity;
-
+        readyToObserve = true;
         wifiRestaurantsList = new ArrayList<>();
 
         restaurants_recycler_view = view.findViewById(R.id.restaurants_recycler_view);
         restaurantsAdapter = new wifiRestaurantsAdapter(wifiRestaurantsList);
 
         buttonPressed = false;
+
+
         TextView not_found = view.findViewById(R.id.not_found);
         not_found.setVisibility(view.GONE);
         Button enable_wifi = view.findViewById(R.id.enable_wifi);
@@ -117,26 +123,40 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         });
 
         // Create the observer which updates the UI.
-        final Observer<List<String>> restsObserver = wifiRestaurants -> {
+        restsObserver = wifiRestaurants -> {
+            if(!readyToObserve){return;}
+            if(!buttonPressed) {
+                return;
+            }
+
             // Update the UI, in this case, a TextView.
 //                scannedRestaurants = app.wifiScanner.scannedRestaurants;
-            Log.e("wifiRestaurants",wifiRestaurants.toString());
-//            Log.e("HERE", restaurants.toString());
+            if(restaurants==null) return;
+
             wifiRestaurantsList.clear();
+            boolean found = false;
 
             for(String restaurantWifi: wifiRestaurants){
                 for(Restaurant rest: restaurants){
                     Log.e("RestuarantName", rest.Wifi);
                     if(rest.Wifi.equals(restaurantWifi)){
-                        // todo: change button
+                        found = true;
                         enable_wifi.setVisibility(view.GONE);
                         wifiRestaurantsList.add(rest);
                     }
                 }
             }
-            restaurantsAdapter.setAdapter(wifiRestaurantsList);
-            restaurantsAdapter.notifyDataSetChanged();
-            Log.e("itemCount","" + restaurantsAdapter.getItemCount());
+            if(found){
+                not_found.setVisibility(view.GONE);
+                restaurantsAdapter.setAdapter(wifiRestaurantsList);
+                restaurantsAdapter.notifyDataSetChanged();
+            }
+            else {
+                if(wifiRestaurantsList.isEmpty()){
+                    not_found.setVisibility(view.VISIBLE);
+                }
+
+            }
         };
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
@@ -148,7 +168,6 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                 restaurantsAdapter.setAdapter(restaurants);
             }
             else {
-                Log.e("restaurants", restaurants.toString());
                 beginWifiScan(enable_wifi);
             }
 
@@ -169,6 +188,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             });
         }}
     }
+
 
     private void beginWifiScan(Button enable_wifi){
         EnableLocation();
@@ -222,6 +242,10 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
     }
 
+    private void WiFiScanFailure(){
+
+    }
+
     private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             result -> {
@@ -231,6 +255,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                         boolean success = app.wifiScanner.wifiManager.startScan();
                         if (!success) {
                             app.wifiScanner.scanFailure();
+
                         }
                         Log.e("FAIL REASON", String.valueOf(success));
                     }

@@ -67,7 +67,7 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         for (documentSnapshot in it.result.documents){
-                            app.info.dishToRate = documentSnapshot.id
+//                            app.info.dishToRate = documentSnapshot.id
                             Log.e("ORDERED DISH ID:", documentSnapshot.id) // todo: to delete
                             Toast.makeText(context, "Ordered dish successfully!", Toast.LENGTH_SHORT).show()
                         }
