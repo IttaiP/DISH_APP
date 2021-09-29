@@ -9,62 +9,65 @@
     app:dragEdge="right"
     app:mode="same_level">
 
-    <!-- Swipe Layout -->
-    <LinearLayout
-        android:layout_width="100dp"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <TextView
+        <!-- Swipe Layout -->
+        <LinearLayout
             android:id="@+id/order"
             android:layout_width="100dp"
-            android:layout_height="137dp"
+            android:layout_height="match_parent"
             android:background="@color/light_grey"
-            android:textColor="@color/white"
             android:gravity="center"
-            android:text="ORDER"/>
+            android:orientation="vertical">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textAlignment="center"
+                android:text="ORDER"
+                android:textColor="@color/white" />
 
-    <!-- Main Layout -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:padding="10dp">
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/dish_name"
-            android:layout_width="wrap_content"
+        <!-- Main Layout -->
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Dish name"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:fontFamily="@font/catamaran_light"/>
+            android:layout_gravity="center_vertical"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/dish_description"
-            android:layout_width="120dp"
-            android:layout_height="wrap_content"
-            tools:text="beef with vegetables and other things blas blaad kskjgsrhgsg "
-            android:textSize="12sp"
-            android:fontFamily="@font/catamaran_light"/>
+            <TextView
+                android:id="@+id/dish_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Dish name"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:fontFamily="@font/catamaran_light"/>
 
-        <TextView
-            android:id="@+id/dish_score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            tools:text="5.6"
-            android:textSize="16sp"
-            android:gravity="bottom"
-            android:textColor="@color/black"
-            android:fontFamily="@font/catamaran_light"
-            />
+            <TextView
+                android:id="@+id/dish_description"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                tools:text="beef with vegetables and other things blas blaad kskjgsrhgsg "
+                android:textSize="12sp"
+                android:fontFamily="@font/catamaran_light"/>
 
-    </LinearLayout>
+            <TextView
+                android:id="@+id/dish_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="5.6"
+                android:textSize="16sp"
+                android:gravity="bottom"
+                android:textColor="@color/black"
+                android:fontFamily="@font/catamaran_light"
+                />
+
+        </LinearLayout>
 
 
-</com.chauthai.swipereveallayout.SwipeRevealLayout>
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>

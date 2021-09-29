@@ -7,6 +7,7 @@ import com.postpc.dish.DishItem
 import com.postpc.dish.DishHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +26,7 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
     private var dishes = mutableListOf<DishItem>()
     private var context: Context? = null
     private var viewBinderHelper = ViewBinderHelper()
-    private lateinit var order: TextView
+    private lateinit var order: LinearLayout
     private lateinit var app: DishApplication
     private lateinit var firestore: FirebaseFirestore
 
@@ -63,13 +64,13 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
         order.setOnClickListener { it ->
             app = it.context.applicationContext as DishApplication
             firestore.collection("all-dishes")
-                .whereEqualTo("name", holder._dish_name.toString()).get()
+                .whereEqualTo("description", holder._dish_description.text.toString()).get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         for (documentSnapshot in it.result.documents){
-//                            app.info.dishToRate = documentSnapshot.id
-//                            Log.e("ORDERED DISH ID:", documentSnapshot.id) // todo: to delete
-//                            Toast.makeText(context, "Ordered dish successfully!", Toast.LENGTH_SHORT).show()
+                            app.info.dishToRate.add(documentSnapshot.id)
+                            Log.e("ORDERED DISH ID:", documentSnapshot.id) // todo: to delete
+                            Toast.makeText(context, "Ordered dish successfully!", Toast.LENGTH_SHORT).show()
                         }
                     }
                     else{

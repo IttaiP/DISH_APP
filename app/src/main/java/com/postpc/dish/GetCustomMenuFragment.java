@@ -22,9 +22,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,6 +80,7 @@ public class GetCustomMenuFragment extends Fragment {
         recyclerView.addItemDecoration(horizontal_decorator);
         dishes = new ArrayList<>();
         adapter = new CustomDishesAdapter();
+
 //        adapter.setDishesAdapter(dishes);
 
         recyclerView.setHasFixedSize(true);
@@ -92,6 +97,24 @@ public class GetCustomMenuFragment extends Fragment {
 
         Log.d("restaurant", restaurant);
 
+        database.collection("restaurants").whereEqualTo("name", "Nam")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Restaurant restaurant1 = document.toObject(Restaurant.class);
+                    document.getReference().collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @SuppressLint("NotifyDataSetChanged")
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            dishes = (ArrayList<DishItem>) Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
+                            adapter.setDishesAdapter(dishes);
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+            }
+        });
 
         // Create the observer which updates the UI.
         final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {

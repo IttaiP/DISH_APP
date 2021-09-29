@@ -3,7 +3,9 @@ package com.postpc.dish;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,17 +18,18 @@ import java.text.DecimalFormat;
 
 public class CustomDishHolder extends RecyclerView.ViewHolder {
 
-    private final TextView dish_name, dish_description, dish_score, order;
+    private final TextView dish_name, dish_description, dish_score;
+    private final LinearLayout order;
     private TextView restaurant_name;
     private final SwipeRevealLayout swipeRevealLayout;
 
     public CustomDishHolder(@NonNull View itemView) {
         super(itemView);
-        dish_name = itemView.findViewById(R.id.dish_name);
-        dish_description = itemView.findViewById(R.id.restaurant_name);
-        dish_score = itemView.findViewById(R.id.dish_score);
-        order = itemView.findViewById(R.id.order);
         swipeRevealLayout = itemView.findViewById(R.id.swipe_layout);
+        dish_name = itemView.findViewById(R.id.dish_name);
+        dish_description = itemView.findViewById(R.id.dish_description);
+        dish_score = itemView.findViewById(R.id.dish_score);
+        order = swipeRevealLayout.findViewById(R.id.order);
 //        dishImage = itemView.findViewById(R.id.dish_image);
     }
 
@@ -34,7 +37,7 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
         return swipeRevealLayout;
     }
 
-    public TextView getOrder() {
+    public LinearLayout getOrder() {
         return order;
     }
 
