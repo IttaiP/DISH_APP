@@ -77,8 +77,8 @@ public class RateRecommendationFragment extends Fragment {
             int resourceId = getContext().getResources().getIdentifier(dish.photo, "drawable",
                     getContext().getPackageName());
             dishImage.setImageResource(resourceId);
-            dishName.setText(dish.getName());
-            restaurantName.setText(dish.getRestaurantName());
+            dishName.setText("You ordered " + dish.getName());
+            restaurantName.setText("From " + dish.getRestaurantName());
         });
 
         // listeners
@@ -88,28 +88,18 @@ public class RateRecommendationFragment extends Fragment {
             dishRating.put("Rating", rating);
 
             app.info.database.collection("users").document(app.info.myID)
-                    .collection("Ratings").document(dishToRateID).get()
+                    .collection("Ratings").document(dishToRateID).set(dishRating)
                     .addOnCompleteListener(task -> {
-                        DocumentSnapshot ds = task.getResult();
-
                         // if this dish wad already rated by the user:
                         if (task.isSuccessful()){
-                            ds.getReference().update("Rating", rating)
-                                    .addOnSuccessListener(unused ->
-                                            Log.e("SUCCESS", "update dish to user's ratings"))
-                                    .addOnFailureListener(e ->
-                                            Log.e("FAILURE", "FAILED to update dish to user's ratings"));
+                            app.info.removeDishFromToRate(dishToRateID);
+                            Toast.makeText(this.getContext(), "Thank you for rating!", Toast.LENGTH_SHORT).show();
+                            getActivity().getSupportFragmentManager().popBackStackImmediate();
+                            Log.e("SUCCESS", "update dish to user's ratings");
                         }
-
-                        // if this is the first time the user rates this dish
                         else {
-                            ds.getReference().set(dishRating)
-                                    .addOnSuccessListener(unused ->
-                                            Log.e("SUCCESS", "add dish to user's ratings"))
-                                    .addOnFailureListener(e ->
-                                            Log.e("FAILURE", "FAILED to add dish to user's ratings"));
+                            Log.e("FAILURE", "Failed to update");
                         }
-                        Toast.makeText(this.getContext(), "Thank you for rating!", Toast.LENGTH_SHORT).show();
                     });
         });
     }
