@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -77,6 +78,7 @@ public class SearchFragment extends Fragment {
 
 
 
+
     public static SearchFragment newInstance() {
         return new SearchFragment();
     }
@@ -92,6 +94,7 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         buttonPressed = false;
         wifiButton = view.findViewById(R.id.WifiScanbutton);
+        wifiButton.setText("Show Restaurants in WIFI range");
         search = view.findViewById(R.id.search_bar);
         recycler_view = view.findViewById(R.id.recycler_view);
         database = FirebaseFirestore.getInstance();
@@ -102,6 +105,8 @@ public class SearchFragment extends Fragment {
 
         restaurants = new ArrayList<>();
         wifiRangerestaurants = new ArrayList<>();
+        TextView not_found = view.findViewById(R.id.not_found_search);
+        not_found.setVisibility(view.GONE);
 
         adapter = new restaurnats_adapter(restaurants);
 
@@ -152,13 +157,20 @@ public class SearchFragment extends Fragment {
         final Observer<List<String>> restsObserver = wifiRestaurants -> {
             // Update the UI, in this case, a TextView.
 //                scannedRestaurants = app.wifiScanner.scannedRestaurants;
+            if(!buttonPressed) {
+                return;
+            }
+
+
             Log.e("wifiRestaurants",wifiRestaurants.toString());
             wifiRangerestaurants.clear();
+            boolean found = false;
+
 
             for(String restaurantWifi: wifiRestaurants){
                 for(Restaurant rest: restaurants){
-                    Log.e("RestuarantName", rest.Wifi);
                     if(rest.Wifi.equals(restaurantWifi)){
+                        found = true;
                         // todo: change button
                         wifiButton.setText("Show All Restaurants");
                         wifiRangerestaurants.add(rest);
@@ -166,8 +178,21 @@ public class SearchFragment extends Fragment {
                 }
             }
             adapter.setAdapter(wifiRangerestaurants);
-            adapter.notifyDataSetChanged();
-            Log.e("itemCount",""+adapter.getItemCount());
+
+            if(found){
+//                adapter.setAdapter(wifiRangerestaurants);
+                adapter.notifyDataSetChanged();
+                not_found.setVisibility(view.GONE);
+
+            }
+            else{
+//                adapter.setAdapter(wifiRangerestaurants);
+                adapter.notifyDataSetChanged();
+                wifiButton.setText("Show All Restaurants");
+                not_found.setVisibility(view.VISIBLE);
+
+            }
+
         };
 
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
@@ -176,6 +201,8 @@ public class SearchFragment extends Fragment {
         wifiButton.setOnClickListener(view1 -> {
             buttonPressed = !buttonPressed;
             if(!buttonPressed){
+                not_found.setVisibility(view.GONE);
+
                 wifiButton.setText(getString(R.string.wifi_btn));
                 adapter.setAdapter(restaurants);
                 adapter.notifyDataSetChanged();
@@ -200,6 +227,8 @@ public class SearchFragment extends Fragment {
             }
         });
     }
+
+
 
     public Restaurant find_restaurant_by_name(String name) {
         for(Restaurant restaurant : restaurants) {

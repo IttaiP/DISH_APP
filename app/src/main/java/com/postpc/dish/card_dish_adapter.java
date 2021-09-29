@@ -35,13 +35,14 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
     @Override
     public void onBindViewHolder(@NonNull card_dish_holder holder, @SuppressLint("RecyclerView") int position) {
         holder.bind(dishes.get(position), context);
-        ImageView image = holder.itemView.findViewById(R.id.dish_photo);
-        image.setOnClickListener(new View.OnClickListener() {
+        ImageView remove = holder.itemView.findViewById(R.id.remove);
+        remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.e("clicked ", "card");
-//                dishes.remove(position);
-//                notifyItemRemoved(position);
+                Log.e("position ", String.valueOf(position));
+                Log.e("Dishes are ", dishes.toString());
+                dishes.remove(dishes.get(position));
+                notifyItemRemoved(position);
             }
         });
     }

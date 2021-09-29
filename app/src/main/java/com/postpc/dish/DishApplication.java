@@ -55,6 +55,8 @@ public class DishApplication extends Application implements LifecycleOwner {
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
+        int x = Paper.book("x").read("xx", 3);
+
         info.userEmail = info.sp.getString("email", null);
         info.myID = info.sp.getString("id", null);
         //todo: need to update user ID first for this to work properly.
@@ -106,7 +108,7 @@ public class DishApplication extends Application implements LifecycleOwner {
 
 
         WorkManager workManager = WorkManager.getInstance(this);
-                workManager.enqueueUniquePeriodicWork("load similar users",
+                workManager.enqueueUniquePeriodicWork(info.userEmail,
                         ExistingPeriodicWorkPolicy.KEEP,
                         periodicWorkRequestRequest);
         workInfo = workManager.getWorkInfoById(periodicWorkRequestRequest.getId());

@@ -36,6 +36,19 @@
         app:layout_constraintBottom_toTopOf="@id/recycler_view"/>
 
 
+    <TextView
+        android:id="@+id/not_found_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/bitter"
+        android:text="No restaurants were found"
+        android:textSize="16dp"
+        android:elevation="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/recycler_view" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
