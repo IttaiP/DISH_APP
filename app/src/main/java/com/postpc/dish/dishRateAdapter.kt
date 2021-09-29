@@ -20,7 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.postpc.dish.R
 
-class dishRateAdapter: ListAdapter<DishItem, dishRateHolder>(DishDiffCallBack3()) {
+class dishRateAdapter(val listener: ContentListener) :
+    ListAdapter<DishItem, dishRateHolder>(DishDiffCallBack3()) {
 
     private var setDishes = mutableSetOf<String>()
     private var dishes = mutableListOf<DishItem>()
@@ -60,24 +61,17 @@ class dishRateAdapter: ListAdapter<DishItem, dishRateHolder>(DishDiffCallBack3()
         var rate_dish = holder.rate_dish
         var dish_id = ""
         rate_dish.setOnClickListener() {
-            app = it.context.applicationContext as DishApplication
-            app.info.database.collection("all-dishes").whereEqualTo("name", holder._dish_name).whereEqualTo("restaurant_name", holder._dish_restaurant_name).addSnapshotListener { result: QuerySnapshot?, e: FirebaseException? ->
-                if (result != null) {
-                    }
-                }
-            }
-
+            listener.onItemClicked(dishes[position])
         }
+    }
 
     override fun getItemCount() = dishes.size
 
-    public interface ContentListener {
+    interface ContentListener {
         fun onItemClicked(item: DishItem)
     }
 
 }
-
-
 
 private class DishDiffCallBack3 : DiffUtil.ItemCallback<DishItem>() {
     override fun areItemsTheSame(oldItem: DishItem, newItem: DishItem): Boolean =

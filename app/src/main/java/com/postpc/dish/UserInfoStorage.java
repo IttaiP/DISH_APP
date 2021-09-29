@@ -15,6 +15,7 @@ import java.util.List;
 import io.paperdb.Paper;
 
 public class UserInfoStorage {
+    private boolean flag = false;
     private String restaurant;
     private ArrayList<String> dishToRate;
     public String userEmail;
@@ -71,10 +72,17 @@ public class UserInfoStorage {
     }
 
     public ArrayList<String> getDishToRate() {
-        dishToRate = new ArrayList<>();
-        dishToRate.add("0HEbQdcMUoqovPtCGnRr");
-        dishToRate.add("DJBWkaGK26LrVC7ScC2i");
-        dishToRate.add("LXtcb2qasdVveT2h0SYx");
+        if(!flag) {
+            dishToRate = new ArrayList<>();
+            dishToRate.add("0HEbQdcMUoqovPtCGnRr");
+            dishToRate.add("DJBWkaGK26LrVC7ScC2i");
+            dishToRate.add("LXtcb2qasdVveT2h0SYx");
+            flag = true;
+        }
         return dishToRate;
+    }
+
+    public void removeDishFromToRate(String dishToRemove) {
+        dishToRate.remove(dishToRemove);
     }
 }

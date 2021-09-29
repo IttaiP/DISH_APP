@@ -3,6 +3,7 @@ package com.postpc.dish;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -54,7 +55,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     private RecyclerView dishes_recycler_view;
     private dishRateAdapter dishRateAdapter;
 
-    Activity activity;
+    AppCompatActivity activity;
     private LocationRequest locationRequest;
     private static final int REQUEST_CHECK_SETTINGS = 10001;
     DishApplication app;
@@ -81,13 +82,13 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        activity = getActivity();
+        activity = (AppCompatActivity) getActivity();
         app = (DishApplication)activity.getApplication().getApplicationContext();
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.HomeViewModel.class);
         mViewModel.activity = activity;
         readyToObserve = true;
         wifiRestaurantsList = new ArrayList<>();
-
+        dishesToRate = new ArrayList<>();
         restaurants_recycler_view = view.findViewById(R.id.restaurants_recycler_view);
         restaurantsAdapter = new wifiRestaurantsAdapter(wifiRestaurantsList);
 
@@ -102,7 +103,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         restaurants_recycler_view.setAdapter(restaurantsAdapter);
 
         dishes_recycler_view = view.findViewById(R.id.dishes_recycler_view);
-        dishRateAdapter = new dishRateAdapter();
+        dishRateAdapter = new dishRateAdapter(this::onItemClicked);
         TextView no_dishes_to_rate = view.findViewById(R.id.no_dishes_to_rate);
         no_dishes_to_rate.setVisibility(view.GONE);
         dishes_recycler_view.setHasFixedSize(true);
@@ -174,7 +175,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         });
 
         ArrayList<String> getDishesToRate = app.info.getDishToRate();
-        if(getDishesToRate == null) {
+        if(getDishesToRate == null || getDishesToRate.isEmpty()) {
             no_dishes_to_rate.setVisibility(view.VISIBLE);
         }
         else {
@@ -312,6 +313,21 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
     @Override
     public void onItemClicked(@NonNull DishItem item) {
-
+        //Added by Ittai
+//        app = (DishApplication) activity.getApplication();
+//        app.info.setRestaurant(restaurant_name.getText().toString());
+        Bundle arguments = new Bundle();
+        app.info.database.collection("all-dishes").whereEqualTo("name", item.name).whereEqualTo("restaurant_name", item.restaurant_name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()) {
+                    Log.d("dish ID to rate", documentSnapshot.getId());
+                    arguments.putString("dish ID to rate", documentSnapshot.getId());
+                    Fragment rateRecommendation = new RateRecommendationFragment();
+                    rateRecommendation.setArguments(arguments);
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment_container, rateRecommendation).addToBackStack(null).commit();
+                }
+            }
+        });
     }
 }
