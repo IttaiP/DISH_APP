@@ -24,14 +24,19 @@
         <!-- android:theme="@style/Theme.DISH.NoActionBar" /> -->
         <activity
             android:name=".HomeScreen"
+            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.DISH.NoActionBar" />
         <activity
             android:name=".User"
+            android:screenOrientation="portrait"
+
             android:exported="true"
             tools:ignore="Instantiatable" />
         <activity
             android:name=".MainActivity"
+            android:screenOrientation="portrait"
+
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
