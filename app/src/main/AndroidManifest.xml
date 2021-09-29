@@ -13,10 +13,11 @@
         android:name=".DishApplication"
         android:allowBackup="true"
         android:label="DISH"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/icon"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.DISH">
+        android:theme="@style/Theme.DISH"
+        >
         <!-- <activity -->
         <!-- android:name=".ToDeleteLater" -->
         <!-- android:exported="true" -->
@@ -48,6 +49,7 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
     </application>
 
 </manifest>

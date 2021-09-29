@@ -17,6 +17,15 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
+    <ImageView
+        android:id="@+id/remove"
+        android:layout_height="80dp"
+        android:layout_width="80dp"
+        android:src="@drawable/remove"
+        android:layout_margin="15dp"
+        android:layout_gravity="right"
+        />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
