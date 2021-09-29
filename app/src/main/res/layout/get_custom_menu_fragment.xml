@@ -41,7 +41,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_of_dishes"
         android:layout_width="wrap_content"
-        android:layout_height="400dp"
+        android:layout_height="480dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="1dp"

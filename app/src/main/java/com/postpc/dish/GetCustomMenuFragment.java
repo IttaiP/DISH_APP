@@ -97,25 +97,6 @@ public class GetCustomMenuFragment extends Fragment {
 
         Log.d("restaurant", restaurant);
 
-        database.collection("restaurants").whereEqualTo("name", "Nam")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (QueryDocumentSnapshot document : task.getResult()) {
-                    Restaurant restaurant1 = document.toObject(Restaurant.class);
-                    document.getReference().collection("dishes").orderBy("name").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @SuppressLint("NotifyDataSetChanged")
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            dishes = (ArrayList<DishItem>) Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
-                            adapter.setDishesAdapter(dishes);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                }
-            }
-        });
-
         // Create the observer which updates the UI.
         final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {
             @Override
