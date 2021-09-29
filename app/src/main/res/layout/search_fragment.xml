@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:id="@+id/rec"
+    android:id="@+id/search_fragment"
     android:background="@color/dark_gray"
     android:layout_height="match_parent"
     tools:context=".choose_dishes">
@@ -12,18 +12,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="275dp"
-        android:layout_marginTop="38dp"
         android:translationZ="5dp"
         android:elevation="30dp"
         android:src="@drawable/ic_baseline_search_24"
         app:layout_constraintStart_toStartOf="@id/search_bar"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="@id/search_bar"
+        app:layout_constraintBottom_toBottomOf="@id/search_bar"/>
 
     <EditText
         android:id="@+id/search_bar"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="20dp"
         android:paddingLeft="20dp"
         android:hint="Search restaurant"
@@ -32,7 +32,8 @@
         android:background="@drawable/background_search_bar"
         app:actionViewClass="android:support.v7.widget.SearchView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/recycler_view"/>
 
 
     <androidx.recyclerview.widget.RecyclerView

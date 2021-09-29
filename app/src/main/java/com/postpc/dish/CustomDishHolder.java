@@ -23,7 +23,7 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
     public CustomDishHolder(@NonNull View itemView) {
         super(itemView);
         dish_name = itemView.findViewById(R.id.dish_name);
-        dish_description = itemView.findViewById(R.id.dish_description);
+        dish_description = itemView.findViewById(R.id.restaurant_name);
         dish_score = itemView.findViewById(R.id.dish_score);
         order = itemView.findViewById(R.id.order);
         swipeRevealLayout = itemView.findViewById(R.id.swipe_layout);

@@ -99,8 +99,12 @@ public class WifiScanner {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
         List<ScanResult> results = wifiManager.getScanResults();
-        scannedRestaurants.clear(); // todo : decide whether we want to show old ones or not
-        wifiRestaurants.clear();
+        if(scannedRestaurants != null) {
+            scannedRestaurants.clear(); // todo : decide whether we want to show old ones or not
+        }
+        if(wifiRestaurants != null) {
+            wifiRestaurants.clear();
+        }
         Log.d("FAILURE", "!!!!!!");
 
     }

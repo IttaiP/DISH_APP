@@ -31,10 +31,93 @@
         app:layout_constraintHorizontal_bias="0.079"
         app:layout_constraintStart_toStartOf="parent" />
 
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="HomeFragment" />-->
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="HomeFragment" />
+        android:id="@+id/restaurants_nearby"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Restaurants nearby"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:textColor="@color/black"
+        android:fontFamily="@font/bitter"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/home_screen_photo"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/restaurants_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"
+        app:layout_constraintTop_toBottomOf="@id/restaurants_nearby"/>
+
+    <Button
+        android:id="@+id/enable_wifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Enable Wifi"
+        android:textSize="12dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintTop_toBottomOf="@id/restaurants_nearby"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"/>
+
+    <TextView
+        android:id="@+id/not_found"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No restaurants were found"
+        android:textSize="15dp"
+        android:fontFamily="@font/bitter"
+        app:layout_constraintTop_toBottomOf="@id/restaurants_nearby"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"
+        />
+
+    <TextView
+        android:id="@+id/border"
+        android:layout_width="wrap_content"
+        android:layout_height="160dp"
+        app:layout_constraintTop_toBottomOf="@id/restaurants_nearby"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"/>
+
+    <TextView
+        android:id="@+id/dishes_to_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Dishes to rate"
+        android:textColor="@color/black"
+        android:fontFamily="@font/bitter"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toBottomOf="@id/border"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"/>
+
+    <TextView
+        android:id="@+id/no_dishes_to_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Well done, you have no dishes to rate"
+        android:fontFamily="@font/bitter"
+        android:textSize="15dp"
+        app:layout_constraintTop_toBottomOf="@id/dishes_to_rate"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/dishes_recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layoutManager="LinearLayoutManager"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@id/restaurants_nearby"
+        app:layout_constraintTop_toBottomOf="@id/dishes_to_rate"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -163,7 +163,14 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
             case R.id.nav_rate_recommendation:
                 // todo: check if the bundle works
                 Bundle bundle = new Bundle();
-                bundle.putString("dish ID to rate", app.info.getDishToRate());
+                String dishToRateId = "";
+                try {
+                    dishToRateId = app.info.getDishToRate().get(0);
+                }
+                catch (Exception exception) {
+                    dishToRateId = "";
+                }
+                bundle.putString("dish ID to rate", dishToRateId);
                 Fragment fragment = new RateRecommendationFragment();
                 fragment.setArguments(bundle);
 

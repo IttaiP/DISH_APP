@@ -16,26 +16,20 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 
-public class restaurant_view extends RecyclerView.ViewHolder {
+public class wifiRestaurantsHolder extends RecyclerView.ViewHolder {
     private final TextView name;
-    private final TextView city;
     private final TextView category;
     private final ImageView image;
 
-    public restaurant_view(@NonNull View itemView) {
+    public wifiRestaurantsHolder(@NonNull View itemView) {
         super(itemView);
-        name = itemView.findViewById(R.id.restaurantNameTextView);
-        city = itemView.findViewById(R.id.cityTextView);
-        category = itemView.findViewById(R.id.categoryTextView);
-        image = itemView.findViewById(R.id.restaurantImageView);
+        name = itemView.findViewById(R.id.restaurant_name);
+        category = itemView.findViewById(R.id.restaurant_category);
+        image = itemView.findViewById(R.id.restaurant_image);
     }
 
     public TextView get_restaurant_name() {
         return name;
-    }
-
-    public TextView get_restaurant_city() {
-        return city;
     }
 
     public TextView get_restaurant_category() {
@@ -46,13 +40,9 @@ public class restaurant_view extends RecyclerView.ViewHolder {
 
     public void bind(Restaurant restaurant, Context context) {
         name.setText(restaurant.name);
-        city.setText(restaurant.city);
         category.setText(restaurant.category);
         int resourceId = context.getResources().getIdentifier(restaurant.code, "drawable",
                 context.getPackageName());
         image.setImageResource(resourceId);
-
-//        image.setImageResource(context.getResources().getDrawable(resourceId));
-//        image.setImageURI(Uri.fromFile(new File("src/main/res/drawable/" + restaurant.code + ".png"))
     }
 }

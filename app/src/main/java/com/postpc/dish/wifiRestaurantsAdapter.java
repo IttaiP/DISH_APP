@@ -18,28 +18,27 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class restaurnats_adapter extends RecyclerView.Adapter<restaurant_view> {
+public class wifiRestaurantsAdapter extends RecyclerView.Adapter<wifiRestaurantsHolder> {
 
     private Context context;
     private List<Restaurant> restaurants;
-    private SharedViewModel sharedViewModel;
 
     private DishApplication app;
 
-    restaurnats_adapter(List<Restaurant> restaurants) {
+    wifiRestaurantsAdapter(List<Restaurant> restaurants) {
         this.restaurants = restaurants;
     }
 
     @NonNull
     @Override
-    public restaurant_view onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public wifiRestaurantsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.restaurant_adapter, parent, false);
-        return new restaurant_view(view);
+        View view = LayoutInflater.from(context).inflate(R.layout.wifi_restaurant, parent, false);
+        return new wifiRestaurantsHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull restaurant_view holder, int position) {
+    public void onBindViewHolder(@NonNull wifiRestaurantsHolder holder, int position) {
 
         holder.bind(restaurants.get(position), context);
         ImageView restaurant_image = holder.get_restaurant_image();

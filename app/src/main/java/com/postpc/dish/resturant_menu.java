@@ -133,7 +133,7 @@ public class resturant_menu extends Fragment {
                 arguments.putString("restaurant", restaurant);
                 Fragment custom_menu_fragment = new GetCustomMenuFragment();
                 custom_menu_fragment.setArguments(arguments);
-                activity.getSupportFragmentManager().beginTransaction().replace(R.id.restaurant_menu, custom_menu_fragment).addToBackStack(null).commit();
+                activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment_container, custom_menu_fragment).addToBackStack(null).commit();
             }
         });
     }

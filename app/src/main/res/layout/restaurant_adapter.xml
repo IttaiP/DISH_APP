@@ -52,17 +52,6 @@
             android:textColor="@color/light_grey"
             android:textStyle="italic"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/custom_menu_button"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:background="@color/dark_gray"
-            android:text="Custom Menu"
-            android:textColor="@color/white"
-            android:textSize="10sp" />
-
-
 
     </LinearLayout>
 </LinearLayout>

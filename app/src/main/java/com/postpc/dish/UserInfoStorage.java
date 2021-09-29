@@ -16,7 +16,7 @@ import io.paperdb.Paper;
 
 public class UserInfoStorage {
     private String restaurant;
-    private String dishToRate;
+    private ArrayList<String> dishToRate;
     public String userEmail;
     public String myID = "";
     public FirebaseFirestore database = FirebaseFirestore.getInstance();
@@ -62,11 +62,19 @@ public class UserInfoStorage {
         sp.edit().putString("id", myID).apply();
     }
 
-    public void setDishToRate(String dishToRate) {
-        this.dishToRate = dishToRate;
+//    public void setDishToRate(String dishToRate) {
+//        this.dishToRate = dishToRate;
+//    }
+
+    public void addDishToRate(String dishToRate) {
+        this.dishToRate.add(dishToRate);
     }
 
-    public String getDishToRate() {
+    public ArrayList<String> getDishToRate() {
+        dishToRate = new ArrayList<>();
+        dishToRate.add("0HEbQdcMUoqovPtCGnRr");
+        dishToRate.add("DJBWkaGK26LrVC7ScC2i");
+        dishToRate.add("LXtcb2qasdVveT2h0SYx");
         return dishToRate;
     }
 }
