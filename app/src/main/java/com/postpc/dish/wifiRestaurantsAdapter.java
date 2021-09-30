@@ -52,7 +52,6 @@ public class wifiRestaurantsAdapter extends RecyclerView.Adapter<wifiRestaurants
                 app = (DishApplication) activity.getApplication();
                 app.info.setRestaurant(restaurant_name.getText().toString());
 
-                app.runWork2();
                 Bundle arguments = new Bundle();
                 Log.d("name", restaurant_name.getText().toString());
                 arguments.putString("restaurant", restaurant_name.getText().toString());

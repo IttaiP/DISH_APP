@@ -281,4 +281,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/stack_view" />
 
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="175dp"
+        tools:layout_editor_absoluteY="310dp"
+        android:elevation="2dp"/>
+
+    <TextView
+        android:id="@+id/loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="finding users with similar tastes"
+        app:layout_constraintBottom_toBottomOf="@+id/stack_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/swipe_title"
+        android:elevation="2dp"/>
+
+    <TextView
+        android:id="@+id/dont_worry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Dont worry, next time you\n won't need  to wait this long"
+        app:layout_constraintBottom_toBottomOf="@+id/stack_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loading"
+        app:layout_constraintVertical_bias="0.261"
+        android:elevation="2dp"/>
+
+    <View
+        android:id="@+id/black_cover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="-10dp"
+        android:background="@color/white"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

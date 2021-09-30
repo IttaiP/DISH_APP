@@ -96,6 +96,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         buttonPressed = false;
 
 
+
         TextView not_found = view.findViewById(R.id.not_found);
         not_found.setVisibility(view.GONE);
         enable_wifi = view.findViewById(R.id.enable_wifi);

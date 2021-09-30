@@ -149,7 +149,6 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 break;
 
             case R.id.nav_search:
-                app.runWork2();
                 getSupportFragmentManager().beginTransaction().
                         replace(R.id.nav_fragment_container, new SearchFragment()).commit();
                 break;

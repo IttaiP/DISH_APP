@@ -39,6 +39,7 @@ public class resturant_menu extends Fragment {
     private FirebaseFirestore database;
     private DividerItemDecoration vertical_decorator;
     private DividerItemDecoration horizontal_decorator;
+    DishApplication app;
 
     private DishesAdapter adapter;
     private List<DishItem> dishes;
@@ -58,6 +59,8 @@ public class resturant_menu extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        app = (DishApplication) getActivity().getApplication();
+        app.runWork2();
 
         Context context = getContext();
 

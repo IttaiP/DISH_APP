@@ -27,7 +27,7 @@ import java.util.List;
 
 import io.paperdb.Paper;
 
-public class OtherUsersWorker extends ListenableWorker {
+public class OtherUsersWorker extends Worker {
     private final DishApplication app = (DishApplication) getApplicationContext();
     private final FirebaseFirestore database = app.info.database;
     SettableFuture<Result> mFuture;
@@ -39,14 +39,36 @@ public class OtherUsersWorker extends ListenableWorker {
         super(context, workerParams);
     }
 
+//
+//    @NonNull
+//    @Override
+//    public ListenableFuture<Result> startWork() {
+//        Log.e("Started", "OtherUsersWorker doWork");
+//        mFuture = SettableFuture.create();
+//
+//
+////        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) { // not sure why had first 2 conds
+//        load_similar_users();
+//
+//
+////        Paper.book().write("otherUsers", app.info.otherUsers);
+////        Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
+////        Log.e("Wrote", "otherUsers:"+ app.info.otherUsers.toString());
+////        Log.e("Wrote", "otherUsersEmails:"+ app.info.otherUsersEmails.toString());
+//
+//
+//        return mFuture;
+//    }
+
     @NonNull
     @Override
-    public ListenableFuture<Result> startWork() {
+    public Result doWork() {
         Log.e("Started", "OtherUsersWorker doWork");
-        mFuture = SettableFuture.create();
-
 
 //        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) { // not sure why had first 2 conds
+        if(app.info.ratings.isEmpty() ) {
+            return Result.failure(); // todo: check what i should do here
+        }
         load_similar_users();
 
 
@@ -55,29 +77,8 @@ public class OtherUsersWorker extends ListenableWorker {
 //        Log.e("Wrote", "otherUsers:"+ app.info.otherUsers.toString());
 //        Log.e("Wrote", "otherUsersEmails:"+ app.info.otherUsersEmails.toString());
 
-
-        return mFuture;
+        return Result.success();
     }
-
-//    @NonNull
-//    @Override
-//    public Result doWork() {
-//        Log.e("Started", "OtherUsersWorker doWork");
-//
-////        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) { // not sure why had first 2 conds
-//        if(app.info.ratings.isEmpty() ) {
-//            return Result.failure(); // todo: check what i should do here
-//        }
-//        load_similar_users();
-//
-//
-//        Paper.book().write("otherUsers", app.info.otherUsers);
-//        Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
-//        Log.e("Wrote", "otherUsers:"+ app.info.otherUsers.toString());
-//        Log.e("Wrote", "otherUsersEmails:"+ app.info.otherUsersEmails.toString());
-//
-//        return Result.success();
-//    }
 
 
 

@@ -1,8 +1,10 @@
 package com.postpc.dish;
 
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,13 +14,16 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.work.WorkInfo;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 public class InitUserDishDataFragment extends Fragment {
     private final float FABULOUS = 5;
@@ -85,9 +91,16 @@ public class InitUserDishDataFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         app = (DishApplication)getActivity().getApplication();
         doneButton = view.findViewById(R.id.finish_button);
+        getView().findViewById(R.id.loading).setVisibility(View.GONE);
+        getView().findViewById(R.id.dont_worry).setVisibility(View.GONE);
+        getView().findViewById(R.id.progressBar).setVisibility(View.GONE);
+        doneButton.setVisibility(View.VISIBLE);
+
 
         doneButton.setOnClickListener(view1 -> {
 //            app.load_rated_dishes_from_sp();
+
+
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
             firebaseFirestore.collection("users").document(user.getUid())
@@ -97,8 +110,33 @@ public class InitUserDishDataFragment extends Fragment {
                         Intent intent = new Intent(getContext(), HomeScreen.class);
                         intent.putExtra("Full Name", name);
                 intent.putExtra("Email", user.getEmail());
-                        app.runWork();
+                app.runWork();
+                try {
+                    if(app.workInfo!=null&&app.workInfo.get()!=null){
+                        if(app.workInfo.get().getState() != WorkInfo.State.SUCCEEDED){
+                            Runnable r = () -> {
+                                startActivity(intent);//<-- put your code in here.
+
+                            };
+                            Handler h = new Handler();
+                            showLoadingScreen();
+                            h.postDelayed(r, 5000);
+//                startActivity(intent);
+                        };
+                    }
+                    else {
                         startActivity(intent);
+                        return;
+                    }
+                } catch (ExecutionException e) {
+                    startActivity(intent);
+                    return;
+                } catch (InterruptedException e) {
+                    startActivity(intent);
+                    return;
+                }
+
+
                     });
         });
 
@@ -323,6 +361,16 @@ public class InitUserDishDataFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(InitUserDishDataViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    public void showLoadingScreen(){
+        Log.e("running", "348");
+        getView().findViewById(R.id.loading).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.dont_worry).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.black_cover).setElevation(1f);
+        doneButton.setVisibility(View.GONE);
+
     }
 
 }
