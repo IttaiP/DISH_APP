@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     private ArrayList<DishItem> dishesToRate;
     private boolean buttonPressed;
     private boolean readyToObserve;
+    Button enable_wifi;
 
     private Observer<List<String>> restsObserver;
 
@@ -97,7 +98,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
         TextView not_found = view.findViewById(R.id.not_found);
         not_found.setVisibility(view.GONE);
-        Button enable_wifi = view.findViewById(R.id.enable_wifi);
+        enable_wifi = view.findViewById(R.id.enable_wifi);
         restaurants_recycler_view.setHasFixedSize(true);
         restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         restaurants_recycler_view.setAdapter(restaurantsAdapter);
@@ -154,7 +155,12 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             }
             else {
                 if(wifiRestaurantsList.isEmpty()){
-                    not_found.setVisibility(view.VISIBLE);
+                    not_found.setVisibility(View.VISIBLE);
+                    enable_wifi.setVisibility(View.VISIBLE);
+                    if(!enable_wifi.getText().equals("search again")){
+                        enable_wifi.animate().translationY(25f);
+                    }
+                    enable_wifi.setText("search again");
                 }
 
             }
@@ -247,6 +253,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
     }
 
+
     private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
             result -> {
@@ -273,7 +280,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                     Log.e("FAILURE", "onActivityResult: PERMISSION DENIED");
                     if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
                         Snackbar snackbar = Snackbar
-                                .make(activity.getWindow().getDecorView(), "You Must Allow Location For Restaurant Recognition!", Snackbar.LENGTH_INDEFINITE);
+                                .make(activity.getWindow().getDecorView(), "You Must Allow Location For Restaurant Recognition!", Snackbar.LENGTH_SHORT);
                         snackbar.setAction("Got It", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -282,6 +289,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                             }
                         });
                         snackbar.show();
+                        enable_wifi.setVisibility(View.VISIBLE);
                     } else {
                         Snackbar snackbar = Snackbar
                                 .make(activity.getWindow().getDecorView(), "You Must Allow Location Permission Through App Settings!", Snackbar.LENGTH_INDEFINITE)
@@ -297,6 +305,8 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
                                 });
                         snackbar.show();
+                        enable_wifi.setVisibility(View.VISIBLE);
+
                     }
                 }
             });
@@ -307,15 +317,11 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 
     @Override
     public void onItemClicked(@NonNull DishItem item) {
-        //Added by Ittai
-//        app = (DishApplication) activity.getApplication();
-//        app.info.setRestaurant(restaurant_name.getText().toString());
         Bundle arguments = new Bundle();
         app.info.database.collection("all-dishes").whereEqualTo("name", item.name).whereEqualTo("restaurant_name", item.restaurant_name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override

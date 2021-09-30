@@ -44,6 +44,9 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
         for(OtherUser user: app.info.otherUsers){
             for(DishRatings dishRating: user.getRatings()){
                 if(dishRating.Dish_Id.equals(dish_restaurant)){
+                    Log.e("check", "dishrating"+dishRating.Rating);
+                    Log.e("check", "usersim"+user.getSimilarity());
+
                     recommendation += (((dishRating.Rating-2.5)* user.getSimilarity()))*50/6.25;
                     Log.e("FOUND ", String.valueOf(recommendation));
                     otherUsercount++;
