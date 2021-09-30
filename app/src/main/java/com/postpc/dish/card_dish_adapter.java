@@ -42,7 +42,8 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
                 Log.e("position ", String.valueOf(position));
                 Log.e("Dishes are ", dishes.toString());
                 dishes.remove(dishes.get(position));
-                notifyItemRemoved(position);
+                setDishes(dishes);
+                notifyDataSetChanged();
             }
         });
     }
