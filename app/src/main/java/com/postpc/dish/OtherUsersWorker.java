@@ -47,9 +47,6 @@ public class OtherUsersWorker extends ListenableWorker {
 
 
 //        if(app.info.otherUsers.isEmpty() || app.info.otherUsersEmails.isEmpty() || app.info.ratings.isEmpty() ) { // not sure why had first 2 conds
-        if(app.info.ratings.isEmpty() ) {
-            mFuture.set(Result.failure());// todo: check what i should do here
-        }
         load_similar_users();
 
 

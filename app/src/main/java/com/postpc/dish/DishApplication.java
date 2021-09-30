@@ -98,7 +98,7 @@ public class DishApplication extends Application implements LifecycleOwner {
                         .addTag("OtherUsersWorker")
                         .build();
 
-
+        Log.e("Unique work name", info.userEmail);
         WorkManager workManager = WorkManager.getInstance(this);
                 workManager.enqueueUniquePeriodicWork(info.userEmail,
                         ExistingPeriodicWorkPolicy.KEEP,
