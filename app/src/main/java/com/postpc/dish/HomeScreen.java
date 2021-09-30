@@ -3,8 +3,10 @@ package com.postpc.dish;
 import static com.google.firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD;
 import static com.google.firebase.auth.GoogleAuthProvider.GOOGLE_SIGN_IN_METHOD;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -230,4 +232,10 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                     replace(R.id.nav_fragment_container, WelcomeScreenFragment.newInstance()).commit();
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
 }
