@@ -27,23 +27,33 @@ public class UserInfoStorage {
     public List<String> otherUsersEmails;
     public HashMap<String, Float> DishRecommendationScores;
     SharedPreferences sp;
+    DishApplication app;
 
     public UserInfoStorage(Context context){
         FirebaseAuth auth = FirebaseAuth.getInstance();
 //        user_Email = auth.getCurrentUser().getEmail();
 //        myID = auth.getCurrentUser().getUid();
         sp = PreferenceManager.getDefaultSharedPreferences(context);
-        Paper.book().destroy();
-        ratings = Paper.book().read("ratings", new ArrayList<>());
-        indicesInRatings = Paper.book().read("indicesInRatings", new ArrayList<>());
-        otherUsers = Paper.book().read("otherUsers", new ArrayList<>());
-        otherUsersEmails = Paper.book().read("otherUsersEmails", new ArrayList<>());
-        DishRecommendationScores = Paper.book().read("DishRecommendationScores", new HashMap<>());
+//        Paper.book().destroy();
+
+        app = (DishApplication) context.getApplicationContext();
+    }
+
+    public void initDB(){
+        ratings = Paper.book(getUserEmail()).read("ratings", new ArrayList<>());
+        indicesInRatings = Paper.book(getUserEmail()).read("indicesInRatings", new ArrayList<>());
+        otherUsers = Paper.book(getUserEmail()).read("otherUsers", new ArrayList<>());
+        otherUsersEmails = Paper.book(getUserEmail()).read("otherUsersEmails", new ArrayList<>());
+        DishRecommendationScores = Paper.book(getUserEmail()).read("DishRecommendationScores", new HashMap<>());
     }
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+        initDB();
         sp.edit().putString("email", userEmail).apply();
+        if(myID!=null) {
+            app.load_rated_dishes_from_sp();
+        }
     }
 
     public String getUserEmail() {

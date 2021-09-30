@@ -80,7 +80,7 @@ public class GetCustomMenuViewModel extends AndroidViewModel {
                         }
                     }
                 });
-        Paper.book().write("DishReccomendationScores", app.info.DishRecommendationScores);
+        Paper.book(app.info.getUserEmail()).write("DishReccomendationScores", app.info.DishRecommendationScores);
 
 
     }

@@ -28,6 +28,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -55,22 +56,13 @@ public class DishApplication extends Application implements LifecycleOwner {
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
 
-        int x = Paper.book("x").read("xx", 3);
 
-        info.userEmail = info.sp.getString("email", null);
+//        info.userEmail = info.sp.getString("email", null);
         info.myID = info.sp.getString("id", null);
         //todo: need to update user ID first for this to work properly.
-        if(info.myID!=null) {
-            load_rated_dishes_from_sp();
-        }
+
 
     }
-
-
-
-
-
-
 
 
 
@@ -119,8 +111,8 @@ public class DishApplication extends Application implements LifecycleOwner {
                     public void onSuccess(WorkInfo result) {
                         Log.e("HERE!!", info.otherUsers.toString());
 
-                        Paper.book().write("otherUsers", info.otherUsers);
-                        Paper.book().write("otherUsersEmails", info.otherUsersEmails);
+                        Paper.book(info.getUserEmail()).write("otherUsers", info.otherUsers);
+                        Paper.book(info.getUserEmail()).write("otherUsersEmails", info.otherUsersEmails);
                         Log.e("Wrote", "otherUsers:" + info.otherUsers.toString());
                         Log.e("Wrote", "otherUsersEmails:" + info.otherUsersEmails.toString());
                     }
@@ -150,16 +142,18 @@ public class DishApplication extends Application implements LifecycleOwner {
 
     public void load_rated_dishes_from_sp(){
         Gson gson = new Gson();
-        DishRatings[] ratingsArray = gson.fromJson(info.sp.getString("ratings", null), DishRatings[].class);
-        if(ratingsArray!=null){
-            info.ratings = Arrays.asList(ratingsArray);
-        }
-        String[] iRatingsArray = gson.fromJson(info.sp.getString("iRatings", null), String[].class);
-        if(iRatingsArray!=null){
-            info.indicesInRatings = Arrays.asList(iRatingsArray);
-
-        }
-        if(info.ratings==null){
+//        DishRatings[] ratingsArray = gson.fromJson(info.sp.getString("ratings", null), DishRatings[].class);
+        info.ratings = Paper.book(info.getUserEmail()).read("ratings", new ArrayList<>());
+//        if(ratingsArray!=null){
+//            info.ratings = Arrays.asList(ratingsArray);
+//        }
+//        String[] iRatingsArray = gson.fromJson(info.sp.getString("iRatings", null), String[].class);
+        info.indicesInRatings = Paper.book(info.getUserEmail()).read("iRatings", new ArrayList<>());
+//        if(iRatingsArray!=null){
+//            info.indicesInRatings = Arrays.asList(iRatingsArray);
+//
+//        }
+        if(info.ratings.isEmpty()){
             load_rated_dishes();
         }
     }
@@ -182,8 +176,10 @@ public class DishApplication extends Application implements LifecycleOwner {
                         }
                         Gson gson = new Gson();
                         String ratingsAsJson = gson.toJson(info.ratings);
+                        Paper.book(info.getUserEmail()).write("ratings", info.ratings);
                         info.sp.edit().putString("ratings", ratingsAsJson).apply();
                         String iRatingsAsJson = gson.toJson(info.indicesInRatings);
+                        Paper.book(info.getUserEmail()).write("iRatings", info.indicesInRatings);
                         info.sp.edit().putString("iRatings", iRatingsAsJson).apply();
                     } else {
                         Log.e("ERRRORRR", "Error getting documents: ", task.getException());

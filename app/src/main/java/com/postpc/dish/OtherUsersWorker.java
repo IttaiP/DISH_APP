@@ -151,10 +151,10 @@ public class OtherUsersWorker extends ListenableWorker {
                                                 newOtherUser.addRating(newRating);
                                                 Log.e("Rating", newRating.Dish_Name+newRating.Rating);
                                             }
-                                            Paper.book().write("otherUsers", app.info.otherUsers);
+                                            Paper.book(app.info.getUserEmail()).write("otherUsers", app.info.otherUsers);
                                             Log.e("otherUsersWrote", ""+app.info.otherUsers);
 
-                                            Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
+                                            Paper.book(app.info.getUserEmail()).write("otherUsersEmails", app.info.otherUsersEmails);
 //                                            updatedUserCount--;
 //                                            Log.e("updatedUserCount", ""+updatedUserCount);
 //                                            if(updatedUserCount==0){
@@ -207,7 +207,7 @@ public class OtherUsersWorker extends ListenableWorker {
 //                                                app.info.otherUsers.add(newOtherUser);
                                                 Log.e("Rating", newRating.Dish_Name+newRating.Rating);
                                             }
-                                            Paper.book().write("otherUsers", app.info.otherUsers);
+                                            Paper.book(app.info.getUserEmail()).write("otherUsers", app.info.otherUsers);
                                             Log.e("otherUsersWrote", ""+app.info.otherUsers);
 
 //                                            Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);

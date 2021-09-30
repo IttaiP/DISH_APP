@@ -61,7 +61,7 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
     @SuppressLint("DefaultLocale")
     public void bind(DishItem dish) {
         dish_name.setText(dish.getName());
-        dish_description.setText(dish.getDescription());
+        dish_description.setText(dish.getName());
         String num = String.format("%.2f", dish.getMatch());
         dish_score.setText("Matching is " + num);
     }

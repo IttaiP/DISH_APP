@@ -34,6 +34,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
     private EditText email, password;
     private Button signInButton, signInWithGoogleButton;
     private TextView register;
+    private DishApplication app;
 
     public static WelcomeScreenFragment newInstance() {
         return new WelcomeScreenFragment();
@@ -95,6 +96,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
                                         intent.putExtra("Full Name" , name);
                                     }
                                     intent.putExtra("Email" , email.getText().toString());
+                                    app.info.setUserEmail(email.getText().toString());
                                     startActivity(intent);
                                 }
                             }
@@ -125,6 +127,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
                                         intent.putExtra("Full Name" , name);
                                     }
                                     intent.putExtra("Email" , email.getText().toString());
+                                    app.info.setUserEmail(email.getText().toString());
                                     startActivity(intent);
                                 }
                             }
@@ -142,6 +145,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        app = (DishApplication)getActivity().getApplication();
 
         // get text views
         email = view.findViewById(R.id.welcome_screen_EmailAddress_field);

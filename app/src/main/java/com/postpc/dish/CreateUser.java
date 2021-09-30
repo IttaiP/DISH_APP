@@ -227,8 +227,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     editTextEmail.getText().toString().trim(),
                     editTextPassword.getText().toString().trim());
         }
-        app.info.setUserEmail(user.email);
         app.info.setMyID(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        app.info.setUserEmail(user.email);
 
 
         FirebaseFirestore.getInstance().collection("users").
@@ -241,7 +241,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                                 "User has been registered successfully!",
                                 Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
-                        app.info.myID = mAuth.getCurrentUser().getUid();
+//                        app.info.myID = mAuth.getCurrentUser().getUid();
+                        app.info.setMyID(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         app.info.setUserEmail(mAuth.getCurrentUser().getEmail());
                         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()
                                 .getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);

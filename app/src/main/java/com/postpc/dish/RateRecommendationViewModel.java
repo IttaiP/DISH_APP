@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.paperdb.Paper;
+
 public class RateRecommendationViewModel extends SharedViewModel {
     DishApplication app = (DishApplication)getApplication().getApplicationContext();
 
@@ -86,6 +88,9 @@ public class RateRecommendationViewModel extends SharedViewModel {
         String ratingsAsJson = gson.toJson(app.info.ratings);
         String iRatingsAsJson = gson.toJson(app.info.indicesInRatings);
         SharedPreferences sp = ((DishApplication)getApplication()).info.sp;
+        Paper.book(app.info.getUserEmail()).write("ratings", app.info.ratings);
+        Paper.book(app.info.getUserEmail()).write("iRatings", app.info.indicesInRatings);
+
         sp.edit().putString("ratings", ratingsAsJson).apply();
         sp.edit().putString("iRatings", iRatingsAsJson).apply();
 

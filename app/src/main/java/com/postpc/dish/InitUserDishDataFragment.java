@@ -97,7 +97,7 @@ public class InitUserDishDataFragment extends Fragment {
                         Intent intent = new Intent(getContext(), HomeScreen.class);
                         intent.putExtra("Full Name", name);
                 intent.putExtra("Email", user.getEmail());
-//                        app.runWork();
+                        app.runWork();
                         startActivity(intent);
                     });
         });

@@ -36,10 +36,10 @@ public class CalcSimilaritiesWorker extends Worker {
 
         calculateSimilarities();
 
-        Paper.book().write("otherUsers", app.info.otherUsers);
-        Paper.book().write("otherUsersEmails", app.info.otherUsersEmails);
-        Paper.book().write("indicesInRatings", app.info.indicesInRatings);
-        Paper.book().write("DishReccomendationScores", app.info.DishRecommendationScores);
+        Paper.book(app.info.getUserEmail()).write("otherUsers", app.info.otherUsers);
+        Paper.book(app.info.getUserEmail()).write("otherUsersEmails", app.info.otherUsersEmails);
+        Paper.book(app.info.getUserEmail()).write("indicesInRatings", app.info.indicesInRatings);
+        Paper.book(app.info.getUserEmail()).write("DishReccomendationScores", app.info.DishRecommendationScores);
 
         Log.e("otherUsers", app.info.otherUsers.toString());
         Log.e("otherUsersEmails", app.info.otherUsersEmails.toString());
