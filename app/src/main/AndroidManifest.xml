@@ -19,9 +19,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DISH">
-        <activity
-            android:name=".AddPhotoFromGallery"
-            android:exported="true" />
         <!-- <activity -->
         <!-- android:name=".ToDeleteLater" -->
         <!-- android:exported="true" -->

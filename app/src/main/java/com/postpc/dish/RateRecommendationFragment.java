@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.DashPathEffect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -177,8 +178,12 @@ public class RateRecommendationFragment extends Fragment {
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
             Uri imageUri = data.getData();
             StorageReference storageReference = app.info.firebaseStorage.getReference();
-            StorageReference photoRef = storageReference.child("photo.jpg");
-            photoRef.putFile(imageUri).addOnCompleteListener(task -> Log.e("SUCCESS", "uploaded"));
+            String ts = String.valueOf(System.currentTimeMillis()/1000);
+            StorageReference photoRef = storageReference.child(dishToRateID + "/" + app.info.myID + ts);
+            photoRef.putFile(imageUri).addOnCompleteListener(task ->
+                    Log.e("SUCCESS", String.valueOf(task.getResult().getTask().getSnapshot().getUploadSessionUri())));
+//            Uri uri = photoRef.getDownloadUrl().getResult();
+//            Log.e("URI IS", String.valueOf(uri));
         }
     }
 
