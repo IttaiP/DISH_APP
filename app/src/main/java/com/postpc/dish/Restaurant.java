@@ -7,14 +7,19 @@ public class Restaurant {
     public String category;
     public String code;
     public String Wifi;
+    public Double latitude;
+    public Double longitude;
 
-    Restaurant(String name, String city, String category, String code ,String Wifi) {
+    Restaurant(String name, String city, String category, String code ,String Wifi,
+               Double latitude, Double longitude) {
         this.name = name;
         this.city = city;
         this.category = category;
         this.code = code;
         this.id = "";
         this.Wifi = Wifi;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     Restaurant() { }
