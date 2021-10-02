@@ -25,23 +25,29 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
-import pub.devrel.easypermissions.AfterPermissionGranted;
-import pub.devrel.easypermissions.EasyPermissions;
+//import pub.devrel.easypermissions.AfterPermissionGranted;
+//import pub.devrel.easypermissions.EasyPermissions;
 
 public class RateRecommendationFragment extends Fragment {
 
@@ -51,6 +57,7 @@ public class RateRecommendationFragment extends Fragment {
     private DishApplication app;
     private FirebaseAuth auth;
     private RateRecommendationViewModel mViewModel;
+    private SharedViewModel sharedViewModel;
     private RatingBar stars;
     private String dishToRateID = null;
     private ImageView dishImage;
@@ -74,6 +81,7 @@ public class RateRecommendationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.RateRecommendationViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         app = (DishApplication) getActivity().getApplication();
         auth = FirebaseAuth.getInstance();
 
@@ -180,10 +188,22 @@ public class RateRecommendationFragment extends Fragment {
             StorageReference storageReference = app.info.firebaseStorage.getReference();
             String ts = String.valueOf(System.currentTimeMillis()/1000);
             StorageReference photoRef = storageReference.child(dishToRateID + "/" + app.info.myID + ts);
-            photoRef.putFile(imageUri).addOnCompleteListener(task ->
-                    Log.e("SUCCESS", String.valueOf(task.getResult().getTask().getSnapshot().getUploadSessionUri())));
-//            Uri uri = photoRef.getDownloadUrl().getResult();
-//            Log.e("URI IS", String.valueOf(uri));
+            photoRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SUCCESS UPLOADING", "photo");
+                    photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.e("The uri is ", uri.toString());
+                            HomeScreen homeScreen = (HomeScreen) getActivity();
+                            homeScreen.addUriToUpload(dishToRateID, uri);
+                            sharedViewModel.getUriLiveData().setValue(homeScreen.urisToUpload);
+                        }
+                    });
+                }
+            });
+
         }
     }
 

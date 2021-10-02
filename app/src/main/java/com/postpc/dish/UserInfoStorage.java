@@ -2,6 +2,7 @@ package com.postpc.dish;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -26,6 +27,7 @@ public class UserInfoStorage {
     public List<DishRatings> ratings;
     public List<String> indicesInRatings;
     public List<OtherUser> otherUsers;
+    public List<Uri> toUpload;
     public List<String> otherUsersEmails;
     public HashMap<String, Float> DishRecommendationScores;
     SharedPreferences sp;
