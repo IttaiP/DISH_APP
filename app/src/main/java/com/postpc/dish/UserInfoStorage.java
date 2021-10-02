@@ -2,11 +2,13 @@ package com.postpc.dish;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +20,14 @@ public class UserInfoStorage {
     private boolean flag = false;
     private String restaurant;
     private ArrayList<String> dishToRate;
+    public FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     public String userEmail;
     public String myID = "";
     public FirebaseFirestore database = FirebaseFirestore.getInstance();
     public List<DishRatings> ratings;
     public List<String> indicesInRatings;
     public List<OtherUser> otherUsers;
+    public List<Uri> toUpload;
     public List<String> otherUsersEmails;
     public HashMap<String, Float> DishRecommendationScores;
     SharedPreferences sp;
@@ -72,10 +76,6 @@ public class UserInfoStorage {
         this.myID = myID;
         sp.edit().putString("id", myID).apply();
     }
-
-//    public void setDishToRate(String dishToRate) {
-//        this.dishToRate = dishToRate;
-//    }
 
     public void addDishToRate(String dishToRate) {
         this.dishToRate.add(dishToRate);

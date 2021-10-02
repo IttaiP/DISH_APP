@@ -5,55 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".resturant_menu"
+    android:id="@+id/dish_gallery"
     android:background="@color/white">
 
     <TextView
-        android:id="@+id/restaurant_name"
+        android:id="@+id/dish_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
         android:layout_marginEnd="176dp"
         android:translationZ="90dp"
         android:textColor="@color/black"
-        android:textSize="30dp"
-        android:text="America Burgers"
         android:fontFamily="@font/bitter"
+        android:textSize="30dp"
+        android:text="Dish Name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/image_restaurant"
-        app:layout_constraintBottom_toBottomOf="@id/image_restaurant"/>
+        app:layout_constraintTop_toTopOf="@id/dish_image"
+        app:layout_constraintBottom_toBottomOf="@id/dish_image"/>
 
     <TextView
-        android:id="@+id/custom_menu"
+        android:id="@+id/photos_by_users"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="177dp"
         android:layout_marginEnd="176dp"
         android:translationZ="90dp"
         android:textColor="@color/black"
-        android:textSize="20dp"
-        android:text="Menu made just for you"
         android:fontFamily="@font/bitter"
+        android:textSize="20dp"
+        android:text="Photos by our users"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/restaurant_name"/>
+        app:layout_constraintTop_toBottomOf="@id/dish_name"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_of_dishes"
+        android:id="@+id/photos_recycler_view"
         android:layout_width="wrap_content"
-        android:layout_height="480dp"
-        android:layout_marginStart="10dp"
+        android:layout_height="450dp"
+        android:layout_marginStart="1dp"
         android:layout_marginTop="30dp"
         android:layout_marginEnd="1dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintTop_toBottomOf="@id/dish_image"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/image_restaurant"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:spanCount="3" />
 
 
     <ImageView
-        android:id="@+id/image_restaurant"
+        android:id="@+id/dish_image"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="30dp"
@@ -64,15 +66,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar_custom_menu_screen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,33 +3,25 @@ package com.postpc.dish;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,10 +36,9 @@ public class GetCustomMenuFragment extends Fragment {
     private FirebaseFirestore database;
     private DividerItemDecoration vertical_decorator;
     private DividerItemDecoration horizontal_decorator;
-
+    private ProgressBar progressBar;
     private CustomDishesAdapter adapter;
     private List<DishItem> dishes;
-
     private String restaurant;
 
     public static GetCustomMenuFragment newInstance() {
@@ -75,7 +66,7 @@ public class GetCustomMenuFragment extends Fragment {
         vertical_decorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.decorator_for_dishes)));
         horizontal_decorator = new DividerItemDecoration(getContext(), DividerItemDecoration.HORIZONTAL);
         horizontal_decorator.setDrawable(Objects.requireNonNull(ContextCompat.getDrawable(getContext(), R.drawable.decorator_for_dishes)));
-
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_custom_menu_screen);
         recyclerView.addItemDecoration(vertical_decorator);
         recyclerView.addItemDecoration(horizontal_decorator);
         dishes = new ArrayList<>();

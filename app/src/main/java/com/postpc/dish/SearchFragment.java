@@ -161,7 +161,6 @@ public class SearchFragment extends Fragment {
                 return;
             }
 
-
             Log.e("wifiRestaurants",wifiRestaurants.toString());
             wifiRangerestaurants.clear();
             boolean found = false;

@@ -3,7 +3,9 @@ package com.postpc.dish;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 
-public class DishItem {
+import java.io.Serializable;
+
+public class DishItem implements Serializable {
     public String name;
     public String description;
     public String photo;

@@ -39,12 +39,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements dishRateAdapter.ContentListener{
@@ -63,11 +66,13 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Restaurant> wifiRestaurantsList;
     private ArrayList<DishItem> dishesToRate;
+    private HashMap<String, Uri> urisToUpload;
     private boolean buttonPressed;
     private boolean readyToObserve;
     Button enable_wifi;
 
     private Observer<List<String>> restsObserver;
+    private Observer<List<Uri>> uriObserver;
 
 //    public static HomeFragment newInstance() {
 //        return new HomeFragment();
@@ -94,6 +99,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         restaurantsAdapter = new wifiRestaurantsAdapter(wifiRestaurantsList);
 
         buttonPressed = false;
+        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
 
 
@@ -166,9 +172,6 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
             }
         };
-
-        // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
-        app.wifiScanner.getRestaurants().observe(getViewLifecycleOwner(), restsObserver);
 
         enable_wifi.setOnClickListener(view1 -> {
             buttonPressed = !buttonPressed;

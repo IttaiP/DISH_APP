@@ -1,5 +1,11 @@
 package com.postpc.dish;
 
+import static android.app.Activity.RESULT_OK;
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,30 +13,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import java.util.HashMap;
 import java.util.Map;
 
+//import pub.devrel.easypermissions.AfterPermissionGranted;
+//import pub.devrel.easypermissions.EasyPermissions;
+
 public class RateRecommendationFragment extends Fragment {
 
+    private static final int IMAGE_PICK_CODE = 1000;
+    private static final int PERMISSION_CODE = 1001;
+
     private DishApplication app;
-    private FirebaseAuth auth;
     private RateRecommendationViewModel mViewModel;
+    private SharedViewModel sharedViewModel;
     private RatingBar stars;
     private String dishToRateID = null;
     private ImageView dishImage;
     private TextView dishName, restaurantName;
-    private FloatingActionButton addPhotoButton;
-    private Button submitButton;
+    private ProgressBar progressBar;
     private float rating;
 
     public static RateRecommendationFragment newInstance() {
@@ -43,12 +59,15 @@ public class RateRecommendationFragment extends Fragment {
         return inflater.inflate(R.layout.rate_recommendation_fragment, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.RateRecommendationViewModel.class);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         app = (DishApplication) getActivity().getApplication();
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_rating_screen);
 
         // get dish to rate from bundle:
         Bundle bundle = this.getArguments();
@@ -61,9 +80,9 @@ public class RateRecommendationFragment extends Fragment {
         dishImage = (ImageView) view.findViewById(R.id.dish_image);
         dishName = (TextView) view.findViewById(R.id.dish_name);
         restaurantName = (TextView) view.findViewById(R.id.rate_restaurant_name);
-        addPhotoButton = (FloatingActionButton) view.findViewById(R.id.add_photo_button);
+        FloatingActionButton addPhotoButton = (FloatingActionButton) view.findViewById(R.id.add_photo_button);
         stars = (RatingBar) view.findViewById(R.id.ratingBar);
-        submitButton = (Button) view.findViewById(R.id.submit_button);
+        Button submitButton = (Button) view.findViewById(R.id.submit_button);
 
         stars.setOnRatingBarChangeListener((ratingBar, v, b) -> {
             rating = stars.getRating();
@@ -83,6 +102,7 @@ public class RateRecommendationFragment extends Fragment {
 
         // listeners
         submitButton.setOnClickListener(view1 -> {
+            progressBar.setVisibility(View.VISIBLE);
             Map<String, Object> dishRating = new HashMap<>();
             dishRating.put("Dish_Name", dishName.getText().toString());
             dishRating.put("Rating", rating);
@@ -90,6 +110,7 @@ public class RateRecommendationFragment extends Fragment {
             app.info.database.collection("users").document(app.info.myID)
                     .collection("Ratings").document(dishToRateID).set(dishRating)
                     .addOnCompleteListener(task -> {
+                        progressBar.setVisibility(View.GONE);
                         // if this dish wad already rated by the user:
                         if (task.isSuccessful()){
                             app.info.removeDishFromToRate(dishToRateID);
@@ -102,6 +123,76 @@ public class RateRecommendationFragment extends Fragment {
                         }
                     });
         });
+
+        addPhotoButton.setOnClickListener(view12 -> {
+            // check runtime permission
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (getActivity().checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    // permission not granted, request it.
+                    String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                    // show popup
+                    requestPermissions(permissions, PERMISSION_CODE);
+                }
+                else {
+                    // permission already granted
+                    pickImageFromGallery();
+                }
+            }
+            else {
+                // system os is less then marshmallow
+                pickImageFromGallery();
+            }
+
+        });
+    }
+
+    private void pickImageFromGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType("image/*");
+        startActivityForResult(intent, IMAGE_PICK_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults){
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case PERMISSION_CODE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    // permission was granted
+                    pickImageFromGallery();
+                }
+                else {
+                    Toast.makeText(getContext(), "Permission denied!", Toast.LENGTH_SHORT).show();
+                }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        progressBar.setVisibility(View.VISIBLE); // todo: not sure this should be here
+        if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            progressBar.setVisibility(View.GONE); // todo: not sure this should be here
+            Uri imageUri = data.getData();
+            StorageReference storageReference = app.info.firebaseStorage.getReference();
+            String ts = String.valueOf(System.currentTimeMillis()/1000);
+            StorageReference photoRef = storageReference.child(dishToRateID + "/" + app.info.myID + ts);
+            photoRef.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Log.e("SUCCESS UPLOADING", "photo");
+                    photoRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.e("The uri is ", uri.toString());
+                            HomeScreen homeScreen = (HomeScreen) getActivity();
+                            homeScreen.addUriToUpload(dishToRateID, uri);
+                            sharedViewModel.getUriLiveData().setValue(homeScreen.urisToUpload);
+                        }
+                    });
+                }
+            });
+
+        }
     }
 
     @Override

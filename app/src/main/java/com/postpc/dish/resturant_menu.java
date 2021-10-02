@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class resturant_menu extends Fragment {
+public class resturant_menu extends Fragment implements DishesAdapter.ContentListener {
 
     private ResturantMenuViewModel mViewModel;
     private SharedViewModel sharedViewModel;
@@ -63,10 +64,12 @@ public class resturant_menu extends Fragment {
         app.runWork2();
 
         Context context = getContext();
+        Bundle arguments = getArguments();
+        String restaurant = arguments.getString("restaurant");
 
         database = FirebaseFirestore.getInstance();
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
-        restaurant = sharedViewModel.getRestuarant();
+//        restaurant = sharedViewModel.getRestuarant();
 
         recycler_view = view.findViewById(R.id.list_of_dishes);
         vertical_decorator = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
@@ -77,15 +80,12 @@ public class resturant_menu extends Fragment {
         recycler_view.addItemDecoration(vertical_decorator);
         recycler_view.addItemDecoration(horizontal_decorator);
         dishes = new ArrayList<>();
-        adapter = new DishesAdapter();
+        adapter = new DishesAdapter(this::onItemClicked);
 //        adapter.setDishesAdapter(dishes);
 
         recycler_view.setHasFixedSize(true);
         recycler_view.setLayoutManager(new GridLayoutManager(getContext(), 2));
         recycler_view.setAdapter(adapter);
-
-        Bundle arguments = getArguments();
-        String restaurant = arguments.getString("restaurant");
 
         TextView restaurant_name = view.findViewById(R.id.restaurant_name);
         ImageView restaurant_image = view.findViewById(R.id.image_restaurant);
@@ -146,6 +146,23 @@ public class resturant_menu extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ResturantMenuViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    @Override
+    public void onItemClicked(@NonNull DishItem item) {
+        Bundle arguments = new Bundle();
+        app.info.database.collection("all-dishes").whereEqualTo("name", item.name).whereEqualTo("restaurant_name", item.restaurant_name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()) {
+                    arguments.putString("dishId", documentSnapshot.getId());
+                    arguments.putSerializable("dish", item);
+                    Fragment galleryFragment = new GalleryFragment();
+                    galleryFragment.setArguments(arguments);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment_container, galleryFragment).addToBackStack(null).commit();
+                }
+            }
+        });
     }
 
 }

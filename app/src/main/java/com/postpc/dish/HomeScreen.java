@@ -3,8 +3,11 @@ package com.postpc.dish;
 import static com.google.firebase.auth.EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD;
 import static com.google.firebase.auth.GoogleAuthProvider.GOOGLE_SIGN_IN_METHOD;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -24,12 +27,17 @@ import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.FieldValue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public class HomeScreen extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -40,10 +48,12 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
     FirebaseAuth auth;
     private DrawerLayout drawer;
     private GoogleSignInClient mGoogleSignInClient;
+    HashMap<String, List<String>> urisToUpload;
     TextView userName;
     TextView email;
     Intent intentCreatedMe;
     InitUserDishDataViewModel initUserDishDataViewModel;
+    SharedViewModel sharedViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +74,9 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
 
         app = (DishApplication) getApplicationContext();
+
+        sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
+
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -128,6 +141,22 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
         };
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.
         initUserDishDataViewModel.getemailOtherUserCalcSimLiveData().observe(this, emailOtherUserCalcLiveDataObserver);
+
+        final Observer<HashMap<String, List<String>>> uriObserver = toUpload -> {
+
+            for(Map.Entry<String, List<String>> dish_photo_uri: urisToUpload.entrySet()) {
+                for(String uri : dish_photo_uri.getValue()) {
+                    app.info.database.collection("all-dishes").document(dish_photo_uri.getKey()).update("photos", FieldValue.arrayUnion(uri)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Log.e("UPLOADED", "successfully");
+                        }
+                    });
+                }
+            }
+        };
+
+        sharedViewModel.getUriLiveData().observe(this, uriObserver);
     }
 
     @Override
@@ -230,4 +259,20 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                     replace(R.id.nav_fragment_container, WelcomeScreenFragment.newInstance()).commit();
         });
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void addUriToUpload(String dish_id, Uri uri) {
+        if(urisToUpload == null) {
+            urisToUpload = new HashMap<>();
+        }
+        if (urisToUpload.get(dish_id) == null) {
+            urisToUpload.put(dish_id, new ArrayList<>());
+        }
+        urisToUpload.get(dish_id).add(uri.toString());
+    }
+
 }
