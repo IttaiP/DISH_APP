@@ -34,6 +34,7 @@
             android:exported="true"
             android:screenOrientation="portrait"
             tools:ignore="Instantiatable" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -44,6 +45,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
 
         <meta-data
             android:name="preloaded_fonts"

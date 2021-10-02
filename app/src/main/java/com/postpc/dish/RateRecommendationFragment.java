@@ -1,18 +1,12 @@
 package com.postpc.dish;
 
 import static android.app.Activity.RESULT_OK;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.DashPathEffect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,26 +20,16 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 //import pub.devrel.easypermissions.AfterPermissionGranted;
 //import pub.devrel.easypermissions.EasyPermissions;
@@ -56,15 +40,12 @@ public class RateRecommendationFragment extends Fragment {
     private static final int PERMISSION_CODE = 1001;
 
     private DishApplication app;
-    private FirebaseAuth auth;
     private RateRecommendationViewModel mViewModel;
     private SharedViewModel sharedViewModel;
     private RatingBar stars;
     private String dishToRateID = null;
     private ImageView dishImage;
     private TextView dishName, restaurantName;
-    private FloatingActionButton addPhotoButton;
-    private Button submitButton;
     private ProgressBar progressBar;
     private float rating;
 
@@ -85,7 +66,7 @@ public class RateRecommendationFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.RateRecommendationViewModel.class);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         app = (DishApplication) getActivity().getApplication();
-        auth = FirebaseAuth.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_rating_screen);
 
         // get dish to rate from bundle:
@@ -99,9 +80,9 @@ public class RateRecommendationFragment extends Fragment {
         dishImage = (ImageView) view.findViewById(R.id.dish_image);
         dishName = (TextView) view.findViewById(R.id.dish_name);
         restaurantName = (TextView) view.findViewById(R.id.rate_restaurant_name);
-        addPhotoButton = (FloatingActionButton) view.findViewById(R.id.add_photo_button);
+        FloatingActionButton addPhotoButton = (FloatingActionButton) view.findViewById(R.id.add_photo_button);
         stars = (RatingBar) view.findViewById(R.id.ratingBar);
-        submitButton = (Button) view.findViewById(R.id.submit_button);
+        Button submitButton = (Button) view.findViewById(R.id.submit_button);
 
         stars.setOnRatingBarChangeListener((ratingBar, v, b) -> {
             rating = stars.getRating();
