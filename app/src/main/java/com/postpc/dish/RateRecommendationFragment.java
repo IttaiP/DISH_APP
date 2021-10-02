@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -64,6 +65,7 @@ public class RateRecommendationFragment extends Fragment {
     private TextView dishName, restaurantName;
     private FloatingActionButton addPhotoButton;
     private Button submitButton;
+    private ProgressBar progressBar;
     private float rating;
 
     public static RateRecommendationFragment newInstance() {
@@ -84,6 +86,7 @@ public class RateRecommendationFragment extends Fragment {
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
         app = (DishApplication) getActivity().getApplication();
         auth = FirebaseAuth.getInstance();
+        progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_rating_screen);
 
         // get dish to rate from bundle:
         Bundle bundle = this.getArguments();
@@ -118,6 +121,7 @@ public class RateRecommendationFragment extends Fragment {
 
         // listeners
         submitButton.setOnClickListener(view1 -> {
+            progressBar.setVisibility(View.VISIBLE);
             Map<String, Object> dishRating = new HashMap<>();
             dishRating.put("Dish_Name", dishName.getText().toString());
             dishRating.put("Rating", rating);
@@ -125,6 +129,7 @@ public class RateRecommendationFragment extends Fragment {
             app.info.database.collection("users").document(app.info.myID)
                     .collection("Ratings").document(dishToRateID).set(dishRating)
                     .addOnCompleteListener(task -> {
+                        progressBar.setVisibility(View.GONE);
                         // if this dish wad already rated by the user:
                         if (task.isSuccessful()){
                             app.info.removeDishFromToRate(dishToRateID);
@@ -183,7 +188,9 @@ public class RateRecommendationFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        progressBar.setVisibility(View.VISIBLE); // todo: not sure this should be here
         if (resultCode == RESULT_OK && requestCode == IMAGE_PICK_CODE){
+            progressBar.setVisibility(View.GONE); // todo: not sure this should be here
             Uri imageUri = data.getData();
             StorageReference storageReference = app.info.firebaseStorage.getReference();
             String ts = String.valueOf(System.currentTimeMillis()/1000);
