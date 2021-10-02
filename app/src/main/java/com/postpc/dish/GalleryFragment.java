@@ -10,17 +10,27 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.List;
 
 public class GalleryFragment extends Fragment {
 
     private GalleryViewModel mViewModel;
     private RecyclerView recyclerView;
-//    private GalleryImageAdapter adapter;
+    private GalleryImageAdapter adapter;
+    private ImageView realDishPhoto;
+    private TextView dishName;
     private DishApplication app;
 
     public static GalleryFragment newInstance() {
@@ -36,16 +46,37 @@ public class GalleryFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        adapter = new GalleryImageAdapter();
-        recyclerView = view.findViewById(R.id.photos_by_users);
+        adapter = new GalleryImageAdapter();
+        recyclerView = view.findViewById(R.id.photos_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
-//        recyclerView.setAdapter(adapter);
+        recyclerView.setAdapter(adapter);
 
         app = (DishApplication)getActivity().getApplication().getApplicationContext();
 
-        StorageReference storageReference = app.info.firebaseStorage.getReference();
+        Bundle arguments = getArguments();
+        DishItem dish = (DishItem) arguments.getSerializable("dish");
+        String dishId = arguments.getString("dishId");
 
+        realDishPhoto = view.findViewById(R.id.dish_image);
+        dishName = view.findViewById(R.id.dish_name);
+
+        dishName.setText(dish.name);
+        int resourceId = getContext().getResources().getIdentifier(dish.photo, "drawable",
+                getContext().getPackageName());
+        realDishPhoto.setImageResource(resourceId);
+        app.info.database.collection("all-dishes").document(dishId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot documentSnapshot = task.getResult();
+                List<String> uris = (List<String>) documentSnapshot.get("photos");
+                for(String uri : uris) {
+                    Log.e("CURRENT URI", uri.toString());
+                    adapter.addUri(uri);
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
 
     @Override
@@ -54,5 +85,6 @@ public class GalleryFragment extends Fragment {
         mViewModel = new ViewModelProvider(this).get(GalleryViewModel.class);
         // TODO: Use the ViewModel
     }
+
 
 }

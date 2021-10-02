@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@id/dish_name"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_of_dishes"
+        android:id="@+id/photos_recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="450dp"
         android:layout_marginStart="1dp"
