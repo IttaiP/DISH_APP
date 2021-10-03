@@ -58,8 +58,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:20.0.1'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    implementation 'com.github.AppIntro:AppIntro:6.1.0'
     implementation 'com.github.pires:obd-java-api:1.0'
+    implementation 'com.github.AppIntro:AppIntro:6.0.0'
 
     def nav_version = "2.3.5"
 

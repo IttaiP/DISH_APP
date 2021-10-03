@@ -1,4 +1,7 @@
 package com.postpc.dish;
 
-public class IntroSlider extends {
+import com.github.appintro.AppIntro;
+
+public class IntroSlider extends AppIntro {
+
 }
