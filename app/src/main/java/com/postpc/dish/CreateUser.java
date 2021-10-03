@@ -102,6 +102,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.create_user_register_button:
                 registerUser();
+                Intent intent = new Intent(getContext(), IntroSlider.class); //todo: make sure
+                startActivity(intent); //todo: make sure
                 break;
         }
     }
@@ -149,6 +151,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         writeNewUserToFirestoreDatabase(true);
+                        Intent intent = new Intent(getContext(), IntroSlider.class); //todo: make sure
+                        startActivity(intent); //todo: make sure
 
                     } else {
                         // If sign in fails, display a message to the user.
@@ -230,7 +234,6 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         app.info.setMyID(FirebaseAuth.getInstance().getCurrentUser().getUid());
         app.info.setUserEmail(user.email);
 
-
         FirebaseFirestore.getInstance().collection("users").
                 document(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .set(user)
@@ -241,7 +244,6 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                                 "User has been registered successfully!",
                                 Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
-//                        app.info.myID = mAuth.getCurrentUser().getUid();
                         app.info.setMyID(FirebaseAuth.getInstance().getCurrentUser().getUid());
                         app.info.setUserEmail(mAuth.getCurrentUser().getEmail());
                         NavHostFragment navHostFragment = (NavHostFragment) requireActivity()

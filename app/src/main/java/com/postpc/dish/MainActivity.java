@@ -2,10 +2,17 @@ package com.postpc.dish;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.work.WorkInfo;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,8 +32,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         app = (DishApplication) getApplication();
 
-
-
+        if (app.info.myID != null) {
+            Log.e("FIRST IF", "in the first if");
+            if (!app.info.myID.isEmpty()) {
+                Log.e("SECOND IF", "in the second if");
+                FragmentManager manager = getFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                Fragment fragment = new InitUserDishDataFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.nav_host_fragment, fragment).addToBackStack(null).commit();
+            }
+        }
     }
 
 //    @RequiresApi(api = Build.VERSION_CODES.P)
