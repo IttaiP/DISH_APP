@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class GPSScanner {
+    Double ONE_KM_TRANSLATE = 0.009;
     LocationManager locationManager;
     BroadcastReceiver GPSScanReceiver;
 
@@ -123,8 +124,8 @@ public class GPSScanner {
 
 
                     for (int i = 0; i < restaurants.size(); ++i) {
-                        if (latitude > latitudes.get(i) - (0.01 * this.getCurrentKM().getValue()) && latitude < latitudes.get(i) + (0.01 * this.getCurrentKM().getValue())) {
-                            if (longitude > longitudes.get(i) - (0.01 * this.getCurrentKM().getValue()) && latitude < longitudes.get(i) + (0.01 * this.getCurrentKM().getValue())) {
+                        if (latitude > latitudes.get(i) - (ONE_KM_TRANSLATE * this.getCurrentKM().getValue()) && latitude < latitudes.get(i) + (ONE_KM_TRANSLATE * this.getCurrentKM().getValue())) {
+                            if (longitude > longitudes.get(i) - (ONE_KM_TRANSLATE * this.getCurrentKM().getValue()) && latitude < longitudes.get(i) + (ONE_KM_TRANSLATE * this.getCurrentKM().getValue())) {
                                 restaurantsInRange.add(restaurants.get(i));
                                 this.getRestaurants().setValue(restaurantsInRange);
 

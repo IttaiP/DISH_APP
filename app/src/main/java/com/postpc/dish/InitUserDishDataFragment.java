@@ -49,6 +49,7 @@ import com.yuyakaido.android.cardstackview.SwipeableMethod;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -344,6 +345,8 @@ public class InitUserDishDataFragment extends Fragment {
 //                        documentReference.update("restaurantName", FieldValue.delete());
 //                    }
                     dishes = Objects.requireNonNull(task.getResult()).toObjects(DishItem.class);
+                    Collections.shuffle(dishes);
+
                     Log.d("Name is", dishes.get(0).name);
                     myCallback.onCallback(dishes);
                                     Log.d("dishes", dishes.get(0).name);

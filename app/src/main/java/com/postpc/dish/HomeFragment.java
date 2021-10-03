@@ -79,6 +79,10 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     Button minusButton;
     TextView kmTextView;
     boolean searchByKmUpdate;
+    int NOT_PRESSED = 0;
+    final int WIFI = 1;
+    final int GPS = 2;
+    int whichButtonPressed = 0;
 
     private Observer<List<String>> restsObserver;
     private Observer<List<String>> restsGPSObserver;
@@ -235,6 +239,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
 
         enable_wifi.setOnClickListener(view1 -> {
+            whichButtonPressed = WIFI;
             buttonPressed = !buttonPressed;
             if(!buttonPressed) {
                 restaurantsAdapter.setAdapter(restaurants);
@@ -263,6 +268,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         enable_GPS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                whichButtonPressed = GPS;
                 EnableLocation();
                 enable_GPS.setVisibility(getView().GONE);
                 mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
@@ -336,26 +342,30 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             new ActivityResultContracts.RequestPermission(),
             result -> {
                 if (result) {
-                    Log.e("SUCCESS", "onActivityResult: PERMISSION GRANTED");
-                    searchByKmUpdate = true;
-                    app.gpsScanner.search(getActivity());
-                    if(app.wifiScanner.wifiManager.isWifiEnabled()){
-                        boolean success = app.wifiScanner.wifiManager.startScan();
-                        if (!success) {
-                            app.wifiScanner.scanFailure();
+                    switch (whichButtonPressed){
+                        case WIFI:
+                            if(app.wifiScanner.wifiManager.isWifiEnabled()){
+                            boolean success = app.wifiScanner.wifiManager.startScan();
+                            if (!success) {
+                                app.wifiScanner.scanFailure();
 
+                            }
+                            Log.e("FAIL REASON", String.valueOf(success));
                         }
-                        Log.e("FAIL REASON", String.valueOf(success));
-                    }
-                    else {
-                        app.wifiScanner.wifiManager.setWifiEnabled(true);
-                        boolean success = app.wifiScanner.wifiManager.startScan();
-                        if (!success) {
-                            app.wifiScanner.scanFailure();
+                        else {
+                            app.wifiScanner.wifiManager.setWifiEnabled(true);
+                            boolean success = app.wifiScanner.wifiManager.startScan();
+                            if (!success) {
+                                app.wifiScanner.scanFailure();
+                            }
+                            app.wifiScanner.wifiManager.setWifiEnabled(false);
                         }
-                        app.wifiScanner.wifiManager.setWifiEnabled(false);
+                        break;
+                        case GPS:
+                            searchByKmUpdate = true;
+                            app.gpsScanner.search(getActivity());
                     }
-
+                    whichButtonPressed = NOT_PRESSED;
                 } else {
                     Log.e("FAILURE", "onActivityResult: PERMISSION DENIED");
                     if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
