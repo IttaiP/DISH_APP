@@ -121,8 +121,6 @@ public class GPSScanner {
 //                    this.getRestaurants().setValue(restaurantsInRange);
 //                    restaurants.clear();
 
-//                    int currentkm = Integer.parseInt(kmView.getText().toString());
-
 
                     for (int i = 0; i < restaurants.size(); ++i) {
                         if (latitude > latitudes.get(i) - (0.01 * this.getCurrentKM().getValue()) && latitude < latitudes.get(i) + (0.01 * this.getCurrentKM().getValue())) {
