@@ -43,6 +43,7 @@ public class GPSScanner {
     List<String> GPSRestaurants;
     int notFoundCount;
     public MutableLiveData<List<String>> foundRestaurantsLiveData;
+    public MutableLiveData<Integer> currentKM;
 
     List<String> restaurants = new ArrayList<>();
     List<Double> latitudes = new ArrayList<>();
@@ -52,13 +53,12 @@ public class GPSScanner {
     final Looper looper = null;
     Criteria criteria;
 
-    private int currentKM;
 
 
     GPSScanner(DishApplication app) {
         this.app = app;
         notFoundCount = 0;
-        currentKM = 10; // todo: link with buttons
+        this.getCurrentKM().setValue(5); // todo: link with buttons
         initGPS();
     }
 
@@ -70,12 +70,15 @@ public class GPSScanner {
     }
 
     public void setCurrentKM(int currentKM) {
-        this.currentKM = currentKM;
+        this.currentKM.setValue(currentKM);
     }
 
-    public int getCurrentKM() {
-        return this.currentKM;
-    }
+    public MutableLiveData<Integer> getCurrentKM() {
+        if (currentKM == null) {
+            currentKM = new MutableLiveData<Integer>();
+        }
+        return currentKM;    }
+
 
 
 
@@ -122,8 +125,8 @@ public class GPSScanner {
 
 
                     for (int i = 0; i < restaurants.size(); ++i) {
-                        if (latitude > latitudes.get(i) - (0.01 * this.getCurrentKM()) && latitude < latitudes.get(i) + (0.01 * this.getCurrentKM())) {
-                            if (longitude > longitudes.get(i) - (0.01 * this.getCurrentKM()) && latitude < longitudes.get(i) + (0.01 * this.getCurrentKM())) {
+                        if (latitude > latitudes.get(i) - (0.01 * this.getCurrentKM().getValue()) && latitude < latitudes.get(i) + (0.01 * this.getCurrentKM().getValue())) {
+                            if (longitude > longitudes.get(i) - (0.01 * this.getCurrentKM().getValue()) && latitude < longitudes.get(i) + (0.01 * this.getCurrentKM().getValue())) {
                                 restaurantsInRange.add(restaurants.get(i));
                                 this.getRestaurants().setValue(restaurantsInRange);
 

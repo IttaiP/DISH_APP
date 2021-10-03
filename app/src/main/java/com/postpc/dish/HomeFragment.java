@@ -75,9 +75,15 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     private boolean readyToObserve;
     Button enable_wifi;
     Button enable_GPS;
+    Button plusButton;
+    Button minusButton;
+    TextView kmTextView;
+    boolean searchByKmUpdate;
 
     private Observer<List<String>> restsObserver;
     private Observer<List<String>> restsGPSObserver;
+    private Observer<Integer> kmObserver;
+
 
     private Observer<List<Uri>> uriObserver;
 
@@ -100,6 +106,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.HomeViewModel.class);
         mViewModel.activity = activity;
         readyToObserve = true;
+        searchByKmUpdate = false;
         wifiRestaurantsList = new ArrayList<>();
         GPSRestaurantsList = new ArrayList<>();
         dishesToRate = new ArrayList<>();
@@ -119,6 +126,10 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
         enable_wifi = view.findViewById(R.id.enable_wifi);
         enable_GPS = view.findViewById(R.id.enable_gps);
+        minusButton = view.findViewById(R.id.minus_button);
+        plusButton = view.findViewById(R.id.plus_button);
+        kmTextView = view.findViewById(R.id.km);
+        initKMListeners();
 
         restaurants_recycler_view.setHasFixedSize(true);
         restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
@@ -326,6 +337,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             result -> {
                 if (result) {
                     Log.e("SUCCESS", "onActivityResult: PERMISSION GRANTED");
+                    searchByKmUpdate = true;
                     app.gpsScanner.search(getActivity());
                     if(app.wifiScanner.wifiManager.isWifiEnabled()){
                         boolean success = app.wifiScanner.wifiManager.startScan();
@@ -406,5 +418,41 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                 }
             }
         });
+    }
+
+    public void initKMListeners(){
+        minusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentKM = app.gpsScanner.getCurrentKM().getValue();
+                if(currentKM > 1){
+                    if(searchByKmUpdate){
+                        app.gpsScanner.search(getActivity());
+                    }
+                    app.gpsScanner.setCurrentKM(currentKM - 1);
+                }
+            }
+        });
+
+        plusButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentKM = app.gpsScanner.getCurrentKM().getValue();
+                if(currentKM < 10){
+                    if(searchByKmUpdate){
+                        app.gpsScanner.search(getActivity());
+                    }
+                    app.gpsScanner.setCurrentKM(currentKM + 1);
+                }
+            }
+        });
+
+        kmObserver = km -> {
+            kmTextView.setText(km.toString());
+        };
+
+        app.gpsScanner.getCurrentKM().observe(getViewLifecycleOwner(), kmObserver);
+
+
     }
 }
