@@ -40,7 +40,7 @@ public class IntroSlider extends AppIntro {
 
         addSlide(AppIntroFragment.newInstance("Get your custom menu",
                 "Click on the button below to find out which of the dishes in the restaurant there is a high probability you will like.",
-                R.drawable.custom_menu_demo, Color.rgb(167, 196, 188)));
+                R.drawable.custom_menu_demo, Color.rgb(2, 71, 94)));
 
         addSlide(AppIntroFragment.newInstance("See real photos by other users",
                 "Click on the dish to see real photos of it taken by other users.",
