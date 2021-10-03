@@ -32,27 +32,27 @@ public class IntroSlider extends AppIntro {
                 "Choose the type of food at the top of the screen.\n " +
                         "Swipe the dish to the direction you see fit, or click the red 'X' button if you do not want to answer.\n" +
                         "The more dishes you swipe, the better our offers will be :)",
-                R.drawable.swipe_demo, Color.YELLOW));
+                R.drawable.swipe_demo, Color.rgb(47, 93, 98)));
 
         addSlide(AppIntroFragment.newInstance("Search restaurant",
                 "You can search restaurant by name, location or wifi.",
-                R.drawable.search_demo, Color.rgb(19, 42, 50)));
+                R.drawable.search_demo, Color.rgb(94, 139, 126)));
 
         addSlide(AppIntroFragment.newInstance("Get your custom menu",
                 "Click on the button below to find out which of the dishes in the restaurant there is a high probability you will like.",
-                R.drawable.custom_menu_demo, Color.BLUE));
+                R.drawable.custom_menu_demo, Color.rgb(167, 196, 188)));
 
         addSlide(AppIntroFragment.newInstance("See real photos by other users",
                 "Click on the dish to see real photos of it taken by other users.",
-                R.drawable.photos_by_users_demo, Color.GREEN));
+                R.drawable.photos_by_users_demo, Color.rgb(57, 166, 163)));
 
         addSlide(AppIntroFragment.newInstance("Make an order",
                 "Swipe left the dish you want.",
-                R.drawable.order_demo, Color.RED));
+                R.drawable.order_demo, Color.rgb(0, 87, 146)));
 
         addSlide(AppIntroFragment.newInstance("Rate out recommendation",
                 "After you tried the dish, tell us what you thought by rating it.",
-                R.drawable.rate_demo, Color.MAGENTA));
+                R.drawable.rate_demo, Color.rgb(35, 62, 139)));
 
         setSkipButtonEnabled(true);
     }
