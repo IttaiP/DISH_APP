@@ -38,6 +38,7 @@ import io.paperdb.Paper;
 public class DishApplication extends Application implements LifecycleOwner {
     public UserInfoStorage info;
     public WifiScanner wifiScanner;
+    public GPSScanner gpsScanner;
     boolean calcWasRun;
     private Activity mCurrentActivity = null;
     ListenableFuture<WorkInfo> workInfo;
@@ -55,6 +56,7 @@ public class DishApplication extends Application implements LifecycleOwner {
 
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
+        gpsScanner = new GPSScanner(this);
 
 
 //        info.userEmail = info.sp.getString("email", null);

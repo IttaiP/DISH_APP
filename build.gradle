@@ -3,10 +3,11 @@ buildscript {
     ext.kotlin_version = '1.4.10'
 
     repositories {
-        maven { url "https://jitpack.io" }
         google()
         mavenCentral()
         jcenter()
+        maven { url "https://jitpack.io" }
+
     }
 
     dependencies {
@@ -19,6 +20,7 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
+
 
 task clean(type: Delete) {
     delete rootProject.buildDir

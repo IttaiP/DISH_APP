@@ -54,7 +54,10 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
     private HomeViewModel mViewModel;
     private wifiRestaurantsAdapter restaurantsAdapter;
+    private wifiRestaurantsAdapter GPSrestaurantsAdapter;
+
     private RecyclerView restaurants_recycler_view;
+    private RecyclerView GPS_restaurants_recycler_view;
     private RecyclerView dishes_recycler_view;
     private dishRateAdapter dishRateAdapter;
 
@@ -65,13 +68,17 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
     List<String> scannedRestaurants;
     private ArrayList<Restaurant> restaurants;
     private ArrayList<Restaurant> wifiRestaurantsList;
+    private ArrayList<Restaurant> GPSRestaurantsList;
     private ArrayList<DishItem> dishesToRate;
     private HashMap<String, Uri> urisToUpload;
     private boolean buttonPressed;
     private boolean readyToObserve;
     Button enable_wifi;
+    Button enable_GPS;
 
     private Observer<List<String>> restsObserver;
+    private Observer<List<String>> restsGPSObserver;
+
     private Observer<List<Uri>> uriObserver;
 
 //    public static HomeFragment newInstance() {
@@ -94,24 +101,36 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         mViewModel.activity = activity;
         readyToObserve = true;
         wifiRestaurantsList = new ArrayList<>();
+        GPSRestaurantsList = new ArrayList<>();
         dishesToRate = new ArrayList<>();
         restaurants_recycler_view = view.findViewById(R.id.restaurants_recycler_view);
+        GPS_restaurants_recycler_view = view.findViewById(R.id.restaurants_gps_recycler_view);
+
         restaurantsAdapter = new wifiRestaurantsAdapter(wifiRestaurantsList);
+        GPSrestaurantsAdapter = new wifiRestaurantsAdapter(GPSRestaurantsList);
 
         buttonPressed = false;
         HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
 
-
-
         TextView not_found = view.findViewById(R.id.not_found);
         not_found.setVisibility(view.GONE);
+        TextView not_found_gps = view.findViewById(R.id.not_found_gps);
+        not_found_gps.setVisibility(view.GONE);
+
         enable_wifi = view.findViewById(R.id.enable_wifi);
+        enable_GPS = view.findViewById(R.id.enable_gps);
+
         restaurants_recycler_view.setHasFixedSize(true);
         restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
         restaurants_recycler_view.setAdapter(restaurantsAdapter);
+        GPS_restaurants_recycler_view.setHasFixedSize(true);
+        GPS_restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        GPS_restaurants_recycler_view.setAdapter(GPSrestaurantsAdapter);
 
         dishes_recycler_view = view.findViewById(R.id.dishes_recycler_view);
         dishRateAdapter = new dishRateAdapter(this::onItemClicked);
+
+
         TextView no_dishes_to_rate = view.findViewById(R.id.no_dishes_to_rate);
         no_dishes_to_rate.setVisibility(view.GONE);
         dishes_recycler_view.setHasFixedSize(true);
@@ -124,6 +143,8 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                 if(task.isSuccessful()) {
                     restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
                     restaurantsAdapter.setAdapter(restaurants);
+                    GPSrestaurantsAdapter.setAdapter(restaurants);
+
                 }
                 else {
                     Log.e("Error", "Firebase " + task.getException().getMessage());
@@ -173,6 +194,35 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             }
         };
 
+        app.wifiScanner.getRestaurants().observe(getViewLifecycleOwner(), restsObserver);
+
+        restsGPSObserver = GPSRestaurants -> {
+            Log.e("restsGPSObserver",GPSRestaurants.toString());
+            GPSRestaurantsList.clear();
+            if(restaurants==null) return;
+            if(!GPSRestaurants.isEmpty()){
+                not_found_gps.setVisibility(View.VISIBLE);
+                not_found_gps.setVisibility(View.GONE);
+
+                for(Restaurant rest: restaurants){
+                    if(GPSRestaurants.contains(rest.name)){
+                        GPSRestaurantsList.add(rest);
+                    }
+                }
+                GPSrestaurantsAdapter.setAdapter(GPSRestaurantsList);
+                GPSrestaurantsAdapter.notifyDataSetChanged();
+
+            }
+            else{
+                enable_GPS.setVisibility(View.VISIBLE);
+                enable_GPS.animate().translationY(25f);
+                not_found_gps.setVisibility(View.VISIBLE);
+            }
+        };
+
+        app.gpsScanner.getRestaurants().observe(getViewLifecycleOwner(), restsGPSObserver);
+
+
         enable_wifi.setOnClickListener(view1 -> {
             buttonPressed = !buttonPressed;
             if(!buttonPressed) {
@@ -198,6 +248,19 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                 }
             });
         }}
+
+        enable_GPS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EnableLocation();
+                enable_GPS.setVisibility(getView().GONE);
+                mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+
+
+
+
+            }
+        });
     }
 
 
@@ -263,6 +326,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             result -> {
                 if (result) {
                     Log.e("SUCCESS", "onActivityResult: PERMISSION GRANTED");
+                    app.gpsScanner.search(getActivity());
                     if(app.wifiScanner.wifiManager.isWifiEnabled()){
                         boolean success = app.wifiScanner.wifiManager.startScan();
                         if (!success) {
@@ -294,6 +358,8 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                         });
                         snackbar.show();
                         enable_wifi.setVisibility(View.VISIBLE);
+                        enable_GPS.setVisibility(View.VISIBLE);
+
                     } else {
                         Snackbar snackbar = Snackbar
                                 .make(activity.getWindow().getDecorView(), "You Must Allow Location Permission Through App Settings!", Snackbar.LENGTH_INDEFINITE)
@@ -310,6 +376,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                                 });
                         snackbar.show();
                         enable_wifi.setVisibility(View.VISIBLE);
+                        enable_GPS.setVisibility(View.VISIBLE);
 
                     }
                 }
