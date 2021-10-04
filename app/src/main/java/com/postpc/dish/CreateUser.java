@@ -102,8 +102,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
         switch (view.getId()){
             case R.id.create_user_register_button:
                 registerUser();
-                Intent intent = new Intent(getContext(), IntroSlider.class); //todo: make sure
-                startActivity(intent); //todo: make sure
+//                Intent intent = new Intent(getContext(), IntroSlider.class); //todo: make sure
+//                startActivity(intent); //todo: make sure
                 break;
         }
     }
@@ -213,7 +213,6 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                         progressBar.setVisibility(View.GONE);
                     }});
     }
-
     private void writeNewUserToFirestoreDatabase(boolean withGoogle) {
         User user = null;
         if (withGoogle){
@@ -266,6 +265,8 @@ public class CreateUser extends Fragment implements View.OnClickListener {
                                 Toast.LENGTH_LONG).show();
                         progressBar.setVisibility(View.GONE);
                     }});
+        Intent intent = new Intent(getContext(), IntroSlider.class); //todo: make sure
+        startActivity(intent); //todo: make sure
     }
     // =============================================================================================
 }
