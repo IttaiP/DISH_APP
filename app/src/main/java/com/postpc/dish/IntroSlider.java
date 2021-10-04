@@ -29,8 +29,8 @@ public class IntroSlider extends AppIntro {
                 R.drawable.first_demo, Color.rgb(19, 42, 50)));
 
         addSlide(AppIntroFragment.newInstance("Swipe your opinion on the dish",
-                "Choose the type of food at the top of the screen.\n " +
-                        "Swipe the dish to the direction you see fit, or click the red 'X' button if you do not want to answer.\n" +
+                "Choose the type of food.\n " +
+                        "Swipe the dish to the direction you see fit.\n" +
                         "The more dishes you swipe, the better our offers will be :)",
                 R.drawable.swipe_demo, Color.rgb(47, 93, 98)));
 
@@ -43,14 +43,14 @@ public class IntroSlider extends AppIntro {
                 R.drawable.custom_menu_demo, Color.rgb(2, 71, 94)));
 
         addSlide(AppIntroFragment.newInstance("See real photos by other users",
-                "Click on the dish to see real photos of it taken by other users.",
+                "Click on the dish to see real photos taken by other users.",
                 R.drawable.photos_by_users_demo, Color.rgb(57, 166, 163)));
 
         addSlide(AppIntroFragment.newInstance("Make an order",
                 "Swipe left the dish you want.",
                 R.drawable.order_demo, Color.rgb(0, 87, 146)));
 
-        addSlide(AppIntroFragment.newInstance("Rate out recommendation",
+        addSlide(AppIntroFragment.newInstance("Rate our recommendation",
                 "After you tried the dish, tell us what you thought by rating it.",
                 R.drawable.rate_demo, Color.rgb(35, 62, 139)));
 
