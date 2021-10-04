@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
     @Override
     public void onBindViewHolder(@NonNull card_dish_holder holder, @SuppressLint("RecyclerView") int position) {
         holder.bind(dishes.get(position), context);
-        ImageView remove = holder.itemView.findViewById(R.id.remove);
+        Button remove = holder.itemView.findViewById(R.id.remove);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

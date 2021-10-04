@@ -54,6 +54,8 @@ public class GalleryFragment extends Fragment {
 
         app = (DishApplication)getActivity().getApplication().getApplicationContext();
 
+        TextView no_photos_uploaded = view.findViewById(R.id.no_photos_uploaded);
+        no_photos_uploaded.setVisibility(View.GONE);
         Bundle arguments = getArguments();
         DishItem dish = (DishItem) arguments.getSerializable("dish");
         String dishId = arguments.getString("dishId");
@@ -70,11 +72,16 @@ public class GalleryFragment extends Fragment {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot documentSnapshot = task.getResult();
                 List<String> uris = (List<String>) documentSnapshot.get("photos");
-                for(String uri : uris) {
-                    Log.e("CURRENT URI", uri.toString());
-                    adapter.addUri(uri);
+                if((uris != null) && (!uris.isEmpty())) {
+                    for (String uri : uris) {
+                        Log.e("CURRENT URI", uri.toString());
+                        adapter.addUri(uri);
+                    }
+                    adapter.notifyDataSetChanged();
                 }
-                adapter.notifyDataSetChanged();
+                else {
+                    no_photos_uploaded.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

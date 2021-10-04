@@ -23,6 +23,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -97,8 +98,9 @@ public class GetCustomMenuFragment extends Fragment {
                     database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(dish_recommended.getValue() != null) {
+                            if(dish_recommended.getValue() != null && dish_recommended.getValue() >= 50) {
                                 adapter.addDishes(Objects.requireNonNull(documentSnapshot.toObject(DishItem.class)), dish_recommended.getValue());
+                                Collections.sort(adapter.getDishesAdapter(), new SortByMatch());
                                 adapter.notifyDataSetChanged();
                             }
                         }

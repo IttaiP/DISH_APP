@@ -10,4 +10,8 @@
     <color name="dark_gray">#132a32</color>
     <color name="middle_grey">#2b4d59</color>
     <color name="light_grey">#6f7f85</color>
+    <color name="red">#DC143C</color>
+    <color name="yellow">#F0E68C</color>
+    <color name="green">#90EE90</color>
+    <color name="stars">#d3d62f</color>
 </resources>

@@ -4,6 +4,7 @@ import android.graphics.drawable.Drawable;
 import android.media.Image;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 public class DishItem implements Serializable {
     public String name;
@@ -39,4 +40,12 @@ public class DishItem implements Serializable {
 
     public float getMatch() { return this.match; }
 
+}
+
+class SortByMatch implements Comparator<DishItem>
+{
+    @Override
+    public int compare(DishItem dishItem_1, DishItem dishItem_2) {
+        return (int) -(dishItem_1.match - dishItem_2.match);
+    }
 }

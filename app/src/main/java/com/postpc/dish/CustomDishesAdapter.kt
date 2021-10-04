@@ -19,6 +19,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.postpc.dish.R
+import java.util.*
 
 class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallBack2()) {
 
@@ -93,3 +94,4 @@ private class DishDiffCallBack2 : DiffUtil.ItemCallback<DishItem>() {
     override fun areContentsTheSame(oldItem: DishItem, newItem: DishItem): Boolean =
         oldItem.name == newItem.name
 }
+

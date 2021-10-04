@@ -2,9 +2,9 @@
     <item android:state_window_focused="false" android:state_enabled="true"
         android:drawable="@drawable/background_description_dish" />
     <item android:state_pressed="true"
-        android:drawable="@drawable/background_description_pressed" />
+        android:drawable="@drawable/background_green_recommend" />
     <item android:state_selected="true"
-        android:drawable="@drawable/background_description_pressed" />
+        android:drawable="@drawable/background_green_recommend" />
     <item android:state_focused="true" android:state_enabled="true"
         android:drawable="@drawable/background_description_dish" />
     <item android:state_enabled="true"

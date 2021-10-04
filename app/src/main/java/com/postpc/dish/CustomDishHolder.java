@@ -58,11 +58,19 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
     }
 
 
-    @SuppressLint("DefaultLocale")
     public void bind(DishItem dish) {
         dish_name.setText(dish.getName());
         dish_description.setText(dish.getName());
         String num = String.format("%.2f", dish.getMatch());
         dish_score.setText("Matching is " + num);
+        if(dish.match >= 84) {
+            swipeRevealLayout.setBackgroundResource(R.drawable.background_green_recommend);
+        }
+        else if(dish.match >= 68) {
+            swipeRevealLayout.setBackgroundResource(R.drawable.background_yellow_recommend);
+        }
+        else {
+            swipeRevealLayout.setBackgroundResource(R.drawable.background_red_recommend);
+        }
     }
 }

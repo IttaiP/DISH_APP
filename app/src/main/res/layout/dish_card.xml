@@ -17,11 +17,13 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-    <ImageView
+    <Button
         android:id="@+id/remove"
         android:layout_height="80dp"
         android:layout_width="80dp"
-        android:src="@drawable/remove"
+        android:background="@drawable/rounded_courner"
+        android:text="skip"
+        android:textSize="18sp"
         android:layout_margin="15dp"
         android:layout_gravity="right"
         />
