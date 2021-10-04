@@ -65,17 +65,16 @@ class CustomDishesAdapter(val listener3: ContentListener) :
         viewBinderHelper.bind(holder.swipeRevealLayout, dishes[position].name)
         viewBinderHelper.closeLayout(dishes[position].name)
         holder.bind(dishes[position])
-        firestore = FirebaseFirestore.getInstance()
         order = holder.order
         linearLayout = holder.linearLayout;
         order.setOnClickListener { it ->
             app = it.context.applicationContext as DishApplication
-            firestore.collection("all-dishes")
+            app.info.database.collection("all-dishes")
                 .whereEqualTo("description", holder._dish_description.text.toString()).get()
                 .addOnCompleteListener {
                     if (it.isSuccessful){
                         for (documentSnapshot in it.result.documents){
-                            app.info.dishToRate.add(documentSnapshot.id)
+                            app.info.addDishToRate(documentSnapshot.id)
                             Log.e("ORDERED DISH ID:", documentSnapshot.id) // todo: to delete
                             Toast.makeText(context, "Ordered dish successfully!", Toast.LENGTH_SHORT).show()
                         }

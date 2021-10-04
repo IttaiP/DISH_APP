@@ -58,6 +58,10 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
         return dishes;
     }
 
+    public void removeDish(DishItem dish) {
+        dishes.remove(dish);
+    }
+
     public void addDish(DishItem dish) {
         this.dishes.add(dish);
     }

@@ -8,6 +8,8 @@ import com.postpc.dish.DishItem
 import com.postpc.dish.DishHolder
 import android.view.ViewGroup
 import android.view.LayoutInflater
+import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ListAdapter
@@ -19,6 +21,8 @@ import com.postpc.dish.R
 class DishesAdapter(val listener2: ContentListener) :
 ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
 
+    private lateinit var linearLayout: LinearLayout
+    private lateinit var order: LinearLayout
     private var dishes = emptyList<DishItem>()
     private var context: Context? = null
     private lateinit var app: DishApplication
@@ -36,12 +40,26 @@ ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
 
     override fun onBindViewHolder(holder: DishHolder, position: Int) {
         holder.bind(dishes[position])
-        var mAuth = FirebaseAuth.getInstance()
-        var database = FirebaseFirestore.getInstance()
-        // need to get uid from mAuth and then gets its User from firebase
-
-        var dish = holder._dish
-        dish.setOnClickListener() {
+        order = holder.order
+        linearLayout = holder.linearLayout
+        order.setOnClickListener { it ->
+            app = it.context.applicationContext as DishApplication
+            app.info.database.collection("all-dishes")
+                .whereEqualTo("description", holder._dish_description.text.toString()).get()
+                .addOnCompleteListener {
+                    if (it.isSuccessful){
+                        for (documentSnapshot in it.result.documents){
+                            app.info.addDishToRate(documentSnapshot.id)
+                            Log.e("ORDERED DISH ID:", documentSnapshot.id) // todo: to delete
+                            Toast.makeText(context, "Ordered dish successfully!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    else{
+                        Toast.makeText(context, "Dish was not found in database", Toast.LENGTH_SHORT).show()
+                    }
+                }
+        }
+        linearLayout.setOnClickListener() {
             listener2.onItemClicked(dishes[position])
         }
     }

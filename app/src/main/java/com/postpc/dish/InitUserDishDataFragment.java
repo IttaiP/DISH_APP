@@ -234,6 +234,7 @@ public class InitUserDishDataFragment extends Fragment {
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                 for (DocumentSnapshot document: task.getResult()) {
                     rateRecommendationViewModel.rateDish(rating, dish_name, document.getId());
+                    adapter.removeDish(document.toObject(DishItem.class));
                 }
             }
         });

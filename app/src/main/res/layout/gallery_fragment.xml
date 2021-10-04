@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:textSize="30sp"
         android:fontFamily="@font/bitter"
-        android:text="No photos uploaded yet :("
+        android:text="No photos uploaded yet"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
