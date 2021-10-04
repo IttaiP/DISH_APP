@@ -104,7 +104,7 @@ public class InitUserDishDataFragment extends Fragment {
                         Intent intent = new Intent(getContext(), HomeScreen.class);
                         intent.putExtra("Full Name", name);
                 intent.putExtra("Email", user.getEmail());
-//                app.runWork();
+                app.runWork();
                 try {
                     if(app.workInfo!=null&&app.workInfo.get()!=null){
                         if(app.workInfo.get().getState() != WorkInfo.State.SUCCEEDED){

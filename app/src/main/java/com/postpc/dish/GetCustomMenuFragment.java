@@ -3,6 +3,8 @@ package com.postpc.dish;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -41,6 +43,7 @@ public class GetCustomMenuFragment extends Fragment {
     private CustomDishesAdapter adapter;
     private List<DishItem> dishes;
     private String restaurant;
+    private TextView noReccomendationFound;
 
     public static GetCustomMenuFragment newInstance() {
         return new GetCustomMenuFragment();
@@ -59,6 +62,29 @@ public class GetCustomMenuFragment extends Fragment {
 
         GetCustomMenuViewModel customMenuViewModel = new ViewModelProvider(this).get(GetCustomMenuViewModel.class);
         Context context = getContext();
+
+        noReccomendationFound = view.findViewById(R.id.no_reccomendations_found);
+        noReccomendationFound.setAlpha(0);
+        noReccomendationFound.animate().setDuration(500).alpha(1).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                noReccomendationFound.animate().setDuration(500).alpha(0).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        noReccomendationFound.animate().setStartDelay(500).withEndAction(new Runnable() {
+                            @Override
+                            public void run() {
+                                noReccomendationFound.setText("No reccomendations found!");
+                                noReccomendationFound.animate().alpha(1).setDuration(500).start();
+                            }
+                        }).start();
+                    }
+                }).start();
+
+            }
+        }).start();
+
+
 
         database = FirebaseFirestore.getInstance();
 
@@ -93,12 +119,14 @@ public class GetCustomMenuFragment extends Fragment {
         final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {
             @Override
             public void onChanged(@Nullable final HashMap<String, Float> newReccomendations) {
+
                 for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishRecommendationScores.entrySet()) {
 //                    Log.e("IM IN ", customMenuViewModel.app.info.DishReccomendationScores.toString());
                     database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             if(dish_recommended.getValue() != null && dish_recommended.getValue() >= 50) {
+                                noReccomendationFound.setVisibility(View.GONE);
                                 adapter.addDishes(Objects.requireNonNull(documentSnapshot.toObject(DishItem.class)), dish_recommended.getValue());
                                 Collections.sort(adapter.getDishesAdapter(), new SortByMatch());
                                 adapter.notifyDataSetChanged();
