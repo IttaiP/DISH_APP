@@ -16,7 +16,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.postpc.dish.R
 
-class DishesAdapter(val listener: dishRateAdapter.ContentListener) :
+class DishesAdapter(val listener2: ContentListener) :
 ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
 
     private var dishes = emptyList<DishItem>()
@@ -42,7 +42,7 @@ ListAdapter<DishItem, DishHolder>(DishDiffCallBack()) {
 
         var dish = holder._dish
         dish.setOnClickListener() {
-            listener.onItemClicked(dishes[position])
+            listener2.onItemClicked(dishes[position])
         }
     }
 

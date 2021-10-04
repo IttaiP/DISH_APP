@@ -12,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.ListAdapter
+import com.chauthai.swipereveallayout.SwipeRevealLayout
 import com.chauthai.swipereveallayout.ViewBinderHelper
 import com.google.common.base.Predicates.not
 import com.google.firebase.auth.FirebaseAuth
@@ -21,8 +22,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.postpc.dish.R
 import java.util.*
 
-class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallBack2()) {
+class CustomDishesAdapter(val listener3: ContentListener) :
+    ListAdapter<DishItem, CustomDishHolder>(DishDiffCallBack2()){
 
+    private lateinit var linearLayout: LinearLayout
     private var setDishes = mutableSetOf<String>()
     private var dishes = mutableListOf<DishItem>()
     private var context: Context? = null
@@ -46,6 +49,8 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
             this.dishes.add(dish)
             this.setDishes.add(dish.photo);
         }
+
+        Log.e("dishes", this.dishes.toString())
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomDishHolder {
@@ -62,6 +67,7 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
         holder.bind(dishes[position])
         firestore = FirebaseFirestore.getInstance()
         order = holder.order
+        linearLayout = holder.linearLayout;
         order.setOnClickListener { it ->
             app = it.context.applicationContext as DishApplication
             firestore.collection("all-dishes")
@@ -79,11 +85,18 @@ class CustomDishesAdapter: ListAdapter<DishItem, CustomDishHolder>(DishDiffCallB
                     }
                 }
         }
-
+        linearLayout.setOnClickListener {
+            listener3.onItemClicked(dishes[position])
+        }
 
     }
 
     override fun getItemCount() = dishes.size
+
+
+    interface ContentListener {
+        fun onItemClicked(item: DishItem)
+    }
 
 }
 

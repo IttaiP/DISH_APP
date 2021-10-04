@@ -23,7 +23,7 @@ public class GalleryImageHolder extends RecyclerView.ViewHolder {
     public void bind(String uri, Context context) {
         Log.e("IM HERE", "loading");
         Picasso.with(context).load(uri).placeholder(R.drawable.loading)
-                .error(R.drawable.taqueria).into(photo_of_dish);
+                .error(R.drawable.loading).into(photo_of_dish);
     }
 
 
