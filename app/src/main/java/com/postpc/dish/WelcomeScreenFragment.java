@@ -146,6 +146,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         app = (DishApplication)getActivity().getApplication();
+        app.loggedIn = true;
 
         // get text views
         email = view.findViewById(R.id.welcome_screen_EmailAddress_field);

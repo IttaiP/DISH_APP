@@ -43,6 +43,8 @@ public class DishApplication extends Application implements LifecycleOwner {
     private Activity mCurrentActivity = null;
     ListenableFuture<WorkInfo> workInfo;
 
+    public boolean loggedIn = false;
+
 
 
     @Override

@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         app = (DishApplication) getApplication();
 
-        if (app.info.myID != null) {
+        if (app.info.myID != null&& app.loggedIn) {
             Log.e("FIRST IF", "in the first if");
             if (!app.info.myID.isEmpty()) {
                 Log.e("SECOND IF", "in the second if");
