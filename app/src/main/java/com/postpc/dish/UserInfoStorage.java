@@ -22,7 +22,7 @@ public class UserInfoStorage {
     private ArrayList<String> dishToRate;
     public FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     public String userEmail;
-    public String myID = "";
+    public String myID = null;
     public FirebaseFirestore database = FirebaseFirestore.getInstance();
     public List<DishRatings> ratings;
     public List<String> indicesInRatings;

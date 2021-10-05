@@ -21,6 +21,7 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
     private final TextView dish_name, dish_description, dish_score;
     private final LinearLayout order;
     private TextView restaurant_name;
+    private final LinearLayout linearLayout;
     private final SwipeRevealLayout swipeRevealLayout;
 
     public CustomDishHolder(@NonNull View itemView) {
@@ -30,12 +31,15 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
         dish_description = itemView.findViewById(R.id.dish_description);
         dish_score = itemView.findViewById(R.id.dish_score);
         order = swipeRevealLayout.findViewById(R.id.order);
+        linearLayout = itemView.findViewById(R.id.linear_layout);
 //        dishImage = itemView.findViewById(R.id.dish_image);
     }
 
-    public SwipeRevealLayout getSwipeRevealLayout() {
-        return swipeRevealLayout;
+    public LinearLayout getLinearLayout() {
+        return linearLayout;
     }
+
+    public SwipeRevealLayout getSwipeRevealLayout() { return swipeRevealLayout; }
 
     public LinearLayout getOrder() {
         return order;

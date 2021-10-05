@@ -21,9 +21,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +36,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-public class GetCustomMenuFragment extends Fragment {
+public class GetCustomMenuFragment extends Fragment implements CustomDishesAdapter.ContentListener {
 
     private GetCustomMenuViewModel mViewModel;
     private SharedViewModel sharedViewModel;
@@ -41,9 +46,10 @@ public class GetCustomMenuFragment extends Fragment {
     private DividerItemDecoration horizontal_decorator;
     private ProgressBar progressBar;
     private CustomDishesAdapter adapter;
-    private List<DishItem> dishes;
     private String restaurant;
     private TextView noReccomendationFound;
+    DishApplication app;
+
 
     public static GetCustomMenuFragment newInstance() {
         return new GetCustomMenuFragment();
@@ -62,6 +68,9 @@ public class GetCustomMenuFragment extends Fragment {
 
         GetCustomMenuViewModel customMenuViewModel = new ViewModelProvider(this).get(GetCustomMenuViewModel.class);
         Context context = getContext();
+
+        app = (DishApplication) getActivity().getApplication();
+
 
         noReccomendationFound = view.findViewById(R.id.no_reccomendations_found);
         noReccomendationFound.setAlpha(0);
@@ -96,8 +105,7 @@ public class GetCustomMenuFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progress_bar_custom_menu_screen);
         recyclerView.addItemDecoration(vertical_decorator);
         recyclerView.addItemDecoration(horizontal_decorator);
-        dishes = new ArrayList<>();
-        adapter = new CustomDishesAdapter();
+        adapter = new CustomDishesAdapter(this::onItemClicked);
 
 //        adapter.setDishesAdapter(dishes);
 
@@ -150,6 +158,23 @@ public class GetCustomMenuFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(GetCustomMenuViewModel.class);
         // TODO: Use the ViewModel
+    }
+
+    @Override
+    public void onItemClicked(@NonNull DishItem item) {
+        Bundle arguments = new Bundle();
+        app.info.database.collection("all-dishes").whereEqualTo("name", item.name).whereEqualTo("restaurant_name", item.restaurant_name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for(DocumentSnapshot documentSnapshot: task.getResult()) {
+                    arguments.putString("dishId", documentSnapshot.getId());
+                    arguments.putSerializable("dish", item);
+                    Fragment galleryFragment = new GalleryFragment();
+                    galleryFragment.setArguments(arguments);
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment_container, galleryFragment).addToBackStack(null).commit();
+                }
+            }
+        });
     }
 
 }

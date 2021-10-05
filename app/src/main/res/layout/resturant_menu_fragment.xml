@@ -44,7 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="15dp"
-        android:src="@drawable/america_burgers"
         android:scaleType="centerCrop"
         android:alpha="0.5"
         app:layout_constraintTop_toTopOf="parent"
