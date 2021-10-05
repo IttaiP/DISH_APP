@@ -42,7 +42,10 @@ public class card_dish_adapter extends RecyclerView.Adapter<card_dish_holder> {
             public void onClick(View view) {
                 Log.e("position ", String.valueOf(position));
                 Log.e("Dishes are ", dishes.toString());
-                dishes.remove(dishes.get(position));
+                for(int i=0; i<=position; i++){
+                    dishes.remove(dishes.get(0));
+
+                }
                 setDishes(dishes);
                 notifyDataSetChanged();
             }

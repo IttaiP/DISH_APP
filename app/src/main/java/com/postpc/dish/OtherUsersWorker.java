@@ -109,15 +109,12 @@ public class OtherUsersWorker extends Worker {
                                         }
                                     }
                                 }
-                                // todo : add update to user if already exists
                             }
                             if(updatedUserCount==0){
-                                Log.e("SuccesFromHere", "109");
-                                mFuture.set(Result.success());
+
                             }
                         } else {
-                            Log.d("ERRRORRR", "Error getting documents in load_similar_users: ", task.getException());
-                            mFuture.set(Result.failure());
+
                         }
                         // todo: fix!
 

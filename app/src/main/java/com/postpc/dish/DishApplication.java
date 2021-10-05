@@ -61,9 +61,10 @@ public class DishApplication extends Application implements LifecycleOwner {
         gpsScanner = new GPSScanner(this);
 
 
-//        info.userEmail = info.sp.getString("email", null);
-        info.myID = info.sp.getString("id", null);
-        //todo: need to update user ID first for this to work properly.
+//        info.myID = info.sp.getString("id", null);
+        if(info.userEmail!=null){
+            info.myID = Paper.book(info.userEmail).read("id", null);
+        }
 
 
     }

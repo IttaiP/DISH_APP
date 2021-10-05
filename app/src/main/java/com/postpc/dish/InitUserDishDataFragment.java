@@ -97,13 +97,13 @@ public class InitUserDishDataFragment extends Fragment {
 
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-            firebaseFirestore.collection("users").document(user.getUid())
+            firebaseFirestore.collection("users").document(app.info.myID)
                     .get().addOnCompleteListener(task -> {
                         DocumentSnapshot documentSnapshot = task.getResult();
                         String name = documentSnapshot.get("name").toString();
                         Intent intent = new Intent(getContext(), HomeScreen.class);
                         intent.putExtra("Full Name", name);
-                intent.putExtra("Email", user.getEmail());
+                intent.putExtra("Email", app.info.userEmail);
                 app.runWork();
                 try {
                     if(app.workInfo!=null&&app.workInfo.get()!=null){

@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,6 +85,8 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
 
                             // found user with provided email
                             if (task.isSuccessful()){
+                                app.info.myID = task.getResult().getDocuments().get(0).getId();
+
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
                                 List<DocumentSnapshot> documentSnapshotList = task.getResult().getDocuments();
 
@@ -115,6 +118,8 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
 
                             // found user with provided email
                             if (task.isSuccessful()){
+                                app.info.myID = task.getResult().getDocuments().get(0).getId();
+
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
                                 List<DocumentSnapshot> documentSnapshotList = task.getResult().getDocuments();
 
