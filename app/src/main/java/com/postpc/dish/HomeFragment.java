@@ -1,17 +1,16 @@
 package com.postpc.dish;
 
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -19,14 +18,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.LocationRequest;
@@ -34,66 +32,43 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FieldValue;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import org.w3c.dom.Text;
-
+import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.IndicatorStayLayout;
+import com.warkiz.widget.IndicatorType;
+import com.warkiz.widget.OnSeekChangeListener;
+import com.warkiz.widget.SeekParams;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 public class HomeFragment extends Fragment implements dishRateAdapter.ContentListener{
 
     private HomeViewModel mViewModel;
-    private wifiRestaurantsAdapter restaurantsAdapter;
-    private wifiRestaurantsAdapter GPSrestaurantsAdapter;
-
-    private RecyclerView restaurants_recycler_view;
-    private RecyclerView GPS_restaurants_recycler_view;
-    private RecyclerView dishes_recycler_view;
+    private wifiRestaurantsAdapter restaurantsAdapter, GPSrestaurantsAdapter;
+    private RecyclerView restaurants_recycler_view, GPS_restaurants_recycler_view, dishes_recycler_view;
     private dishRateAdapter dishRateAdapter;
-
     AppCompatActivity activity;
     private LocationRequest locationRequest;
     private static final int REQUEST_CHECK_SETTINGS = 10001;
     DishApplication app;
     List<String> scannedRestaurants;
-    private ArrayList<Restaurant> restaurants;
-    private ArrayList<Restaurant> wifiRestaurantsList;
-    private ArrayList<Restaurant> GPSRestaurantsList;
+    private ArrayList<Restaurant> restaurants, wifiRestaurantsList, GPSRestaurantsList;
     private ArrayList<DishItem> dishesToRate;
     private HashMap<String, Uri> urisToUpload;
-    private boolean buttonPressed;
-    private boolean readyToObserve;
-    Button enable_wifi;
-    Button enable_GPS;
-    Button plusButton;
-    Button minusButton;
-    TextView kmTextView;
-    boolean searchByKmUpdate;
-    int NOT_PRESSED = 0;
-    final int WIFI = 1;
-    final int GPS = 2;
-    int whichButtonPressed = 0;
-
-    private Observer<List<String>> restsObserver;
-    private Observer<List<String>> restsGPSObserver;
+    private boolean buttonPressed, readyToObserve, searchByKmUpdate;
+    Button enable_wifi, enable_GPS, plusButton, minusButton;
+    TextView kmTextView, not_found, not_found_gps, no_dishes_to_rate;
+    int NOT_PRESSED = 0, whichButtonPressed = 0;
+    final int WIFI = 1, GPS = 2;
+    private Observer<List<String>> restsObserver, restsGPSObserver;
     private Observer<Integer> kmObserver;
-
-
     private Observer<List<Uri>> uriObserver;
-
-//    public static HomeFragment newInstance() {
-//        return new HomeFragment();
-//    }
+    private Switch gpsSwitch, wifiSwitch;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -102,9 +77,13 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
+        // Initialization:
         activity = (AppCompatActivity) getActivity();
         app = (DishApplication)activity.getApplication().getApplicationContext();
         mViewModel = new ViewModelProvider(this).get(com.postpc.dish.HomeViewModel.class);
@@ -114,56 +93,107 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         wifiRestaurantsList = new ArrayList<>();
         GPSRestaurantsList = new ArrayList<>();
         dishesToRate = new ArrayList<>();
-        restaurants_recycler_view = view.findViewById(R.id.restaurants_recycler_view);
+        restaurants_recycler_view = view.findViewById(R.id.restaurants_wifi_recycler_view);
         GPS_restaurants_recycler_view = view.findViewById(R.id.restaurants_gps_recycler_view);
-
         restaurantsAdapter = new wifiRestaurantsAdapter(wifiRestaurantsList);
         GPSrestaurantsAdapter = new wifiRestaurantsAdapter(GPSRestaurantsList);
-
         buttonPressed = false;
-        HomeViewModel homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
-
-        TextView not_found = view.findViewById(R.id.not_found);
+        not_found = view.findViewById(R.id.not_found);
         not_found.setVisibility(view.GONE);
-        TextView not_found_gps = view.findViewById(R.id.not_found_gps);
+        not_found_gps = view.findViewById(R.id.not_found_gps);
         not_found_gps.setVisibility(view.GONE);
-
-        enable_wifi = view.findViewById(R.id.enable_wifi);
-        enable_GPS = view.findViewById(R.id.enable_gps);
         minusButton = view.findViewById(R.id.minus_button);
         plusButton = view.findViewById(R.id.plus_button);
         kmTextView = view.findViewById(R.id.km);
-        initKMListeners();
-
         restaurants_recycler_view.setHasFixedSize(true);
-        restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity,
+                LinearLayoutManager.HORIZONTAL, false));
         restaurants_recycler_view.setAdapter(restaurantsAdapter);
         GPS_restaurants_recycler_view.setHasFixedSize(true);
-        GPS_restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        GPS_restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity,
+                LinearLayoutManager.HORIZONTAL, false));
         GPS_restaurants_recycler_view.setAdapter(GPSrestaurantsAdapter);
-
         dishes_recycler_view = view.findViewById(R.id.dishes_recycler_view);
         dishRateAdapter = new dishRateAdapter(this::onItemClicked);
-
-
-        TextView no_dishes_to_rate = view.findViewById(R.id.no_dishes_to_rate);
+        no_dishes_to_rate = view.findViewById(R.id.no_dishes_to_rate);
         no_dishes_to_rate.setVisibility(view.GONE);
         dishes_recycler_view.setHasFixedSize(true);
-        dishes_recycler_view.setLayoutManager(new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false));
+        dishes_recycler_view.setLayoutManager(new LinearLayoutManager(activity,
+                LinearLayoutManager.HORIZONTAL, false));
         dishes_recycler_view.setAdapter(dishRateAdapter);
+        gpsSwitch = view.findViewById(R.id.gps_switch);
+        wifiSwitch = view.findViewById(R.id.wifi_switch);
+        // =========================================================================================
 
-        app.info.database.collection("restaurants").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        // Listeners:
+        gpsSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+            whichButtonPressed = GPS;
+            EnableLocation();
+            gpsSwitch.setVisibility(getView().GONE);
+            mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+        });
+
+        wifiSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+            whichButtonPressed = WIFI;
+            buttonPressed = !buttonPressed;
+            if(!buttonPressed) {
+                restaurantsAdapter.setAdapter(restaurants);
+            }
+            else {
+                beginWifiScan(wifiSwitch);
+            }
+        });
+
+        IndicatorSeekBar seekBar = IndicatorSeekBar
+                .with(getContext())
+                .max(10)
+                .min(1)
+                .showIndicatorType(IndicatorType.RECTANGLE)
+                .build();
+
+        new IndicatorStayLayout(getContext()).attachTo(seekBar);
+
+        seekBar.setOnSeekChangeListener(new OnSeekChangeListener() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if(task.isSuccessful()) {
-                    restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
-                    restaurantsAdapter.setAdapter(restaurants);
-                    GPSrestaurantsAdapter.setAdapter(restaurants);
+            public void onSeeking(SeekParams seekParams) {
+                Log.e("seekBar", String.valueOf(seekParams.seekBar));
+                Log.e("progress", String.valueOf(seekParams.progress));
+                Log.e("progressFloat", String.valueOf(seekParams.progressFloat));
+                Log.e("fromUser", String.valueOf(seekParams.fromUser));
+                //when tick count > 0
+                Log.e("thumbPosition", String.valueOf(seekParams.thumbPosition));
 
+                if(searchByKmUpdate){
+                    app.gpsScanner.search(getActivity());
                 }
-                else {
-                    Log.e("Error", "Firebase " + task.getException().getMessage());
-                }
+                app.gpsScanner.setCurrentKM(seekBar.getProgress()); // todo: getProgress?..
+
+
+//                kmObserver = km -> {
+//                    kmTextView.setText(km.toString());
+//                };
+
+//                app.gpsScanner.getCurrentKM().observe(getViewLifecycleOwner(), kmObserver);
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+            }
+        });
+        // =========================================================================================
+
+        app.info.database.collection("restaurants").get().addOnCompleteListener(task -> {
+            if(task.isSuccessful()) {
+                restaurants = (ArrayList<Restaurant>) Objects.requireNonNull(task.getResult()).toObjects(Restaurant.class);
+                restaurantsAdapter.setAdapter(restaurants);
+                GPSrestaurantsAdapter.setAdapter(restaurants);
+            }
+            else {
+                Log.e("Error", "Firebase " + task.getException().getMessage());
             }
         });
 
@@ -205,7 +235,6 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                     }
                     enable_wifi.setText("search again");
                 }
-
             }
         };
 
@@ -226,7 +255,6 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                 }
                 GPSrestaurantsAdapter.setAdapter(GPSRestaurantsList);
                 GPSrestaurantsAdapter.notifyDataSetChanged();
-
             }
             else{
                 enable_GPS.setVisibility(View.VISIBLE);
@@ -236,19 +264,6 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         };
 
         app.gpsScanner.getRestaurants().observe(getViewLifecycleOwner(), restsGPSObserver);
-
-
-        enable_wifi.setOnClickListener(view1 -> {
-            whichButtonPressed = WIFI;
-            buttonPressed = !buttonPressed;
-            if(!buttonPressed) {
-                restaurantsAdapter.setAdapter(restaurants);
-            }
-            else {
-                beginWifiScan(enable_wifi);
-            }
-
-        });
 
         ArrayList<String> getDishesToRate = app.info.getDishToRate();
         if(getDishesToRate == null || getDishesToRate.isEmpty()) {
@@ -265,22 +280,17 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
             });
         }}
 
-        enable_GPS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                whichButtonPressed = GPS;
-                EnableLocation();
-                enable_GPS.setVisibility(getView().GONE);
-                mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
-
-
-
-
-            }
-        });
+//        enable_GPS.setOnClickListener(view12 -> {
+//            whichButtonPressed = GPS;
+//            EnableLocation();
+//            enable_GPS.setVisibility(getView().GONE);
+//            mPermissionResult.launch(Manifest.permission.ACCESS_FINE_LOCATION);
+//        });
     }
 
+    // =============================================================================================
 
+    // Private functions:
     private void beginWifiScan(Button enable_wifi){
         EnableLocation();
         enable_wifi.setVisibility(getView().GONE);
@@ -302,41 +312,32 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                 .checkLocationSettings(builder.build());
 
 
-        result.addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-                try {
-                    LocationSettingsResponse response = task.getResult(ApiException.class);
+        result.addOnCompleteListener(task -> {
+            try {
+                LocationSettingsResponse response = task.getResult(ApiException.class);
 
-                } catch (ApiException e) {
+            } catch (ApiException e) {
 
-                    switch (e.getStatusCode()) {
-                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                switch (e.getStatusCode()) {
+                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
 
-                            try {
-                                ResolvableApiException resolvableApiException = (ResolvableApiException)e;
-                                resolvableApiException.startResolutionForResult(activity,REQUEST_CHECK_SETTINGS);
-                            } catch (IntentSender.SendIntentException ex) {
-                                ex.printStackTrace();
-                            }
-                            break;
+                        try {
+                            ResolvableApiException resolvableApiException = (ResolvableApiException)e;
+                            resolvableApiException.startResolutionForResult(activity,REQUEST_CHECK_SETTINGS);
+                        } catch (IntentSender.SendIntentException ex) {
+                            ex.printStackTrace();
+                        }
+                        break;
 
-                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                            //Device does not have location
-                            break;
-                    }
+                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                        //Device does not have location
+                        break;
                 }
             }
         });
-
-
-
     }
 
-    private void WiFiScanFailure(){
-
-    }
-
+    private void WiFiScanFailure(){}
 
     private ActivityResultLauncher<String> mPermissionResult = registerForActivityResult(
             new ActivityResultContracts.RequestPermission(),
@@ -348,7 +349,6 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                             boolean success = app.wifiScanner.wifiManager.startScan();
                             if (!success) {
                                 app.wifiScanner.scanFailure();
-
                             }
                             Log.e("FAIL REASON", String.valueOf(success));
                         }
@@ -361,22 +361,23 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                             app.wifiScanner.wifiManager.setWifiEnabled(false);
                         }
                         break;
+
                         case GPS:
                             searchByKmUpdate = true;
                             app.gpsScanner.search(getActivity());
                     }
                     whichButtonPressed = NOT_PRESSED;
+
                 } else {
                     Log.e("FAILURE", "onActivityResult: PERMISSION DENIED");
                     if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
                         Snackbar snackbar = Snackbar
-                                .make(activity.getWindow().getDecorView(), "You Must Allow Location For Restaurant Recognition!", Snackbar.LENGTH_SHORT);
-                        snackbar.setAction("Got It", new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                Log.e("REGRET", "RRRRRR");
-                                snackbar.dismiss();
-                            }
+                                .make(activity.getWindow().getDecorView(),
+                                        "You Must Allow Location For Restaurant Recognition!",
+                                        Snackbar.LENGTH_SHORT);
+                        snackbar.setAction("Got It", view -> {
+                            Log.e("REGRET", "RRRRRR");
+                            snackbar.dismiss();
                         });
                         snackbar.show();
                         enable_wifi.setVisibility(View.VISIBLE);
@@ -394,17 +395,14 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
                                         intent.setData(uri);
                                         startActivity(intent);
                                     }
-
                                 });
+
                         snackbar.show();
                         enable_wifi.setVisibility(View.VISIBLE);
                         enable_GPS.setVisibility(View.VISIBLE);
-
                     }
                 }
             });
-
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -412,57 +410,24 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
     }
 
-
     @Override
     public void onItemClicked(@NonNull DishItem item) {
         Bundle arguments = new Bundle();
-        app.info.database.collection("all-dishes").whereEqualTo("name", item.name).whereEqualTo("restaurant_name", item.restaurant_name).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for(DocumentSnapshot documentSnapshot: task.getResult()) {
-                    Log.d("dish ID to rate", documentSnapshot.getId());
-                    arguments.putString("dish ID to rate", documentSnapshot.getId());
-                    Fragment rateRecommendation = new RateRecommendationFragment();
-                    rateRecommendation.setArguments(arguments);
-                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.nav_fragment_container, rateRecommendation).addToBackStack(null).commit();
-                }
-            }
-        });
-    }
-
-    public void initKMListeners(){
-        minusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentKM = app.gpsScanner.getCurrentKM().getValue();
-                if(currentKM > 1){
-                    if(searchByKmUpdate){
-                        app.gpsScanner.search(getActivity());
+        app.info.database.collection("all-dishes")
+                .whereEqualTo("name", item.name)
+                .whereEqualTo("restaurant_name", item.restaurant_name)
+                .get().addOnCompleteListener(task -> {
+                    for(DocumentSnapshot documentSnapshot: task.getResult()) {
+                        Log.d("dish ID to rate", documentSnapshot.getId());
+                        arguments.putString("dish ID to rate", documentSnapshot.getId());
+                        Fragment rateRecommendation = new RateRecommendationFragment();
+                        rateRecommendation.setArguments(arguments);
+                        activity.getSupportFragmentManager()
+                                .beginTransaction()
+                                .replace(R.id.nav_fragment_container, rateRecommendation)
+                                .addToBackStack(null)
+                                .commit();
                     }
-                    app.gpsScanner.setCurrentKM(currentKM - 1);
-                }
-            }
-        });
-
-        plusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int currentKM = app.gpsScanner.getCurrentKM().getValue();
-                if(currentKM < 10){
-                    if(searchByKmUpdate){
-                        app.gpsScanner.search(getActivity());
-                    }
-                    app.gpsScanner.setCurrentKM(currentKM + 1);
-                }
-            }
-        });
-
-        kmObserver = km -> {
-            kmTextView.setText(km.toString());
-        };
-
-        app.gpsScanner.getCurrentKM().observe(getViewLifecycleOwner(), kmObserver);
-
-
+                });
     }
 }
