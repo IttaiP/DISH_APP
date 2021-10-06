@@ -213,6 +213,12 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
 
             // todo: finish logout
             case R.id.nav_logout:
+                app.restartData();
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                HomeScreen.this.finish();
+
 //                FirebaselUser user = FirebaseAuth.getInstance().getCurrentUser();
 //                String providerId = null;
 //                if (user != null) {

@@ -53,20 +53,18 @@ public class DishApplication extends Application implements LifecycleOwner {
 
         Paper.init(this);
 //        Paper.book().delete("otherUsersEmails");
+        restartData();
+    }
+
+    public void restartData(){
         calcWasRun = false;
-
-
         info = new UserInfoStorage(this);
         wifiScanner = new WifiScanner(this);
         gpsScanner = new GPSScanner(this);
-
-
 //        info.myID = info.sp.getString("id", null);
         if(info.userEmail!=null){
             info.myID = Paper.book(info.userEmail).read("id", null);
         }
-
-
     }
 
 
