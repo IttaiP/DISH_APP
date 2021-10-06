@@ -17,6 +17,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -107,7 +109,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         not_found_gps.setVisibility(view.GONE);
 //        minusButton = view.findViewById(R.id.minus_button);
 //        plusButton = view.findViewById(R.id.plus_button);
-        kmTextView = view.findViewById(R.id.restaurants_nearby);
+        kmTextView = view.findViewById(R.id.km_away);
         restaurants_recycler_view.setHasFixedSize(true);
         restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.HORIZONTAL, false));
@@ -170,7 +172,13 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         });
 
         kmObserver = km -> {
-            kmTextView.setText("Restaurants " + km  +" Km away");
+            final Animation slide_out = AnimationUtils.loadAnimation(getContext(),R.anim.slide_out_left);
+            kmTextView.startAnimation(slide_out);
+            kmTextView.setText(km + "");
+            final Animation slide_in = AnimationUtils.loadAnimation(getContext(),R.anim.slide_in_number);
+            kmTextView.startAnimation(slide_in);
+
+
         };
 
         app.gpsScanner.getCurrentKM().observe(getViewLifecycleOwner(), kmObserver);

@@ -92,5 +92,9 @@ public class UserInfoStorage {
 
     public void removeDishFromToRate(String dishToRemove) {
         dishesToRate.remove(dishToRemove);
+        Paper.book(getUserEmail()).write("dishesToRate", dishesToRate);
+        Gson gson = new Gson();
+        String dishesAsJson = gson.toJson(app.info.ratings);
+        sp.edit().putString("dishesToRate", dishesAsJson).apply();
     }
 }

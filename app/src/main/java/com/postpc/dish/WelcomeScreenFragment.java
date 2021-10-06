@@ -84,7 +84,7 @@ public class WelcomeScreenFragment extends Fragment implements View.OnClickListe
                         .addOnCompleteListener(task -> {
 
                             // found user with provided email
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful() && !task.getResult().getDocuments().isEmpty()){
                                 app.info.myID = task.getResult().getDocuments().get(0).getId();
 
                                 Intent intent = new Intent(this.getContext(), HomeScreen.class);
