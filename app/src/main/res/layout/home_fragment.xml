@@ -44,7 +44,7 @@
         android:id="@+id/restaurants_nearby"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Restaurants nearby"
+        android:text="Restaurants 5 Km away"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
@@ -160,40 +160,40 @@
         app:layout_constraintTop_toBottomOf="@id/wifi_restaurants"
         app:layout_constraintStart_toStartOf="@id/restaurants_nearby"/>
 
-    <TextView
-        android:id="@+id/km"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/bitter"
-        android:text="5"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+<!--    <TextView-->
+<!--        android:id="@+id/km"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="@font/bitter"-->
+<!--        android:text="5"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="20sp"-->
 
-        tools:layout_editor_absoluteX="174dp"
-        tools:layout_editor_absoluteY="508dp" />
+<!--        tools:layout_editor_absoluteX="174dp"-->
+<!--        tools:layout_editor_absoluteY="508dp" />-->
 
-    <Button
-        android:id="@+id/minus_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:text="-"
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="72dp"
-        tools:layout_editor_absoluteY="508dp" />
+<!--    <Button-->
+<!--        android:id="@+id/minus_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:minWidth="0dp"-->
+<!--        android:minHeight="0dp"-->
+<!--        android:text="-"-->
+<!--        android:textSize="14sp"-->
+<!--        tools:layout_editor_absoluteX="72dp"-->
+<!--        tools:layout_editor_absoluteY="508dp" />-->
 
-    <Button
-        android:id="@+id/plus_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="0dp"
-        android:minHeight="0dp"
-        android:text="+"
+<!--    <Button-->
+<!--        android:id="@+id/plus_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:minWidth="0dp"-->
+<!--        android:minHeight="0dp"-->
+<!--        android:text="+"-->
 
-        android:textSize="14sp"
-        tools:layout_editor_absoluteX="218dp"
-        tools:layout_editor_absoluteY="508dp" />
+<!--        android:textSize="14sp"-->
+<!--        tools:layout_editor_absoluteX="218dp"-->
+<!--        tools:layout_editor_absoluteY="508dp" />-->
 
     <TextView
         android:id="@+id/borderbottmo"
@@ -281,16 +281,16 @@
         app:layout_constraintTop_toBottomOf="@id/wifi_restaurants"
         app:layout_constraintBottom_toTopOf="@id/divider2"/>
 
-    <TextView
-        android:id="@+id/km_away"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="5"
-        android:textSize="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/seek_bar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/restaurants_nearby"
-        app:layout_constraintTop_toBottomOf="@+id/home_screen_photo" />
+<!--    <TextView-->
+<!--        android:id="@+id/km_away"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="5"-->
+<!--        android:textSize="30dp"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/seek_bar"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@+id/restaurants_nearby"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/home_screen_photo" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

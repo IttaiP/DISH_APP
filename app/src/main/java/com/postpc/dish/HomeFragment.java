@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         not_found_gps.setVisibility(view.GONE);
 //        minusButton = view.findViewById(R.id.minus_button);
 //        plusButton = view.findViewById(R.id.plus_button);
-        kmTextView = view.findViewById(R.id.km_away);
+        kmTextView = view.findViewById(R.id.restaurants_nearby);
         restaurants_recycler_view.setHasFixedSize(true);
         restaurants_recycler_view.setLayoutManager(new LinearLayoutManager(activity,
                 LinearLayoutManager.HORIZONTAL, false));
@@ -170,7 +170,7 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
         });
 
         kmObserver = km -> {
-            kmTextView.setText(km+"");
+            kmTextView.setText("Restaurants " + km  +" Km away");
         };
 
         app.gpsScanner.getCurrentKM().observe(getViewLifecycleOwner(), kmObserver);
