@@ -133,7 +133,7 @@
         app:layoutManager="LinearLayoutManager"
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@id/restaurants_nearby"
-        app:layout_constraintTop_toBottomOf="@id/indicatorStayLayout" />
+        app:layout_constraintTop_toBottomOf="@id/seek_bar" />
 
     <TextView
         android:id="@+id/wifi_restaurants"
@@ -202,22 +202,35 @@
         app:layout_constraintTop_toBottomOf="@id/dishes_to_rate"
         app:layout_constraintStart_toStartOf="@id/border2"/>
 
-    <com.warkiz.widget.IndicatorStayLayout
-        android:id="@+id/indicatorStayLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+<!--    <com.warkiz.widget.IndicatorStayLayout-->
+<!--        android:id="@+id/indicatorStayLayout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="13dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/restaurants_nearby">-->
+<!--        <com.warkiz.widget.IndicatorSeekBar-->
+<!--            android:id="@+id/indicatorSeekBar"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:isb_max="10"-->
+<!--            app:isb_min="1"-->
+<!--            app:isb_show_indicator="rectangle" />-->
+<!--    </com.warkiz.widget.IndicatorStayLayout>-->
+
+    <SeekBar
+        android:id="@+id/seek_bar"
+        android:max="100"
+        android:min="10"
         android:layout_marginTop="13dp"
+        android:progress="50"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/restaurants_nearby">
-        <com.warkiz.widget.IndicatorSeekBar
-            android:id="@+id/indicatorSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:isb_max="10"
-            app:isb_min="1"
-            app:isb_show_indicator="rectangle" />
-    </com.warkiz.widget.IndicatorStayLayout>
+        app:layout_constraintTop_toBottomOf="@+id/restaurants_nearby" />
+
 
     <View
         android:id="@+id/divider"
@@ -254,8 +267,8 @@
         android:layout_height="wrap_content"
         android:text="Enable GPS"
         android:fontFamily="@font/bitter"
-        app:layout_constraintEnd_toEndOf="@id/indicatorStayLayout"
-        app:layout_constraintTop_toBottomOf="@id/indicatorStayLayout"
+        app:layout_constraintEnd_toEndOf="@id/seek_bar"
+        app:layout_constraintTop_toBottomOf="@id/seek_bar"
         app:layout_constraintBottom_toTopOf="@id/divider"/>
 
     <Switch
@@ -264,9 +277,20 @@
         android:layout_height="wrap_content"
         android:text="Enable wifi"
         android:fontFamily="@font/bitter"
-        app:layout_constraintEnd_toEndOf="@id/indicatorStayLayout"
+        app:layout_constraintEnd_toEndOf="@id/seek_bar"
         app:layout_constraintTop_toBottomOf="@id/wifi_restaurants"
         app:layout_constraintBottom_toTopOf="@id/divider2"/>
+
+    <TextView
+        android:id="@+id/km_away"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:textSize="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/seek_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/restaurants_nearby"
+        app:layout_constraintTop_toBottomOf="@+id/home_screen_photo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
