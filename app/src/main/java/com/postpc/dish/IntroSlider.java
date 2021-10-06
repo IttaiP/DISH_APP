@@ -2,18 +2,18 @@ package com.postpc.dish;
 
 import static com.github.appintro.AppIntroPageTransformerType.*;
 
-import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.github.appintro.AppIntro;
 import com.github.appintro.AppIntroFragment;
 import com.github.appintro.AppIntroPageTransformerType;
-
-import java.util.ArrayList;
 
 public class IntroSlider extends AppIntro {
 
@@ -24,20 +24,13 @@ public class IntroSlider extends AppIntro {
         AppIntroPageTransformerType depth = Depth.INSTANCE;
         setTransformer(depth);
 
-        String[] permissions = {
-                Manifest.permission.ACCESS_WIFI_STATE,
-                Manifest.permission.CHANGE_WIFI_STATE,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-        };
-
         // all slides of intro
         addSlide(AppIntroFragment.newInstance("Hey!", "Let's go on a tour",
                 R.drawable.first_demo, Color.rgb(19, 42, 50)));
 
         addSlide(AppIntroFragment.newInstance("Swipe your opinion on the dish",
-                "Choose the type of food.\n " +
-                        "Swipe the dish to the direction you see fit.\n" +
+                "Choose the type of food at the top of the screen.\n " +
+                        "Swipe the dish to the direction you see fit, or click the red 'X' button if you do not want to answer.\n" +
                         "The more dishes you swipe, the better our offers will be :)",
                 R.drawable.swipe_demo, Color.rgb(47, 93, 98)));
 
@@ -50,22 +43,17 @@ public class IntroSlider extends AppIntro {
                 R.drawable.custom_menu_demo, Color.rgb(2, 71, 94)));
 
         addSlide(AppIntroFragment.newInstance("See real photos by other users",
-                "Click on the dish to see real photos taken by other users.",
+                "Click on the dish to see real photos of it taken by other users.",
                 R.drawable.photos_by_users_demo, Color.rgb(57, 166, 163)));
 
         addSlide(AppIntroFragment.newInstance("Make an order",
                 "Swipe left the dish you want.",
                 R.drawable.order_demo, Color.rgb(0, 87, 146)));
 
-        addSlide(AppIntroFragment.newInstance("Rate our recommendation",
+        addSlide(AppIntroFragment.newInstance("Rate out recommendation",
                 "After you tried the dish, tell us what you thought by rating it.",
                 R.drawable.rate_demo, Color.rgb(35, 62, 139)));
 
-        addSlide(AppIntroFragment.newInstance("Permissions",
-                "In order to use your location and wifi, you must give permission.",
-                R.drawable.first_demo, Color.rgb(35, 62, 139)));
-
-        askForPermissions(permissions,8, true);
         setSkipButtonEnabled(true);
     }
 

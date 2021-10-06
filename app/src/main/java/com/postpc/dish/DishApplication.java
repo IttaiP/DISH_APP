@@ -158,6 +158,8 @@ public class DishApplication extends Application implements LifecycleOwner {
 //            info.indicesInRatings = Arrays.asList(iRatingsArray);
 //
 //        }
+
+        info.dishesToRate = Paper.book(info.getUserEmail()).read("dishesToRate", new ArrayList<>());
         if(info.ratings.isEmpty()){
             load_rated_dishes();
         }

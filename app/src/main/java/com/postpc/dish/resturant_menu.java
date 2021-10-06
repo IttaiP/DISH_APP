@@ -65,7 +65,7 @@ public class resturant_menu extends Fragment implements DishesAdapter.ContentLis
 
         Context context = getContext();
         Bundle arguments = getArguments();
-        String restaurant = arguments.getString("restaurant");
+        restaurant = arguments.getString("restaurant");
 
         database = FirebaseFirestore.getInstance();
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);

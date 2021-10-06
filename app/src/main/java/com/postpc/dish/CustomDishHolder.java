@@ -64,13 +64,13 @@ public class CustomDishHolder extends RecyclerView.ViewHolder {
 
     public void bind(DishItem dish) {
         dish_name.setText(dish.getName());
-        dish_description.setText(dish.getName());
+        dish_description.setText(dish.getDescription());
         String num = String.format("%.2f", dish.getMatch());
         dish_score.setText("Matching is " + num);
-        if(dish.match >= 84) {
+        if(dish.match >= 70) {
             swipeRevealLayout.setBackgroundResource(R.drawable.background_green_recommend);
         }
-        else if(dish.match >= 68) {
+        else if(dish.match >= 60) {
             swipeRevealLayout.setBackgroundResource(R.drawable.background_yellow_recommend);
         }
         else {

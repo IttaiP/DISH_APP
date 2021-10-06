@@ -193,7 +193,7 @@ public class HomeScreen extends AppCompatActivity implements NavigationView.OnNa
                 Bundle bundle = new Bundle();
                 String dishToRateId = "";
                 try {
-                    dishToRateId = app.info.getDishToRate().get(0);
+                    dishToRateId = app.info.getDishesToRate().get(0);
                 }
                 catch (Exception exception) {
                     dishToRateId = "";

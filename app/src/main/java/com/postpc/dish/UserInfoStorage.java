@@ -9,6 +9,7 @@ import android.util.Log;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,9 +18,8 @@ import java.util.List;
 import io.paperdb.Paper;
 
 public class UserInfoStorage {
-    private boolean flag = false;
     private String restaurant;
-    private ArrayList<String> dishToRate;
+    public ArrayList<String> dishesToRate;
     public FirebaseStorage firebaseStorage = FirebaseStorage.getInstance();
     public String userEmail;
     public String myID = null;
@@ -49,6 +49,7 @@ public class UserInfoStorage {
         otherUsers = Paper.book(getUserEmail()).read("otherUsers", new ArrayList<>());
         otherUsersEmails = Paper.book(getUserEmail()).read("otherUsersEmails", new ArrayList<>());
         DishRecommendationScores = Paper.book(getUserEmail()).read("DishRecommendationScores", new HashMap<>());
+        dishesToRate = Paper.book(getUserEmail()).read("dishesToRate", new ArrayList<>());
     }
 
     public void setUserEmail(String userEmail) {
@@ -78,21 +79,18 @@ public class UserInfoStorage {
     }
 
     public void addDishToRate(String dishToRate) {
-        this.dishToRate.add(dishToRate);
+        this.dishesToRate.add(dishToRate);
+        Paper.book(getUserEmail()).write("dishesToRate", dishesToRate);
+        Gson gson = new Gson();
+        String dishesAsJson = gson.toJson(app.info.ratings);
+        sp.edit().putString("dishesToRate", dishesAsJson).apply();
     }
 
-    public ArrayList<String> getDishToRate() {
-        if(!flag) {
-            dishToRate = new ArrayList<>();
-            dishToRate.add("0HEbQdcMUoqovPtCGnRr");
-            dishToRate.add("DJBWkaGK26LrVC7ScC2i");
-            dishToRate.add("LXtcb2qasdVveT2h0SYx");
-            flag = true;
-        }
-        return dishToRate;
+    public ArrayList<String> getDishesToRate() {
+        return dishesToRate;
     }
 
     public void removeDishFromToRate(String dishToRemove) {
-        dishToRate.remove(dishToRemove);
+        dishesToRate.remove(dishToRemove);
     }
 }

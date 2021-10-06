@@ -265,12 +265,12 @@ public class HomeFragment extends Fragment implements dishRateAdapter.ContentLis
 
         app.gpsScanner.getRestaurants().observe(getViewLifecycleOwner(), restsGPSObserver);
 
-        ArrayList<String> getDishesToRate = app.info.getDishToRate();
+        ArrayList<String> getDishesToRate = app.info.getDishesToRate();
         if(getDishesToRate == null || getDishesToRate.isEmpty()) {
             no_dishes_to_rate.setVisibility(view.VISIBLE);
         }
         else {
-        for (String dish_id : app.info.getDishToRate()) {
+        for (String dish_id : app.info.getDishesToRate()) {
             app.info.database.collection("all-dishes").document(dish_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {

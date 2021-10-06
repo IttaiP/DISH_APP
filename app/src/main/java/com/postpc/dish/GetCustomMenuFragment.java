@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -39,7 +40,6 @@ import java.util.Objects;
 public class GetCustomMenuFragment extends Fragment implements CustomDishesAdapter.ContentListener {
 
     private GetCustomMenuViewModel mViewModel;
-    private SharedViewModel sharedViewModel;
     private RecyclerView recyclerView;
     private FirebaseFirestore database;
     private DividerItemDecoration vertical_decorator;
@@ -117,32 +117,47 @@ public class GetCustomMenuFragment extends Fragment implements CustomDishesAdapt
         String restaurant = arguments.getString("restaurant");
 
         TextView restaurant_name = view.findViewById(R.id.restaurant_name);
-        ImageView restaurant_image = view.findViewById(R.id.image_restaurant);
+        ImageView image_restaurant = view.findViewById(R.id.image_restaurant);
 
         restaurant_name.setText(restaurant);
 
         Log.d("restaurant", restaurant);
 
+        app.info.database.collection("restaurants").whereEqualTo("name", restaurant).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Restaurant restaurant = document.toObject(Restaurant.class);
+                    int resourceId = context.getResources().getIdentifier(restaurant.code, "drawable",
+                            context.getPackageName());
+                    image_restaurant.setImageResource(resourceId);
+                }
+            }
+        });
+
         // Create the observer which updates the UI.
         final Observer<HashMap<String, Float>> nameObserver = new Observer<HashMap<String, Float>>() {
             @Override
             public void onChanged(@Nullable final HashMap<String, Float> newReccomendations) {
-
+                adapter.setDishesAdapter(new ArrayList<>());
                 for(Map.Entry<String, Float> dish_recommended: customMenuViewModel.app.info.DishRecommendationScores.entrySet()) {
 //                    Log.e("IM IN ", customMenuViewModel.app.info.DishReccomendationScores.toString());
                     database.collection("all-dishes").document(dish_recommended.getKey()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(dish_recommended.getValue() != null && dish_recommended.getValue() >= 50) {
-                                noReccomendationFound.setVisibility(View.GONE);
-                                adapter.addDishes(Objects.requireNonNull(documentSnapshot.toObject(DishItem.class)), dish_recommended.getValue());
-                                Collections.sort(adapter.getDishesAdapter(), new SortByMatch());
-                                adapter.notifyDataSetChanged();
+                            DishItem dishToAdd = documentSnapshot.toObject(DishItem.class);
+                            if (dishToAdd.restaurant_name.equals(restaurant)) {
+                                if (dish_recommended.getValue() != null && dish_recommended.getValue() >= 50) {
+                                    noReccomendationFound.setVisibility(View.GONE);
+                                    adapter.addDishes(dishToAdd, dish_recommended.getValue());
+                                    Collections.sort(adapter.getDishesAdapter(), new SortByMatch());
+                                    adapter.notifyDataSetChanged();
+                                }
                             }
                         }
                     });
                 }
-//                Log.e("DISHES ARE ", adapter.getDishesAdapter().toString());
+                Log.e("DISHES ARE ", adapter.getDishesAdapter().toString());
             }
         };
         // Observe the LiveData, passing in this activity as the LifecycleOwner and the observer.

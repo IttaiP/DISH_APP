@@ -21,24 +21,24 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.postpc.dish.R
 import java.util.*
+import kotlin.collections.ArrayList
 
 class CustomDishesAdapter(val listener3: ContentListener) :
     ListAdapter<DishItem, CustomDishHolder>(DishDiffCallBack2()){
 
     private lateinit var linearLayout: LinearLayout
     private var setDishes = mutableSetOf<String>()
-    private var dishes = mutableListOf<DishItem>()
+    private var dishes = ArrayList<DishItem>()
     private var context: Context? = null
     private var viewBinderHelper = ViewBinderHelper()
     private lateinit var order: LinearLayout
     private lateinit var app: DishApplication
-    private lateinit var firestore: FirebaseFirestore
 
     fun setDishesAdapter(dishes: List<DishItem>) {
-        this.dishes = dishes as MutableList<DishItem>
+        this.dishes = dishes as ArrayList<DishItem>
     }
 
-    fun getDishesAdapter(): MutableList<DishItem> {
+    fun getDishesAdapter(): ArrayList<DishItem> {
         return this.dishes
     }
 
